@@ -2,13 +2,8 @@ package CoreClasses;
 
 public abstract class Traveler {
     private boolean hidden;
-    private final Place currentPlace;
+    private  Place currentPlace;
 
-
-    public Traveler(boolean hidden, Place currentPlace) {
-        this.hidden = hidden;
-        this.currentPlace = currentPlace;
-    }
 
     public boolean getHidden() {
         return hidden;
