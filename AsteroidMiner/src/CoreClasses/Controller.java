@@ -1,10 +1,13 @@
 package CoreClasses;
 
+import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
     // Attributes
@@ -17,6 +20,8 @@ public class Controller {
     private boolean win;
     private List<Int> explodingAsteroids;
     private List<Int> SublimingAsteroids;
+    private Random rand; // RNG
+    private final int fps = 60; // necessary for sunstorm
 
     // Methods
     public void startGame(String[] names) {
@@ -26,7 +31,7 @@ public class Controller {
     }
 
     public void setupGame() {
-        Random rand = new Random();
+        rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
         asteroids = new HashMap<Int, Asteroid>();
         explodingAsteroids = new ArrayList<Int>();
@@ -85,16 +90,29 @@ public class Controller {
     }
 
     public void triggerSunStorms() {
-        for (Settler s : settlers) {
-            if (s.getHidden == false) {
-                s.Die();
+        rand = new Random();
+        int wavelength = (rand.nextInt(120) + 180) * 1000; // between 3 and 5 minutes
+        Sunstorm.behave(wavelength);
+        TimerTask checkDeath = new TimerTask() {
+            @Override
+            public void run() {
+                if (ss.isHappening()) {
+                    for (Settler s : settlers) {
+                        if (s.getHidden() == false || s.getDeath()) {
+                            s.Die();
+                        }
+                    }
+                    for (Robot r : robots) {
+                        if (r.getHidden == false) {
+                            s.Die();
+                        }
+                    }
+                }
+
             }
-        }
-        for (Robot r : robots) {
-            if (r.getHidden == false) {
-                s.Die();
-            }
-        }
+        };
+        Timer checkDeaththread = new Timer();
+        checkDeaththread.schedule(checkDeath, wavelength, 1000/fps);
     }
 
     public void explodeAsteroids() {
