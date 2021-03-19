@@ -36,7 +36,7 @@ public class Controller {
 
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
-            int mineralSelector = rand.nextInt(4);
+            int mineralSelector = rand.nextInt(5);
             switch (mineralSelector) {
             case 0:
                 M = new Carbon();
@@ -47,17 +47,24 @@ public class Controller {
             case 2:
                 M = new Iron();
                 break;
-            default:
+            case 3:
                 M = new Uranium();
+            default:
+                M = null;
             }
-            Asteroid a = new Asteroid(i, M); //CHANGE ASTEROID ID TO INT
+            Asteroid a;
+            if (mineralSelector == 4)
+                a = new Asteroid(i);
+            else
+                a = new Asteroid(i, M);
+
             asteroids.put(i, a);
-            if (mineralSelector == 1) {
+            if (mineralSelector == 1)
                 SublimingAsteroids.add(i);
-            }
-            if (mineralSelector == 3) {
+
+            if (mineralSelector == 3)
                 explodingAsteroids.add(i);
-            }
+
         }
     }
 
