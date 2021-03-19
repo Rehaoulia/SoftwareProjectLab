@@ -7,18 +7,10 @@ public static class Sunstorm {
     // Attributes
 
     private float lastStormTime;
-    private Timer start; // start and stop are two different timers
-    private Timer stop;
-    private Timer alarm; // needed for the alarm
+    private Timer timer;
     private longint wavelength; // in milliseconds , change type
     private boolean isHappening;
     private static int count; // =0 by default
-
-    // Methods
-
-    // public Sunstorm(longint wavelength) {
-    // this.wavelength = wavelength;
-    // } // sunstorm decides its wavelength by itself
 
     private double calculateTimeLeft() {
 
@@ -34,21 +26,21 @@ public static class Sunstorm {
                 display();
             }
         };
-        alarm.schedule(setAlarm, wavelength - 10000);
+        timer.schedule(setAlarm, wavelength - 10000);
         TimerTask startStorm = new TimerTask() {
             @Override
             public void run() {
                 setHappening(true);
             }
         };
-        start.schedule(startStorm, wavelength);
+        timer.schedule(startStorm, wavelength);
         TimerTask stopStorm = new TimerTask() {
             @Override
             public void run() {
                 setHappening(false);
             }
         };
-        start.schedule(stopStorm, wavelength + 5000);
+        timer.schedule(stopStorm, wavelength + 5000);
     }
 
     public void setHappening(boolean value) {
@@ -63,7 +55,7 @@ public static class Sunstorm {
         // left for discussion
     }
 
-    public static int getCount(){
+    public static int getCount() {
         return count;
     }
 }

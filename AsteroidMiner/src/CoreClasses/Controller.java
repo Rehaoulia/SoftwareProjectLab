@@ -94,23 +94,22 @@ public class Controller {
         rand = new Random();
         int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
         Sunstorm.behave(wavelength);
-        String threadName = new String("sunstorm",Sunstorm.getCount());
+        String threadName = new String("sunstorm", Sunstorm.getCount());
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
                 if (ss.isHappening()) {
                     for (Settler s : settlers) {
-                        if (s.getHidden() == false || s.getDeath()) {
+                        if (!s.getHidden() && !s.getDeath()) {
                             s.Die();
                         }
                     }
                     for (Robot r : robots) {
-                        if (r.getHidden == false) {
-                            s.Die();
+                        if (!r.getHidden) {
+                            r.Die();
                         }
                     }
                 }
-
             }
         };
 
