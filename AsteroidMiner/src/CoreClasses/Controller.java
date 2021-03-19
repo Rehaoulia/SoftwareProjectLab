@@ -22,6 +22,8 @@ public class Controller {
     private List<Int> SublimingAsteroids;
     private Random rand; // RNG
     private final int fps = 60; // necessary for sunstorm
+    private Map<String, Timer> Threads; // all threads to stop them
+    private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
 
     // Methods
     public void startGame(String[] names) {
@@ -74,7 +76,6 @@ public class Controller {
     }
 
     public void endGame() {
-
     }
 
     public void updateGame() {
@@ -91,8 +92,9 @@ public class Controller {
 
     public void triggerSunStorms() {
         rand = new Random();
-        int wavelength = (rand.nextInt(120) + 180) * 1000; // between 3 and 5 minutes
+        int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
         Sunstorm.behave(wavelength);
+        String threadName = new String("sunstorm",Sunstorm.getCount());
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
@@ -111,8 +113,9 @@ public class Controller {
 
             }
         };
+
         Timer checkDeaththread = new Timer();
-        checkDeaththread.schedule(checkDeath, wavelength, 1000/fps);
+        checkDeaththread.schedule(checkDeath, wavelength, 1000 / fps);
     }
 
     public void explodeAsteroids() {
@@ -120,6 +123,7 @@ public class Controller {
     }
 
     public boolean checkGame() {
+        boolean flag = false;
 
     }
 }

@@ -12,6 +12,7 @@ public static class Sunstorm {
     private Timer alarm; // needed for the alarm
     private longint wavelength; // in milliseconds , change type
     private boolean isHappening;
+    private static int count; // =0 by default
 
     // Methods
 
@@ -25,6 +26,7 @@ public static class Sunstorm {
     }
 
     public void behave(longint _wavelength) {
+        count++;
         this.wavelength = _wavelength;
         TimerTask setAlarm = new TimerTask() {
             @Override
@@ -59,5 +61,9 @@ public static class Sunstorm {
 
     public void display() {
         // left for discussion
+    }
+
+    public static int getCount(){
+        return count;
     }
 }
