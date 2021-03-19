@@ -15,7 +15,7 @@ public class Settler extends Traveler implements Craftable {
     Asteroid currentAsteroid = new Asteroid();
     SpaceStation spaceStation = new SpaceStation();
 
-    public Settler() {
+    public Settler(String i) {
 
     }
 

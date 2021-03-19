@@ -6,8 +6,9 @@ public class Uranium extends Mineral {
 
     public void explode() {
         if (currentAsteroid.radius == currentAsteroid.depth && currentAsteroid.isAphelion == false) {
-            controller.explodingAsteroids.add(currentAsteroid);
-            controller.numAsteroids--;
+            controller.getExplodingAsteroids().add(currentAsteroid.getID());
+            int numAsteroids = controller.getNumAsteroids();
+            numAsteroids--;
             currentAsteroid.isDestroyed = true;
 
         }

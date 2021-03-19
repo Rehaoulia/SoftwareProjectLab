@@ -9,7 +9,7 @@ public class WaterIce extends Mineral {
     public void sublime() {
        if (currentAsteroid.radius == currentAsteroid.depth && currentAsteroid.isAphelion == false)
 
-           controller.sublimingAsteroids.add(currentAsteroid);
+           controller.getSublimingAsteroids().add(currentAsteroid.getID());
 
 
     }}
