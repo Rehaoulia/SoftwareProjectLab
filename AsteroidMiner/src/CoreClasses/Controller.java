@@ -33,8 +33,9 @@ public class Controller {
         SublimingAsteroids = new ArrayList<Int>();
         settlers = new ArrayList<Settler>();
         robots = new ArrayList<Robots>();
-        Mineral M;
+
         for (int i = 0; i < numAsteroids; i++) {
+            Mineral M;
             int mineralSelector = rand.nextInt(4);
             switch (mineralSelector) {
             case 0:
@@ -49,7 +50,7 @@ public class Controller {
             default:
                 M = new Uranium();
             }
-            Asteroid a = new Asteroid(i, a);
+            Asteroid a = new Asteroid(i, M); //CHANGE ASTEROID ID TO INT
             asteroids.put(i, a);
             if (mineralSelector == 1) {
                 SublimingAsteroids.add(i);
@@ -58,7 +59,6 @@ public class Controller {
                 explodingAsteroids.add(i);
             }
         }
-
     }
 
     public void endGame() {
