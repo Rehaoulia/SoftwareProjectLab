@@ -88,7 +88,7 @@ public class Asteroid {
 	
 	
 	
-	public void explode() {
+	private void explode() {
 		isDestroyed =true ;
 		// animation();
 	}
