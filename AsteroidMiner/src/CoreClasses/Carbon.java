@@ -1,5 +1,5 @@
 package CoreClasses;
 
-public class Carbon {
-
+public class Carbon extends Mineral
+{
 }

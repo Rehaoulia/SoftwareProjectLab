@@ -1,5 +1,8 @@
 package CoreClasses;
 
-public class Mineral {
-
+public abstract class Mineral
+{
+    public void disappear()
+    {
+    }
 }
