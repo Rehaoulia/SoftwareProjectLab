@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class SpaceStation implements Craftable {
     //required minerals for crafting the spaceStation:
-    // String[] RequiredMinerals = {"Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce"};
+    String[] RequiredMinerals = {"Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce"};
 
-    Asteroid currentAsteroid = new Asteroid();
+    Asteroid currentAsteroid;
 
     //minerals designated for crafting the spaceStation:
     private ArrayList<String> spaceStationMinerals;
@@ -23,7 +23,7 @@ public class SpaceStation implements Craftable {
 
     //remove the resource from the minerals designated for crafting the spaceStation
     public void removeResource(Mineral resource) {
-        this.spaceStationMinerals.add(resource.toString());
+        this.spaceStationMinerals.remove(resource.toString());
 
     }
 
@@ -45,12 +45,6 @@ public class SpaceStation implements Craftable {
         return (i == 3 && c == 3 && u == 3 && w == 3);
     }
 
-
-    @Override
-    public String[] getRequiredMinerals() {
-        return RequiredMinerals;
-    }
-
     @Override
     public Asteroid getCurrentAstroid() {
         return currentAsteroid;
@@ -61,14 +55,5 @@ public class SpaceStation implements Craftable {
         currentAsteroid = a;
     }
 
-    @Override
-    public boolean checkMineral(Mineral mineral) {
-        return true;
-    }
 
-
-    @Override
-    public boolean checkStatus() {
-        return false;
-    }
 }
