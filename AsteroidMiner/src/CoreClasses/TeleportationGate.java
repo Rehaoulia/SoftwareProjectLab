@@ -23,7 +23,8 @@ public class TeleportationGate {
 	
 	public void setGate(TeleportationGate pair) {
 		if(deployed == true && pair.isPaired()==false ) {				
-		pairedGate = pair;						
+		pairedGate = pair;	
+		pairedGate.pairedGate = this;
 		pairedGate.deployed =true ;	
 		pairedGate.paired = true ;
 		paired = true;						// otherwise it turns to be recursive 
