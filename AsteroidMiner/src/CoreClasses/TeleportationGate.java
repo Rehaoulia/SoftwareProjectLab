@@ -23,11 +23,12 @@ public class TeleportationGate {
 	
 	public void setGate(TeleportationGate pair) {
 		if(deployed == true && pair.isPaired()==false ) {				
-		pairedGate = pair;	
+		this.pairedGate = pair;	
+		this.paired = true;	
 		pair.pairedGate = this;
 		pairedGate.deployed =true ;	
 		pairedGate.paired = true ;
-		paired = true;						// otherwise it turns to be recursive 
+							// otherwise it turns to be recursive 
 		}
 	}
 	public boolean isPaired() {return paired; }
