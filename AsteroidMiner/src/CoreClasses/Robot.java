@@ -1,7 +1,6 @@
 package CoreClasses;
 
-public class Robot implements Craftable{
-	String[] RequiredMinerals = {"Iron","Carbon","Uranium"}; //Again this should be an array of strings
+public class Robot extends Traveler implements Craftable{
 	Asteroid currentAsteroid = new Asteroid();
 	
 	//Constructor
@@ -47,6 +46,7 @@ public class Robot implements Craftable{
 	}
 	
 	//makes the robot hidden (commented because some classes are currently not implemented)
+	//@Override
 	private void hide() {
 		/*if((currentAsteroid.isHollow())&&(currentAsteroid.depth==currentAsteroid.radius)) {
 			setHidden(true);
@@ -64,24 +64,10 @@ public class Robot implements Craftable{
 	}
 
 	/*craftable interface methods*/
-	public String[] getRequiredMinerals() {
-		return RequiredMinerals;
-	}
 	public Asteroid getCurrentAstroid() {
 		return currentAsteroid;
 	}
 	public void setAsteroid(Asteroid a) {
 		currentAsteroid = a;
-	}
-	public boolean checkMineral(Mineral mineral) {
-		for(int i=0; i<RequiredMinerals.length;i++) {
-			if(RequiredMinerals[i].equalsIgnoreCase(mineral.getClass().toString())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public boolean checkStatus() {
-		return false;
 	}
 }
