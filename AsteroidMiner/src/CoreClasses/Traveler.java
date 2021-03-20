@@ -3,7 +3,7 @@ package CoreClasses;
 public abstract class Traveler {
     private boolean hidden;
     private Asteroid currentAsteroid;
-    private  Place currentPlace;
+    private Place currentPlace;
 
 
     public boolean getHidden() {
@@ -12,18 +12,6 @@ public abstract class Traveler {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-    }
-
-    public void hide() throws InterruptedException {
-
-        if (currentAsteroid.hollow() == true && !hidden && currentAsteroid.radius == currentAsteroid.depth) {
-            setHidden(true);
-            sleep(10);
-            wait(10000);
-            setHidden(false);
-            System.out.println("You hide successfully");
-        }
-        System.out.println("You can't hide");
     }
 
 
@@ -35,15 +23,16 @@ public abstract class Traveler {
     }
 
     public void teleport(TeleportationGate tg) {
-
-
-
+        if (tg.isPaired()) {
+            currentAsteroid = tg.getPairedGate().getneighbourAsteroid();
+        }
     }
 
 
-    public abstract void sleep(int i);
+    public abstract void hide() throws InterruptedException;
 
     public abstract void drill();
 
-    public abstract void dying();
+    public abstract void die();
 }
+
