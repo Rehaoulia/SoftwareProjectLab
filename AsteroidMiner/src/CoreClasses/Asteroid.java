@@ -96,7 +96,13 @@ public class Asteroid {
 	
 	
 	
-	///////////////////////////// ive added these they are not in class diagram
+	public boolean getHide() {
+		if(isHollow && !drillable() && !isMineable && !isDestroyed) {
+			isHollow =true ;
+			return true ;
+		}
+		else return false ;	
+	}
 	
 	public int getDepth() {
 		return depth;
