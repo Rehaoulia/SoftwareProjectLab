@@ -4,12 +4,17 @@ import java.util.ArrayList;
 
 public class SpaceStation implements Craftable {
     //required minerals for crafting the spaceStation:
-    String[] RequiredMinerals = {"Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce"};
+    //String[] RequiredMinerals = {"Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce"};
 
     Asteroid currentAsteroid;
 
     //minerals designated for crafting the spaceStation:
     private ArrayList<String> spaceStationMinerals;
+
+    public SpaceStation(Asteroid currentAsteroid) {
+        this.currentAsteroid = currentAsteroid; //Constructor
+    }
+
 
     //add the resource to the minerals designated for crafting the spaceStation
     public void addResource(Mineral resource) {
@@ -57,3 +62,4 @@ public class SpaceStation implements Craftable {
 
 
 }
+
