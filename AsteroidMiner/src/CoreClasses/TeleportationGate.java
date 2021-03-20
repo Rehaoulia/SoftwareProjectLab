@@ -36,5 +36,12 @@ public class TeleportationGate {
 		}
 	}
 	public boolean isPaired() {return paired; }
+	
+	public Asteroid getNeighbour() {
+		return neighbourAsteroid ;
+	}
+	public Asteroid passThrough() {
+		return pairedGate.getNeighbour();
+	}
 
 }
