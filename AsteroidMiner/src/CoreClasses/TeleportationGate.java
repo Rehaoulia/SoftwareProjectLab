@@ -5,6 +5,8 @@ public class TeleportationGate {
 	private boolean deployed;
 	private boolean paired;
 	private TeleportationGate pairedGate;
+	private Asteroid neighbourAsteroid ;
+	
 	
 	public TeleportationGate(){
 		deployed = false;
@@ -16,19 +18,21 @@ public class TeleportationGate {
 		return (paired)? pairedGate: null;
 	}
 	
-	public void setGate() {
+	public void setGate(Asteroid gate_na) {
 		if(!paired)
+		neighbourAsteroid= gate_na;
 		deployed = true ;
 	}
 	
-	public void setGate(TeleportationGate pair) {
+	public void setGate(Asteroid pGate_na ,TeleportationGate pair) {
 		if(deployed == true && pair.isPaired()==false ) {				
 		this.pairedGate = pair;	
 		this.paired = true;	
 		pair.pairedGate = this;
+		pair.neighbourAsteroid = pGate_na;
 		pairedGate.deployed =true ;	
 		pairedGate.paired = true ;
-							// otherwise it turns to be recursive 
+							
 		}
 	}
 	public boolean isPaired() {return paired; }
