@@ -1,10 +1,7 @@
 package CoreClasses;
 
 public interface Craftable {
-	//////////////////////////////////////////////////////////////////////
-	//RequiredMinerals should be strings. having them as minerals does not make sense.
-	//////////////////////////////////////////////////////////////////////
-	Asteroid currentAsteroid = new Asteroid();
+	Asteroid currentAsteroid = null;
 	
 	//returns the current Asteroid of the object
 	Asteroid getCurrentAstroid ();

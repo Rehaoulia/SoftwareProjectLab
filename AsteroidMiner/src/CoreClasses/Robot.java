@@ -1,7 +1,7 @@
 package CoreClasses;
 
 public class Robot extends Traveler implements Craftable{
-	Asteroid currentAsteroid = new Asteroid();
+	Asteroid currentAsteroid;
 	
 	//Constructor
 	///////////////////////////////////////////////////////////////////////////////////
@@ -16,14 +16,13 @@ public class Robot extends Traveler implements Craftable{
 		setAsteroid(destination);
 	}
 	
-	//Makes the robot drill its current asteroid (commented because the asteroid class is currently not implemented
+	//Makes the robot drill its current asteroid
+	@Override
 	public void drill() {
-		/*
 		currentAsteroid.getsDrill();
-		if((currentAsteroid.isDrillable==false)&&(currentAsteroid.radioactive()==true)&&(currentAsteroid.aphelion()==false)) {
-			currentAsteroid.explode(); //explode is supposed to tell the robot to travel to a close destination
+		if(currentAsteroid.destroyed()==true) {
+			//travel(Controller.getClosestAsteroid(currentAsteroid));	//this function does not exist yet
 		}
-		*/
 	}
 	
 	//describes the behavior of the robot (commented because some classes are currently not implemented)
@@ -46,8 +45,8 @@ public class Robot extends Traveler implements Craftable{
 	}
 	
 	//makes the robot hidden (commented because some classes are currently not implemented)
-	//@Override
-	private void hide() {
+	@Override
+	public void hide() {
 		/*if((currentAsteroid.isHollow())&&(currentAsteroid.depth==currentAsteroid.radius)) {
 			setHidden(true);
 			currentAsteroid.getsFill(this); //should we make a getHide?
