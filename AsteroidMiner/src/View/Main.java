@@ -8,98 +8,63 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Main {
-	
-	public static Controller c ;
-	public static int cAsteroid ;
-	
-	public static void main(String[] args) throws IOException {
-       // initialize();
-		
-		cAsteroid = 0 ;
+
+    public static int cAsteroid;
+
+    public static void main(String[] args) throws IOException {
+        Controller c = initialize();
+        int i = 0;
+        while (i < 10) {
+            mainMenu(c);
+        }
+    }
+
+    public static Controller initialize() throws IOException {
+        Controller c = new Controller();
         System.out.println("please write your name to start the game");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
-        Controller c = new Controller();
-        c.startGame(new String[]{name});
-        
-        int i=0;
-        while(i<10){
-        	 ArrayList<String> menuItems = new ArrayList<String>();
-             menuItems.add("Travel");
-             menuItems.add("Drill");
-             menuItems.add("Mine");
-             menuItems.add("Hide");
-             menuItems.add("Craft");
-             menuItems.add("revive");
-             Menu menu = new Menu(menuItems);
-             switch (menu.display()) {
-             case 0:  c.settlers.get(0).travel( c.asteroids.get(cAsteroid));
-             		if( cAsteroid != c.asteroids.size() ) cAsteroid++;
-             		else cAsteroid =0;
-             		System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
-                 break;
-             case 1: // drill
-            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
-                 break;
-             case 2:  c.settlers.get(0).mine();
-            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
-                 break;
-             case 3:  c.settlers.get(0).hide();
-            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
-                 break;
-             case 4: // craft
-                 break;
-             case 5: // revive
-                 break;
-             default:// bogus
-             }
-             //System.out.print(c.);
-        }
+        c.startGame(new String[] { name });
+        return c;
     }
-	
-//	public void initialize() throws IOException {
-//    	cAsteroid = 0 ;
-//        System.out.println("please write your name to start the game");
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//        String name = reader.readLine();
-//        Controller c = new Controller();
-//        c.startGame(new String[]{name});
-//    }
 
-	
-//    public static void mainMenu() throws IOException {
-//        ArrayList<String> menuItems = new ArrayList<String>();
-//        menuItems.add("Travel");
-//        menuItems.add("Drill");
-//        menuItems.add("Mine");
-//        menuItems.add("Hide");
-//        menuItems.add("Craft");
-//        menuItems.add("revive");
-//        Menu menu = new Menu(menuItems);
-//        switch (menu.display()) {
-//        case 0:  c.settlers.get(0).travel( c.asteroids.get(cAsteroid));
-//        		if( cAsteroid != c.asteroids.size() ) cAsteroid++;
-//        		else cAsteroid =0;
-//        		
-//        		System.out.println(c.information);
-//            break;
-//        case 1: // drill
-//            break;
-//        case 2: // mine
-//            break;
-//        case 3: // hide
-//            break;
-//        case 4: // craft
-//            break;
-//        case 5: // revive
-//            break;
-//        default:// bogus
-//        }
-//        //System.out.print(c.);
-//        
-//    }
+    public static void mainMenu(Controller c) throws IOException {
+        ArrayList<String> menuItems = new ArrayList<String>();
+        menuItems.add("Travel");
+        menuItems.add("Drill");
+        menuItems.add("Mine");
+        menuItems.add("Hide");
+        menuItems.add("Craft");
+        menuItems.add("revive");
+        Menu menu = new Menu(menuItems);
+        switch (menu.display()) {
+        case 0:
+            c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
+            if (cAsteroid != c.asteroids.size())
+                cAsteroid++;
+            else
+                cAsteroid = 0;
 
-    public void craftMenu() throws IOException {
+            break;
+        case 1: // drill
+            c.settlers.get(0).drill();
+            break;
+        case 2: // mine
+            c.settlers.get(0).mine();
+            break;
+        case 3: // hide
+            c.settlers.get(0).hide();
+            break;
+        case 4: // craft
+            break;
+        case 5: // revive
+            break;
+        default:// bogus
+        }
+        System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
+    }
+
+    public static void craftMenu() throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Robot");
         menuItems.add("Teleportation Gate");
@@ -115,8 +80,5 @@ public class Main {
         default:// bogus
         }
     }
-
-    
-    
 
 }

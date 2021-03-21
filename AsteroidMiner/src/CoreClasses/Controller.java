@@ -74,7 +74,7 @@ public class Controller {
                 M = null;
             }
             Asteroid a;
-            int radius = rand.nextInt(40) + 10;
+            int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
                 a = new Asteroid(i,radius);
             else
