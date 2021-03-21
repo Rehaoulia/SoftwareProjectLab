@@ -9,6 +9,7 @@ public class Robot extends Traveler implements Craftable{
 	///////////////////////////////////////////////////////////////////////////////////
 	public Robot(Asteroid settlerAsteroid) {
 		setAsteroid(settlerAsteroid);
+		//Controller.addRobot(this);
 	}
 	
 	//makes the robot travel to the destination asteroid
@@ -30,36 +31,41 @@ public class Robot extends Traveler implements Craftable{
 	//It should instead check if the Place is a teleportationGate or not
 	//So getClosestAsteroid should become getClosestPlace and currentAsteroid should become currentPlace instead
 	public boolean behave() {
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//Asteroid should know its closest asteroid because there is no other way for the robot to know it
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/*travel(currentAsteroid.getClosestAsteroid());
-		if(currentAsteroid.getGates().length()==0) {
+		//*travel(Controller.getClosestPlace(currentPlace));
+		if(this.currentPlace.getClass().toString().equalsIgnoreCase("TeleportationGate")) {
+			//teleport(currentPlace.pairedGate());
+			
+			//currentPlace should be protected in Traveler
+			//currentAsteroid should not be in the Traveler
+		}else {
 			drill();
 			hide();
 		}
-		else {
-			teleport(currentAsteroid.getPair()); //currentAsteroid should be currentPlace instead. An asteroid doesn't have a pair
-		}*/
 		return true;
 	}
+	
+	/*Overridden methods*/
 	
 	//makes the robot hidden (commented because some classes are currently not implemented)
 	@Override
 	public void hide() {
-		/*if((currentAsteroid.isHollow())&&(currentAsteroid.depth==currentAsteroid.radius)) {
-			setHidden(true);
-			currentAsteroid.getsFill(this); //should we make a getHide?
-			sleep(10);
-			wait(10000);
-			setHidden(false);
-			currentAsteroid.getsFill(null); 
-		}*/
+		try {
+			if((currentAsteroid.hollow())&&(currentAsteroid.getDepth()==currentAsteroid.radius)) {//depth is private
+				setHidden(true);
+				currentAsteroid.getHide();
+				wait(10000);
+				setHidden(false);
+				currentAsteroid.getsFill(null); 
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//kills the robot (commented because some classes are currently not implemented)
-	public void dying() {
-		//Controller.removeRobot(this); //what do you think?
+	@Override
+	public void die() {
+		//Controller.removeRobot(this); //this function does not exist yet
 	}
 
 	/*craftable interface methods*/
