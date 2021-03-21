@@ -33,7 +33,6 @@ public class Asteroid {
 			isRadioActive =true;
 		else 
 			isRadioActive =false;
-
 		// isAphelion = ??;  we need location to set this
 		
 	} 
@@ -121,8 +120,4 @@ public class Asteroid {
 		return str; }
 	
 	//  public getLocation() {}
-	
-	
-	
-	
 }
