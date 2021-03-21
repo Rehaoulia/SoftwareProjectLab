@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,7 +13,7 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     private List<Settler> settlers;
-    private List<Robot> robots;
+    private static List<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
     private Map<Int, Asteroid> asteroids;
@@ -22,7 +23,7 @@ public class Controller {
     private List<Int> SublimingAsteroids;
     private Random rand; // RNG
     private final int fps = 60; // necessary for sunstorm
-    private Map<String, Timer> Threads; // all threads to stop them
+    private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
 
     // Methods
@@ -35,11 +36,6 @@ public class Controller {
     public void setupGame() {
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
-        asteroids = new HashMap<Int, Asteroid>();
-        explodingAsteroids = new ArrayList<Int>();
-        SublimingAsteroids = new ArrayList<Int>();
-        settlers = new ArrayList<Settler>();
-        robots = new ArrayList<Robots>();
 
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
@@ -56,6 +52,7 @@ public class Controller {
                 break;
             case 3:
                 M = new Uranium();
+                break;
             default:
                 M = null;
             }
@@ -73,6 +70,10 @@ public class Controller {
                 explodingAsteroids.add(i);
 
         }
+    }
+
+    public static void addRobot(Robot r) { // missing from the sequence diagram
+        robots.add(r);
     }
 
     public void endGame() {
@@ -94,7 +95,6 @@ public class Controller {
         rand = new Random();
         int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
         Sunstorm.behave(wavelength);
-        String threadName = new String("sunstorm", Sunstorm.getCount());
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
@@ -112,9 +112,8 @@ public class Controller {
                 }
             }
         };
-
-        Timer checkDeaththread = new Timer();
-        checkDeaththread.schedule(checkDeath, wavelength, 1000 / fps);
+        ThreadTasks.put("sunstorm", checkDeath);
+        Thread.schedule(ThreadTasks.get("sunstorm"), wavelength, 1000 / fps);
     }
 
     public void explodeAsteroids() {
@@ -123,6 +122,5 @@ public class Controller {
 
     public boolean checkGame() {
         boolean flag = false;
-
     }
 }

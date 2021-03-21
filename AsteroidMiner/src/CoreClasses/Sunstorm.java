@@ -6,20 +6,20 @@ import java.util.TimerTask;
 public static class Sunstorm {
     // Attributes
 
-    private float lastStormTime;
-    private Timer timer;
-    private longint wavelength; // in milliseconds , change type
-    private boolean isHappening;
-    private static int count; // =0 by default
+    private static longint lastStormTime;
+    private static Timer timer;
+    private static longint wavelength; // in milliseconds , change type
+    private static boolean isHappening;
+    public static int count; // =0 by default
 
-    private double calculateTimeLeft() {
+    private static double calculateTimeLeft() {
 
-        return 0.0;
+        return 0.0; // better be implemented later
     }
 
-    public void behave(longint _wavelength) {
+    public static void behave(longint _wavelength) {
         count++;
-        this.wavelength = _wavelength;
+        wavelength = _wavelength;
         TimerTask setAlarm = new TimerTask() {
             @Override
             public void run() {
@@ -43,19 +43,15 @@ public static class Sunstorm {
         timer.schedule(stopStorm, wavelength + 5000);
     }
 
-    public void setHappening(boolean value) {
+    public static void setHappening(boolean value) {
         isHappening = value;
     }
 
-    public boolean getHappening() {
+    public static boolean getHappening() {
         return isHappening;
     } // getter
 
-    public void display() {
+    public static void display() {
         // left for discussion
-    }
-
-    public static int getCount() {
-        return count;
     }
 }
