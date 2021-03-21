@@ -76,3 +76,4 @@ public class Robot extends Traveler implements Craftable{
 		currentAsteroid = a;
 	}
 }
+

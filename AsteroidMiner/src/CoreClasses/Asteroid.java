@@ -33,6 +33,7 @@ public class Asteroid {
 			isRadioActive =true;
 		else 
 			isRadioActive =false;
+		// isAphelion = ??;  we need location to set this
 		
 	} 
 	public Asteroid(int _ID) {				// this constructor works without mineral and sets hollow
@@ -123,8 +124,4 @@ public class Asteroid {
 		return str; }
 	
 	//  public getLocation() {}
-	
-	
-	
-	
 }
