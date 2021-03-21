@@ -24,6 +24,7 @@ public class Settler extends Traveler
 	
 	public void travel(Asteroid asteroid) {
 		setAsteroid(asteroid);
+		Controller.updateAsteroid(this.currentAsteroid);
 	}
 	
 	public void putGate() {
@@ -37,14 +38,14 @@ public class Settler extends Traveler
 	@Override
 	public void drill() {
 		this.currentAsteroid.getsDrill();
-		Controller.updateAsteroid();
+		Controller.updateAsteroid(this.currentAsteroid);
 	}
 	
 	public void mine() {
 		if(this.currentAsteroid.getsMine()!= null && this.getCapacityLeft() > 0) {
 			this.minedMinerals.add(this.currentAsteroid.getsMine().getClass().toString());
 		}
-		Controller.updateAsteroid();
+		Controller.updateAsteroid(this.currentAsteroid);
 	}
 	
 	public void fill(String mineral) {
@@ -67,7 +68,7 @@ public class Settler extends Traveler
 				this.minedMinerals.remove(m);
 			}	
 		}
-		Controller.updateAsteroid();
+		Controller.updateAsteroid(this.currentAsteroid);
 	}
 	
 	public boolean revive(Settler S) {

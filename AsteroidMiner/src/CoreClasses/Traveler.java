@@ -4,8 +4,6 @@ public abstract class Traveler {
     protected boolean hidden;
     protected Place currentPlace;
 
-
-
     public boolean getHidden() {
         return hidden;
     }
@@ -23,10 +21,9 @@ public abstract class Traveler {
 
     public void teleport(TeleportationGate tg) {
         if (tg.isPaired()) {
-            currentAsteroid = tg.getPairedGate().getneighbourAsteroid();
+            currentPlace = tg.getPairedGate().getNeighbour();
         }
     }
-
 
 
     public abstract void hide() throws InterruptedException;

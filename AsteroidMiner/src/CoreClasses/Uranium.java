@@ -2,12 +2,12 @@ package CoreClasses;
 
 public class Uranium extends Mineral {
     private Asteroid currentAsteroid;
-    Controller controller = new Controller();
-
+    
     public void explode() {
-        if (currentAsteroid.radius == currentAsteroid.depth && currentAsteroid.isAphelion == false) {
-            currentAsteroid.isDestroyed = true;
-
+        if (currentAsteroid.radius == currentAsteroid.getDepth() && !currentAsteroid.perihelion()) {
+            currentAsteroid.destroyed();
+            Controller.removeExplodingAsteroid(this.currentAsteroid.getID());
+            Controller.updateAsteroid(this.currentAsteroid);
         }
     }
 }

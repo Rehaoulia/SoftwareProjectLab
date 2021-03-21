@@ -16,11 +16,11 @@ public class Controller {
     private static List<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
-    private Map<Int, Asteroid> asteroids;
+    private Map<Integer, Asteroid> asteroids;
     private boolean gamerOver;
     private boolean win;
-    private List<Int> explodingAsteroids;
-    private List<Int> SublimingAsteroids;
+    private static ArrayList<Integer> explodingAsteroids;
+    private static ArrayList<Integer> sublimingAsteroids;
     private Random rand; // RNG
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
@@ -64,7 +64,7 @@ public class Controller {
 
             asteroids.put(i, a);
             if (mineralSelector == 1)
-                SublimingAsteroids.add(i);
+                sublimingAsteroids.add(i);
 
             if (mineralSelector == 3)
                 explodingAsteroids.add(i);
@@ -98,15 +98,15 @@ public class Controller {
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
-                if (ss.isHappening()) {
+                if (Sunstorm.getHappening()) {
                     for (Settler s : settlers) {
                         if (!s.getHidden() && !s.getDeath()) {
-                            s.Die();
+                            s.die();
                         }
                     }
                     for (Robot r : robots) {
-                        if (!r.getHidden) {
-                            r.Die();
+                        if (!r.getHidden()) {
+                            r.die();
                         }
                     }
                 }
@@ -122,13 +122,24 @@ public class Controller {
 
     public boolean checkGame() {
         boolean flag = false;
+		return flag;
     }
     
-    public static void updateAsteroid() {
+    public static void updateAsteroid(Asteroid asteroid) {
     	
     }
     
     public static void updateSettler() {
     	
+    }
+    
+    public static void removeSublimingAsteroid(int id) 
+    {
+    	sublimingAsteroids.remove(id);
+    }
+    
+    public static void removeExplodingAsteroid(int id) 
+    {
+    	explodingAsteroids.remove(id);
     }
 }

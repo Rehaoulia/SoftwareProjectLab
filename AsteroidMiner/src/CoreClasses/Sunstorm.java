@@ -4,12 +4,12 @@ import java.util.Timer;
 
 import java.util.TimerTask;
 
-public static class Sunstorm {
+public class Sunstorm {
     // Attributes
 
-    private static longint lastStormTime;
+    private static long lastStormTime;
     private static Timer timer;
-    private static longint wavelength; // in milliseconds , change type
+    private static long wavelength; // in milliseconds , change type
     private static boolean isHappening;
     public static int count; // =0 by default
 
@@ -18,7 +18,7 @@ public static class Sunstorm {
         return 0.0; // better be implemented later
     }
 
-    public static void behave(longint _wavelength) {
+    public static void behave(long _wavelength) {
         count++;
         wavelength = _wavelength;
         TimerTask setAlarm = new TimerTask() {
