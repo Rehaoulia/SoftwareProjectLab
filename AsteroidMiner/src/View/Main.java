@@ -5,6 +5,7 @@ import CoreClasses.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.InputStreamReader;
 
 public class Main {
@@ -33,9 +34,10 @@ public class Main {
         menuItems.add("Travel");
         menuItems.add("Drill");
         menuItems.add("Mine");
+        menuItems.add("Fill");
         menuItems.add("Hide");
         menuItems.add("Craft");
-        menuItems.add("revive");
+        // menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
         case 0:
@@ -52,16 +54,23 @@ public class Main {
         case 2: // mine
             c.settlers.get(0).mine();
             break;
-        case 3: // hide
+        case 3: // fill
+            Menu minerals = new Menu(c.settlers.get(0).getMinerals());
+            int option = minerals.display();
+            c.settlers.get(0).fill(c.settlers.get(0).getMinerals().get(option));
+            break;
+        case 4: // hide
             c.settlers.get(0).hide();
             break;
-        case 4: // craft
+        case 5: // craft
+            c.settlers.get(0).showCraftMenu();
             break;
-        case 5: // revive
-            break;
-        default:// bogus
+        // case 6: // revive
+        // break;
+        default:
+            System.out.println("you didn't choose any action");
         }
-        System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
+        System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
     }
 
     public static void craftMenu() throws IOException {

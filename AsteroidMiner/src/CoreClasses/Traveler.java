@@ -13,8 +13,7 @@ public abstract class Traveler {
     }
 
     public void unhide() {
-        if (!hidden)
-            System.out.println("already not hidden");
+
         setHidden(false);
 
     }

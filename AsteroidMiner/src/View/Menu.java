@@ -20,9 +20,9 @@ public class Menu {
     }
 
     public int display() throws IOException {
-        System.out.println(message);
+        System.out.println("\n--------"+message+"--------\n");
         for(int i=0;i<choices.size();i++){
-            System.out.println(i+" : "+choices.get(i));
+            System.out.println("\t"+i+" : "+choices.get(i));
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 

@@ -80,7 +80,8 @@ public class Asteroid extends Place {
 		if (drillable() && !isDestroyed) {
 			isBeingDrilled = true;
 			depth++;
-
+			if (!isHollow && !drillable())
+				isMineable = true;
 			return depth;
 		} else {
 			if (isRadioActive && isPerihelion)
@@ -96,7 +97,6 @@ public class Asteroid extends Place {
 
 	public Mineral getsMine() // returns null if its not mineable
 	{
-
 		if (isMineable && !isDestroyed) { // if its not hollow and its not mineable
 			isHollow = true; // then someone is hiding !
 
@@ -110,6 +110,8 @@ public class Asteroid extends Place {
 
 		if (isHollow && !drillable() && !isDestroyed) {
 			mineral = _mineral;
+			isHollow = false;
+			isMineable = true;
 			return true;
 		} else
 			return false;
@@ -153,8 +155,8 @@ public class Asteroid extends Place {
 	}
 
 	public String viewInfo() {
-		String str = "Radius: " + this.radius +"\tDepth:" + depth + "\tHollow: " + Boolean.toString(isHollow)
-				+ "\nDrillable: " + Boolean.toString(drillable()) + "\tMineable :" + Boolean.toString(isMineable);
+		String str = "Radius: " + this.radius + "\t\tDepth:" + depth + "\t\tHollow: " + Boolean.toString(isHollow)
+				+ "\nDrillable: " + Boolean.toString(drillable()) + "\t\tMineable :" + Boolean.toString(isMineable);
 		return str;
 	}
 
