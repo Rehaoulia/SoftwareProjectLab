@@ -29,6 +29,8 @@ public class Asteroid extends Place {
 		isMineable=false;
 		isBeingDrilled=false;
 		isDestroyed=false;
+		depth = 0 ;
+		radius =10;
 		if(mineral.toString().equals("Uranium"))
 			isRadioActive =true;
 		else 
@@ -43,6 +45,8 @@ public class Asteroid extends Place {
 		isBeingDrilled=false;
 		isDestroyed=false;
 		isRadioActive =false;
+		depth = 0 ;
+		radius =10;
 	} 
 	
 	public int getID() {
