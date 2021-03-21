@@ -22,7 +22,7 @@ public class Asteroid extends Place {
 	
 	
 													//need to have location aswell
-	public Asteroid(int _ID, Mineral _mineral) {
+	public Asteroid(int _ID, Mineral _mineral, int _radius) {
 		ID=_ID;
 		mineral=_mineral;
 		isHollow =false;
@@ -30,7 +30,7 @@ public class Asteroid extends Place {
 		isBeingDrilled=false;
 		isDestroyed=false;
 		depth = 0 ;
-		radius =10;
+		radius = _radius;
 		if(mineral.toString().equals("Uranium"))
 			isRadioActive =true;
 		else 
@@ -38,7 +38,7 @@ public class Asteroid extends Place {
 		// isAphelion = ??;  we need location to set this
 		
 	} 
-	public Asteroid(int _ID) {				// this constructor works without mineral and sets hollow
+	public Asteroid(int _ID, int _radius) {				// this constructor works without mineral and sets hollow
 		ID=_ID;
 		isHollow = true;
 		isMineable=false;
@@ -46,7 +46,7 @@ public class Asteroid extends Place {
 		isDestroyed=false;
 		isRadioActive =false;
 		depth = 0 ;
-		radius =10;
+		radius =_radius;
 	} 
 	
 	public int getID() {

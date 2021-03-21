@@ -74,10 +74,11 @@ public class Controller {
                 M = null;
             }
             Asteroid a;
+            int radius = rand.nextInt(40) + 10;
             if (mineralSelector == 4)
-                a = new Asteroid(i);
+                a = new Asteroid(i,radius);
             else
-                a = new Asteroid(i, M);
+                a = new Asteroid(i, M,radius);
 
             asteroids.put(i, a);
             if (mineralSelector == 1)
