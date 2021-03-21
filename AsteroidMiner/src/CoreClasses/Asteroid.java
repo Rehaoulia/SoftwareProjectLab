@@ -57,6 +57,7 @@ public class Asteroid {
 	public int getsDrill() 		// (Settler settler) we can add drillingsettler attr to
 													// specify and limit drilling action
 	{      													 // this function returns -1 if its mineable
+
 		if( drillable() && !isDestroyed) {
 		isBeingDrilled = true;
 		depth++;     
@@ -74,14 +75,17 @@ public class Asteroid {
 	
 	public Mineral getsMine()     							// returns null if its not mineable
 	{
+
 		if( isMineable && !isDestroyed) {	//if its not hollow and its not mineable
 		isHollow =true ;									// then someone is hiding !
+
 		isMineable =false; 
 		return mineral;
 		}else return null;
 	}
 	
 	public boolean getsFill(Mineral _mineral) {
+
 		if(isHollow && !drillable() && !isDestroyed) {
 			mineral = _mineral ;
 			return true ;
@@ -94,7 +98,7 @@ public class Asteroid {
 	public void setSpaceStation(SpaceStation _station) {station = _station;}
 	
 	
-	
+
 	public boolean getHide() {
 		if(isHollow && !drillable() && !isMineable && !isDestroyed) {
 			isHollow =true ;

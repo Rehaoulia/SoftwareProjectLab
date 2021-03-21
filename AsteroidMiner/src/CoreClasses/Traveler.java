@@ -3,7 +3,9 @@ package CoreClasses;
 public abstract class Traveler {
     private boolean hidden;
     private Asteroid currentAsteroid;
+
     private Place currentPlace;
+
 
 
     public boolean getHidden() {
@@ -13,7 +15,6 @@ public abstract class Traveler {
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
-
 
     public void unhide() {
         if (!hidden)
@@ -29,10 +30,10 @@ public abstract class Traveler {
     }
 
 
+
     public abstract void hide() throws InterruptedException;
 
     public abstract void drill();
 
     public abstract void die();
 }
-
