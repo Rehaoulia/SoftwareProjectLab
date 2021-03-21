@@ -6,7 +6,7 @@ public class Settler extends Traveler
 {
 	
 	private String name;
-	private ArrayList<Mineral> minedMinerals; //minedMinerals should be changed to a string ArrayList, explanation below in checkRequiredMaterial
+	private ArrayList<String> minedMinerals; //minedMinerals should be changed to a string ArrayList, explanation below in checkRequiredMaterial
 	private TeleportationGate[] gates;
 	private long timeOfDeath;
 	private boolean dead;
@@ -42,18 +42,32 @@ public class Settler extends Traveler
 	
 	public void mine() {
 		if(this.currentAsteroid.getsMine()!= null && this.getCapacityLeft() > 0) {
-			this.minedMinerals.add(this.currentAsteroid.getsMine());
+			this.minedMinerals.add(this.currentAsteroid.getsMine().getClass().toString());
 		}
 		Controller.updateAsteroid();
 	}
 	
-	public void fill(Mineral mineral) {
-		for(Mineral m : minedMinerals) {
-			if(m.getClass().toString().equalsIgnoreCase(mineral.getClass().toString())) {
-				this.currentAsteroid.getsFill(mineral);
+	public void fill(String mineral) {
+		for(String m : minedMinerals) {
+			if(m.equalsIgnoreCase(mineral)) {
+				switch(mineral) {
+				case "Uranium":
+					this.currentAsteroid.getsFill(new Uranium());
+					break;
+				case "WaterIce":
+					this.currentAsteroid.getsFill(new WaterIce());
+					break;
+				case "Carbon":
+					this.currentAsteroid.getsFill(new Carbon());
+					break;
+				case "Iron":
+					this.currentAsteroid.getsFill(new Iron());
+					break;
+				}
+				this.minedMinerals.remove(m);
 			}	
-			Controller.updateAsteroid();
 		}
+		Controller.updateAsteroid();
 	}
 	
 	public boolean revive(Settler S) {
@@ -71,7 +85,6 @@ public class Settler extends Traveler
 	//minedMinerals needs to be a string arrayList to allow calling method containsAll(), or else this part of the code will be much more complicated
 	public boolean checkRequiredMaterial(int craftable) {
 		boolean canCraft = false;
-		//remove material from settler
 		switch(craftable) {
 			case 1:
 				if(minedMinerals.containsAll(Arrays.asList("Uranium", "Carbon", "Iron"))) {
