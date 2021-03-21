@@ -2,7 +2,7 @@ package CoreClasses;
 
 import java.util.List;
 
-public class Asteroid {
+public class Asteroid extends Place {
 	
 	private boolean isHollow;
 	private boolean isRadioActive;

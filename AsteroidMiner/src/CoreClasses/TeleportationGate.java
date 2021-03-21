@@ -1,6 +1,6 @@
 package CoreClasses;
 
-public class TeleportationGate {
+public class TeleportationGate extends Place {
 	
 	private boolean deployed;
 	private boolean paired;
