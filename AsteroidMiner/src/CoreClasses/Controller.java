@@ -123,4 +123,12 @@ public class Controller {
     public boolean checkGame() {
         boolean flag = false;
     }
+    
+    public static void updateAsteroid() {
+    	
+    }
+    
+    public static void updateSettler() {
+    	
+    }
 }

@@ -1,10 +1,8 @@
 package CoreClasses;
 
 public abstract class Traveler {
-    private boolean hidden;
-    private Asteroid currentAsteroid;
-
-    private Place currentPlace;
+    protected boolean hidden;
+    protected Place currentPlace;
 
 
 

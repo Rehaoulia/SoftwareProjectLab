@@ -2,20 +2,22 @@ package CoreClasses;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Settler extends Traveler implements Craftable 
+public class Settler extends Traveler 
 {
 	
 	private String name;
-	private ArrayList<String> minedMinerals; //minedMinerals should be changed to a string ArrayList, explanation below in checkRequiredMaterial
+	private ArrayList<Mineral> minedMinerals; //minedMinerals should be changed to a string ArrayList, explanation below in checkRequiredMaterial
 	private TeleportationGate[] gates;
 	private long timeOfDeath;
 	private boolean dead;
+	private Asteroid currentAsteroid;
 	
-	public Settler(Asteroid startingAsteroid, String name){
-		this.currentAsteroid = startingAsteroid;
+	public Settler(String name){
 		this.name = name;
+		this.timeOfDeath = 0;
+		this.dead = false;
 	}
-	 //Change currentPlace to currentAsteroid because currentPlace does not have methods such as getsDrill, getsFill, getsMine
+	
 	public void setAsteroid(Asteroid asteroid) {
 		this.currentAsteroid = asteroid; 
 	}
@@ -24,13 +26,12 @@ public class Settler extends Traveler implements Craftable
 		setAsteroid(asteroid);
 	}
 	
-	//Add deploy method to gates (basically just a setter for the deployed attribute)
-	public void putGate(TeleportationGate gate) {
-		for(TeleportationGate g : this.gates) {
-			if(gate.equals(g) && !gate.getDeployed()) {
-				g.deploy(this.currentAsteroid);
+	public void putGate() {
+			if(!gates[0].isDeployed()) {
+				gates[0].setGate(this.currentAsteroid);
+			} else if(gates[0].isDeployed() && !gates[0].isPaired()) {
+				gates[1].setGate(this.currentAsteroid, gates[0]);
 			}
-		}
 	}
 	
 	@Override
@@ -41,19 +42,20 @@ public class Settler extends Traveler implements Craftable
 	
 	public void mine() {
 		if(this.currentAsteroid.getsMine()!= null && this.getCapacityLeft() > 0) {
-			this.minedMinerals.add(this.currentAsteroid.getsMine().toString());
+			this.minedMinerals.add(this.currentAsteroid.getsMine());
 		}
 		Controller.updateAsteroid();
 	}
 	
-	public void fill(String mineral) {
-		if(minedMinerals.contains(mineral)) {
-			this.currentAsteroid.getsFill(mineral);
-		}	
-		Controller.updateAsteroid();
+	public void fill(Mineral mineral) {
+		for(Mineral m : minedMinerals) {
+			if(m.getClass().toString().equalsIgnoreCase(mineral.getClass().toString())) {
+				this.currentAsteroid.getsFill(mineral);
+			}	
+			Controller.updateAsteroid();
+		}
 	}
 	
-	//timeOfDeath changed into long and revive just calculates the difference between current time and time of death also revive return type changed into boolean
 	public boolean revive(Settler S) {
 		long elapsedTime = System.currentTimeMillis() - S.getTimeOfDeath();
 		if(elapsedTime < 10000) {
