@@ -12,11 +12,11 @@ import java.util.TimerTask;
 
 public class Controller {
     // Attributes
-    private ArrayList<Settler> settlers;
+    public ArrayList<Settler> settlers;
     private static ArrayList<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
-    private Map<Integer, Asteroid> asteroids;
+    public Map<Integer, Asteroid> asteroids;
     private boolean gamerOver;
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
@@ -25,7 +25,7 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
-    public String information;
+    public  String information;
 
     // Methods
     
@@ -42,6 +42,7 @@ public class Controller {
         	set.setAsteroid(asteroids.get(0));
             settlers.add(set);
             information = set.getAsteroid().viewInfo();
+            System.out.println(information);
                     
         }
     }

@@ -9,7 +9,16 @@ import java.io.InputStreamReader;
 
 public class Main {
 	
-	private Controller c ;
+	public Controller c ;
+	public int cAsteroid ;
+	
+	public static void main(String[] args) throws IOException {
+        initialize();
+        int i=0;
+        while(i<10){
+            mainMenu();
+        }
+    }
 	
     public static void mainMenu() throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
@@ -21,7 +30,8 @@ public class Main {
         menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
-        case 0: // travel
+        case 0: // c.settlers.getAt(0).travel(c.asteroids.get(cAsteroid));
+        		//if(cAsteroid !== c.asteroids)cAsteroid++;
             break;
         case 1: // drill
             break;
@@ -35,7 +45,7 @@ public class Main {
             break;
         default:// bogus
         }
-       // System.out.print(c.information);
+        //System.out.print(c.);
         
     }
 
@@ -57,6 +67,7 @@ public class Main {
     }
 
     public static void initialize() throws IOException {
+    	cAsteroid = 0 ;
         System.out.println("please write your name to start the game");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
@@ -64,12 +75,6 @@ public class Main {
         c.startGame(new String[]{name});
     }
 
-    public static void main(String[] args) throws IOException {
-        initialize();
-        int i=0;
-        while(i<10){
-            mainMenu();
-        }
-    }
+    
 
 }
