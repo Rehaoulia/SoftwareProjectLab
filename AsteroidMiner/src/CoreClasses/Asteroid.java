@@ -7,9 +7,9 @@ public class Asteroid {
 	private boolean isHollow;
 	private boolean isRadioActive;
 	private boolean isPerihelion;
-	private boolean isMineable=false;
-	private boolean isBeingDrilled=false;
-	private boolean isDestroyed=false;
+	private boolean isMineable;
+	private boolean isBeingDrilled;
+	private boolean isDestroyed;
 	
 	private int ID;
 	private List<TeleportationGate> gates;
@@ -26,13 +26,22 @@ public class Asteroid {
 		ID=_ID;
 		mineral=_mineral;
 		isHollow =false;
-		// isAphelion = ??;  we need location to set this
-		// if uranium then radioActive
+		isMineable=false;
+		isBeingDrilled=false;
+		isDestroyed=false;
+		if(mineral.toString().equals("Uranium"))
+			isRadioActive =true;
+		else 
+			isRadioActive =false;
 		
 	} 
 	public Asteroid(int _ID) {				// this constructor works without mineral and sets hollow
 		ID=_ID;
 		isHollow = true;
+		isMineable=false;
+		isBeingDrilled=false;
+		isDestroyed=false;
+		isRadioActive =false;
 	} 
 	
 	public int getID() {
@@ -42,14 +51,16 @@ public class Asteroid {
 	public boolean radioActive() { return  ((radius/2) <= depth) ?  isRadioActive : false ;}
 	public boolean mineable() {return isMineable;}
 	public boolean perihelion() {return isPerihelion;}
-	public boolean drillable() {return ( !(isMineable || isBeingDrilled) )? true:false ;}
+	public boolean drillable() {return (this.getDepth()!=radius) ? true:false ;}
 	
 	public int getsDrill() 		// (Settler settler) we can add drillingsettler attr to
 													// specify and limit drilling action
 	{      													 // this function returns -1 if its mineable
-		if(radius != depth && !isDestroyed) {
+
+		if( drillable() && !isDestroyed) {
 		isBeingDrilled = true;
-		depth++;               								 // or any other mount we will see
+		depth++;     
+		
 		return depth;
 		}else {
 			if(isRadioActive && isPerihelion ) explode();   // if its radioactive then its not hollow
@@ -63,15 +74,18 @@ public class Asteroid {
 	
 	public Mineral getsMine()     							// returns null if its not mineable
 	{
-		if( (!isHollow || isMineable) && !isDestroyed) {
-		isHollow =true ;
+
+		if( isMineable && !isDestroyed) {	//if its not hollow and its not mineable
+		isHollow =true ;									// then someone is hiding !
+
 		isMineable =false; 
 		return mineral;
 		}else return null;
 	}
 	
 	public boolean getsFill(Mineral _mineral) {
-		if(isHollow && getsDrill()== -1 && !isDestroyed) {
+
+		if(isHollow && !drillable() && !isDestroyed) {
 			mineral = _mineral ;
 			return true ;
 		}
@@ -83,9 +97,18 @@ public class Asteroid {
 	public void setSpaceStation(SpaceStation _station) {station = _station;}
 	
 	
+
+	public boolean getHide() {
+		if(isHollow && !drillable() && !isMineable && !isDestroyed) {
+			isHollow =true ;
+			return true ;
+		}
+		else return false ;	
+	}
 	
-	///////////////////////////// ive added these they are not in class diagram
-	
+	public int getDepth() {
+		return depth;
+	} 
 	
 	
 	private void explode() {
