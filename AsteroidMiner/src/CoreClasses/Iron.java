@@ -1,5 +1,5 @@
 package CoreClasses;
 
-public class Iron {
+public class Iron extends Mineral{
 
 }
