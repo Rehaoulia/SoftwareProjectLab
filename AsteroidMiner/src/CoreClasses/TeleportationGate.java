@@ -1,10 +1,7 @@
 package CoreClasses;
 
+public class TeleportationGate extends Place {
 
-import java.util.List;
-import java.util.Map;
-
-public class TeleportationGate {
 	
 	private boolean deployed;
 	private boolean paired;
