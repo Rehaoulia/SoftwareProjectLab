@@ -2,35 +2,57 @@ package CoreClasses;
 
 import java.util.Timer;
 
-public class Sunstorm {
+import java.util.TimerTask;
+
+public static class Sunstorm {
     // Attributes
 
-    private float lastStormTime;
-    private Timer timer;
-    private double wavelength;
-    private boolean isHappening;
+    private static longint lastStormTime;
+    private static Timer timer;
+    private static longint wavelength; // in milliseconds , change type
+    private static boolean isHappening;
+    public static int count; // =0 by default
 
-    // Methods
+    private static double calculateTimeLeft() {
 
-    public Sunstorm(double wavelength) {
-        this.wavelength = wavelength;
+        return 0.0; // better be implemented later
     }
 
-    private double calculateTimeLeft() {
-
-        return 0.0;
+    public static void behave(longint _wavelength) {
+        count++;
+        wavelength = _wavelength;
+        TimerTask setAlarm = new TimerTask() {
+            @Override
+            public void run() {
+                display();
+            }
+        };
+        timer.schedule(setAlarm, wavelength - 10000);
+        TimerTask startStorm = new TimerTask() {
+            @Override
+            public void run() {
+                setHappening(true);
+            }
+        };
+        timer.schedule(startStorm, wavelength);
+        TimerTask stopStorm = new TimerTask() {
+            @Override
+            public void run() {
+                setHappening(false);
+            }
+        };
+        timer.schedule(stopStorm, wavelength + 5000);
     }
 
-    public void behave() {
-
-    }
-
-    public void setHappening(boolean value) {
+    public static void setHappening(boolean value) {
         isHappening = value;
-
     }
 
-    public void display() {
+    public static boolean getHappening() {
+        return isHappening;
+    } // getter
 
+    public static void display() {
+        // left for discussion
     }
 }

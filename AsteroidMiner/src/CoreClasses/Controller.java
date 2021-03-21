@@ -1,34 +1,30 @@
 package CoreClasses;
 
-import java.util.*;
+import java.nio.file.Watchable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class Controller<Int> {
+public class Controller {
     // Attributes
     private List<Settler> settlers;
-    private List<Robot> robots;
-
-    public int getNumAsteroids() {
-        return numAsteroids;
-    }
-
+    private static List<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
-    private Map<Integer, Asteroid> asteroids;
+    private Map<Int, Asteroid> asteroids;
     private boolean gamerOver;
     private boolean win;
-    private List<Integer> explodingAsteroids;
-
-    public List<Integer> getExplodingAsteroids() {
-        return explodingAsteroids;
-    }
-
-    public List<Integer> getSublimingAsteroids() {
-        return SublimingAsteroids;
-    }
-
-    private List<Integer> SublimingAsteroids;
-    int i;
-
+    private List<Int> explodingAsteroids;
+    private List<Int> SublimingAsteroids;
+    private Random rand; // RNG
+    private final int fps = 60; // necessary for sunstorm
+    private Timer Thread; // all threads to stop them
+    private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
 
     // Methods
     public void startGame(String[] names) {
@@ -38,31 +34,27 @@ public class Controller<Int> {
     }
 
     public void setupGame() {
-        Random rand = new Random();
+        rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
-        asteroids = new HashMap<Integer, Asteroid>();
-        explodingAsteroids = new ArrayList<Integer>();
-        SublimingAsteroids = new ArrayList<Integer>();
-        settlers = new ArrayList<Settler>();
-        robots = new ArrayList<Robot>();
 
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
             switch (mineralSelector) {
-                case 0:
-                    M = new Carbon();
-                    break;
-                case 1:
-                    M = new WaterIce();
-                    break;
-                case 2:
-                    M = new Iron();
-                    break;
-                case 3:
-                    M = new Uranium();
-                default:
-                    M = null;
+            case 0:
+                M = new Carbon();
+                break;
+            case 1:
+                M = new WaterIce();
+                break;
+            case 2:
+                M = new Iron();
+                break;
+            case 3:
+                M = new Uranium();
+                break;
+            default:
+                M = null;
             }
             Asteroid a;
             if (mineralSelector == 4)
@@ -80,8 +72,11 @@ public class Controller<Int> {
         }
     }
 
-    public void endGame() {
+    public static void addRobot(Robot r) { // missing from the sequence diagram
+        robots.add(r);
+    }
 
+    public void endGame() {
     }
 
     public void updateGame() {
@@ -97,12 +92,28 @@ public class Controller<Int> {
     }
 
     public void triggerSunStorms() {
-        for (Traveler T : settlers) {
-            if (T.getHidden() == false) {
-                T.dying();
+        rand = new Random();
+        int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
+        Sunstorm.behave(wavelength);
+        TimerTask checkDeath = new TimerTask() {
+            @Override
+            public void run() {
+                if (ss.isHappening()) {
+                    for (Settler s : settlers) {
+                        if (!s.getHidden() && !s.getDeath()) {
+                            s.Die();
+                        }
+                    }
+                    for (Robot r : robots) {
+                        if (!r.getHidden) {
+                            r.Die();
+                        }
+                    }
+                }
             }
-
-        }
+        };
+        ThreadTasks.put("sunstorm", checkDeath);
+        Thread.schedule(ThreadTasks.get("sunstorm"), wavelength, 1000 / fps);
     }
 
     public void explodeAsteroids() {
@@ -110,7 +121,6 @@ public class Controller<Int> {
     }
 
     public boolean checkGame() {
-        return false;
-
+        boolean flag = false;
     }
 }
