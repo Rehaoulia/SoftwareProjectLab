@@ -12,8 +12,8 @@ import java.util.TimerTask;
 
 public class Controller {
     // Attributes
-    private List<Settler> settlers;
-    private static List<Robot> robots;
+    private ArrayList<Settler> settlers;
+    private static ArrayList<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
     private Map<Integer, Asteroid> asteroids;
@@ -25,17 +25,33 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
+    public String information;
 
     // Methods
+    
+    public Controller() {}
+    
+    
     public void startGame(String[] names) {
+    	this.setupGame();
+    	settlers = new ArrayList<Settler>();
+    	
+    	
         for (String i : Arrays.asList(names)) {
-            settlers.add(new Settler(i));
+        	Settler set = new Settler(i) ;
+        	set.setAsteroid(asteroids.get(0));
+            settlers.add(set);
+            information = set.getAsteroid().viewInfo();
+                    
         }
     }
 
     public void setupGame() {
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
+        asteroids = new HashMap<Integer, Asteroid>();
+        explodingAsteroids = new ArrayList<Integer>();
+        sublimingAsteroids = new ArrayList<Integer>();
 
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
@@ -72,6 +88,7 @@ public class Controller {
         }
     }
 
+    
     public static void addRobot(Robot r) { // missing from the sequence diagram
         robots.add(r);
     }

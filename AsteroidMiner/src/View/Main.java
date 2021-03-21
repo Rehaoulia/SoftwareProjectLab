@@ -8,6 +8,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Main {
+	
+	private Controller c ;
+	
     public static void mainMenu() throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Travel");
@@ -32,6 +35,8 @@ public class Main {
             break;
         default:// bogus
         }
+       // System.out.print(c.information);
+        
     }
 
     public static void craftMenu() throws IOException {
@@ -55,7 +60,8 @@ public class Main {
         System.out.println("please write your name to start the game");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
-        Controller.startGame(new String[]{name});
+        Controller c = new Controller();
+        c.startGame(new String[]{name});
     }
 
     public static void main(String[] args) throws IOException {

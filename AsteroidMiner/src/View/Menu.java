@@ -10,6 +10,7 @@ public class Menu {
     private String message;
 
     public Menu(List<String> choices) {
+    	this.message = "Please choose ";
         this.choices = choices;
     }
 

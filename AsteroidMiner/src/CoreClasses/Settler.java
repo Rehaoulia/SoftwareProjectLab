@@ -21,6 +21,9 @@ public class Settler extends Traveler
 	public void setAsteroid(Asteroid asteroid) {
 		this.currentAsteroid = asteroid; 
 	}
+	public Asteroid getAsteroid() {
+		return currentAsteroid;
+	}
 	
 	public void travel(Asteroid asteroid) {
 		setAsteroid(asteroid);
