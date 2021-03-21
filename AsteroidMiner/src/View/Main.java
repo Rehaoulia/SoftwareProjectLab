@@ -36,14 +36,16 @@ public class Main {
              case 0:  c.settlers.get(0).travel( c.asteroids.get(cAsteroid));
              		if( cAsteroid != c.asteroids.size() ) cAsteroid++;
              		else cAsteroid =0;
-             		
              		System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
                  break;
              case 1: // drill
+            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
                  break;
-             case 2: // mine
+             case 2:  c.settlers.get(0).mine();
+            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
                  break;
-             case 3: // hide
+             case 3:  c.settlers.get(0).hide();
+            	 System.out.println(c.settlers.get(0).getAsteroid().viewInfo());
                  break;
              case 4: // craft
                  break;
