@@ -32,7 +32,13 @@ public class Settler extends Traveler {
 	}
 
 	public void travel(Asteroid asteroid) {
+		
+		if(this.getHidden()) {
 		unhide();
+		currentAsteroid.getUnhide();   
+		// if we dont unhide asteroid, it gonna stay hollow false !!
+		}
+		
 		setAsteroid(asteroid);
 		Controller.updateAsteroid(this.currentAsteroid);
 	}

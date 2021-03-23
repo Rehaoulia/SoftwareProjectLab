@@ -140,6 +140,10 @@ public class Asteroid extends Place {
 		} else
 			return false;
 	}
+	
+	public void getUnhide() {
+		isHollow = true;
+	}
 
 	public int getDepth() {
 		return depth;

@@ -15,6 +15,7 @@ public abstract class Traveler {
     public void unhide() {
 
         setHidden(false);
+        
 
     }
 
