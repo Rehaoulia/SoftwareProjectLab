@@ -135,7 +135,7 @@ public class Asteroid extends Place {
 
 	public boolean getHide() {
 		if (isHollow && !drillable() && !isMineable && !isDestroyed) {
-			isHollow = true;
+			isHollow = false;
 			return true;
 		} else
 			return false;
