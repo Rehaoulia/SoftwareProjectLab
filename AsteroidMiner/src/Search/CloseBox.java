@@ -70,7 +70,7 @@ public class CloseBox {
         if(this.asteroids.size()< this.limit){
         this.asteroids.add(asteroid);
         //System.out.println(depth);
-        this.showBound();
+        //this.showBound();
         }else{
             if(!this.divided){
             this.subdivide();
