@@ -54,6 +54,7 @@ public class Robot extends Traveler implements Craftable{
 				setHidden(true);
 				currentAsteroid.getHide();
 				wait(10000);
+				currentAsteroid.getUnhide();
 				setHidden(false);
 				currentAsteroid.getsFill(null); 
 			}

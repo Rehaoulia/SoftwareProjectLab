@@ -41,10 +41,10 @@ public class SpaceStation implements Craftable {
         for (int j = 0; j < spaceStationMinerals.size(); j++) {
 
             switch (spaceStationMinerals.get(i)) {
-                case "Iron" -> i++;
-                case "Carbon" -> c++;
-                case "Uranium" -> u++;
-                case "waterIce" -> w++;
+//                case "Iron" -> i++;
+//                case "Carbon" -> c++;
+//                case "Uranium" -> u++;
+//                case "waterIce" -> w++;
             }
         }
         return (i == 3 && c == 3 && u == 3 && w == 3);

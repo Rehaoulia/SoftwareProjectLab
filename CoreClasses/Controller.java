@@ -12,30 +12,47 @@ import java.util.TimerTask;
 
 public class Controller {
     // Attributes
-    private List<Settler> settlers;
-    private static List<Robot> robots;
+    public ArrayList<Settler> settlers;
+    private static ArrayList<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
-    private Map<Int, Asteroid> asteroids;
+    public Map<Integer, Asteroid> asteroids;
     private boolean gamerOver;
     private boolean win;
-    private List<Int> explodingAsteroids;
-    private List<Int> SublimingAsteroids;
+    private static ArrayList<Integer> explodingAsteroids;
+    private static ArrayList<Integer> sublimingAsteroids;
     private Random rand; // RNG
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
+    public  String information;
 
     // Methods
+    
+    public Controller() {}
+    
+    
     public void startGame(String[] names) {
+    	this.setupGame();
+    	settlers = new ArrayList<Settler>();
+    	
+    	
         for (String i : Arrays.asList(names)) {
-            settlers.add(new Settler(i));
+        	Settler set = new Settler(i) ;
+        	set.setAsteroid(asteroids.get(0));
+            settlers.add(set);
+            information = set.getAsteroid().viewInfo();
+            System.out.println(information);
+                    
         }
     }
 
     public void setupGame() {
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
+        asteroids = new HashMap<Integer, Asteroid>();
+        explodingAsteroids = new ArrayList<Integer>();
+        sublimingAsteroids = new ArrayList<Integer>();
 
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
@@ -57,14 +74,15 @@ public class Controller {
                 M = null;
             }
             Asteroid a;
+            int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
-                a = new Asteroid(i);
-            else
-                a = new Asteroid(i, M);
-
-            asteroids.put(i, a);
+//                a = new Asteroid(i,radius);
+//            else
+//                a = new Asteroid(i, M,radius);
+//
+//            asteroids.put(i, a);
             if (mineralSelector == 1)
-                SublimingAsteroids.add(i);
+                sublimingAsteroids.add(i);
 
             if (mineralSelector == 3)
                 explodingAsteroids.add(i);
@@ -72,6 +90,7 @@ public class Controller {
         }
     }
 
+    
     public static void addRobot(Robot r) { // missing from the sequence diagram
         robots.add(r);
     }
@@ -98,15 +117,15 @@ public class Controller {
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
-                if (ss.isHappening()) {
+                if (Sunstorm.getHappening()) {
                     for (Settler s : settlers) {
                         if (!s.getHidden() && !s.getDeath()) {
-                            s.Die();
+                            s.die();
                         }
                     }
                     for (Robot r : robots) {
-                        if (!r.getHidden) {
-                            r.Die();
+                        if (!r.getHidden()) {
+                            r.die();
                         }
                     }
                 }
@@ -122,5 +141,24 @@ public class Controller {
 
     public boolean checkGame() {
         boolean flag = false;
+		return flag;
+    }
+    
+    public static void updateAsteroid(Asteroid asteroid) {
+    	
+    }
+    
+    public static void updateSettler() {
+    	
+    }
+    
+    public static void removeSublimingAsteroid(int id) 
+    {
+    	sublimingAsteroids.remove(id);
+    }
+    
+    public static void removeExplodingAsteroid(int id) 
+    {
+    	explodingAsteroids.remove(id);
     }
 }
