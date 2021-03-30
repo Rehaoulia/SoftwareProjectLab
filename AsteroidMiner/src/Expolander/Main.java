@@ -6,10 +6,7 @@ import CoreClasses.Iron;
 import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
-import Local.IntoGameState;
 import FirstState.Placement;
-
-import Local.Jungle;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;

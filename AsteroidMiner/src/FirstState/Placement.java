@@ -13,7 +13,6 @@ import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
 import Search.Border;
 import Search.CloseBox;
-import Local.Octree;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
