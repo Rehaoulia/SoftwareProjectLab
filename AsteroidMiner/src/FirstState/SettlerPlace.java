@@ -31,6 +31,7 @@ import com.jme3.input.controls.AnalogListener;
 
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
@@ -41,10 +42,6 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 /**
  *
  * @author mehdimo
@@ -58,7 +55,7 @@ public class SettlerPlace extends AbstractAppState  {
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
     private boolean front = false, back = false, left = false, right = false,
-            rotatex=false,rotatey=false,rotatexm =false,rotateym=false, rotate=false;
+            rotatex=false,rotatey=false,rotatexm =false,rotateym=false, rotate=false , rotating =false;
     private ChaseCamera chaseCam;
     private Geometry settlerGeom;
     private final Camera cam;
@@ -66,6 +63,7 @@ public class SettlerPlace extends AbstractAppState  {
     private Spatial player;
     private final Vector3f playerDirection = Vector3f.ZERO;
     private final Quaternion playerRotation = Quaternion.ZERO;
+    private Vector3f settlerPos;
 
     public SettlerPlace(SimpleApplication app) {
         rootNode = app.getRootNode();
@@ -83,9 +81,7 @@ public class SettlerPlace extends AbstractAppState  {
 
         flyCam.setMoveSpeed(4);
 
-        //localRootNode.attachChild(loadAsteroids());
         localRootNode.attachChild(loadSettler());
-        //localRootNode.attachChild(loadSky());
 
        player = localRootNode.getChild("pNode");
         BoundingBox boundingbox = (BoundingBox) player.getWorldBound();
@@ -98,10 +94,12 @@ public class SettlerPlace extends AbstractAppState  {
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
+        inputManager.addMapping("Rotating",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(actionListener, "Forward");
         inputManager.addListener(actionListener, "Backward");
         inputManager.addListener(actionListener, "Left");
         inputManager.addListener(actionListener, "Right");
+        inputManager.addListener(actionListener, "Rotating");
         inputManager.addMapping("RotateX", new MouseAxisTrigger(MouseInput.AXIS_X, true));
         inputManager.addMapping("RotateX_negative", new MouseAxisTrigger(MouseInput.AXIS_X, false));
         inputManager.addMapping("RotateY", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
@@ -117,32 +115,37 @@ public class SettlerPlace extends AbstractAppState  {
         flyCam.setEnabled(false);
         chaseCam = new ChaseCamera(cam, settlerGeom, inputManager);
         chaseCam.setSmoothMotion(true);
+        settlerPos = settlerGeom.getLocalTranslation();
     }
     private final AnalogListener analogListener =  new AnalogListener() {
 
         @Override
         public void onAnalog(String name, float value, float tpf) {
             
-            float x=0.0f,y=0.0f;
+            float x=0.0f,y=0.0f , speed=0.05f;
+           
             rotatex = ( "RotateX".equals(name)) && value>0;
             rotatey = ( "RotateY".equals(name)) && value>0;
-                        rotatexm = ( "RotateX_negative".equals(name)) && value>0;
+            rotatexm = ( "RotateX_negative".equals(name)) && value>0;
             rotateym = ( "RotateY_negative".equals(name)) && value>0;
             rotate = rotatex || rotatey || rotatexm || rotateym;
-            
             if( "RotateX".equals(name) ) {
-                x= (float) (value*0.1f);
+                x= (float) (value*speed);
+                y=0;
 
             }else if("RotateX_negative".equals(name)){
-                x= (float) (-value*0.1f);
-            };
+                x= (float) (-value*speed);
+                y=0;
+            }
+            
             if( "RotateY".equals(name) ) {
-                y= (float) (value*0.1f);
-
-
+                y= (float) (value*speed);
+                x=0;
             }else if("RotateY_negative".equals(name)){
-                y= (float) (-value*0.1f);
-            };
+                y= (float) (-value*speed);
+                x=0;
+            }
+           
              playerRotation.fromAngles(x,y,0);
         }
     };
@@ -154,6 +157,7 @@ public class SettlerPlace extends AbstractAppState  {
             back = name.equals("Backward") && keyPressed;
             left = name.equals("Left") && keyPressed;
             right = name.equals("Right") && keyPressed;
+            rotating = name.equals("Rotating") && keyPressed;
         }
     };
 
@@ -184,17 +188,11 @@ public class SettlerPlace extends AbstractAppState  {
 
     @Override
     public void update(float tpf) {
-        // Quaternion quatA = new Quaternion();
-        // quatA = quatA.fromAngleAxis(FastMath.HALF_PI * tpf / 900, Vector3f.UNIT_Y);
-        // localRootNode.rotate(quatA);
 
         Vector3f camDir = cam.getDirection().clone();
         Vector3f camLeft = cam.getLeft().clone();
         Quaternion camRot = cam.getRotation().clone();
-        //camRot.add(playerRotation);
         camRot.normalizeLocal();
-        //camDir.y = 0;
-        //camLeft.y = 0;
         camDir.normalizeLocal();
         camLeft.normalizeLocal();
         playerDirection.set(0, 0, 0);
@@ -206,22 +204,26 @@ public class SettlerPlace extends AbstractAppState  {
             playerDirection.addLocal(camDir);
         if (back)
             playerDirection.addLocal(camDir.negate());
-        if (rotate)
-            playerRotation.addLocal(camRot);
         
             
         if (player != null) {
-            playerDirection.multLocal(30f).multLocal(tpf);
-            playerRotation.multLocal(100f).multLocal(tpf);
+            playerDirection.multLocal(50f).multLocal(tpf);
+            playerRotation.multLocal(50f).multLocal(tpf);
             playerControl.setWalkDirection(playerRotation.mult(playerDirection));
             
-            //playerControl.set
-            //settlerGeom.rotate(playerRotation);
+            settlerGeom.setLocalRotation(camRot);
             settlerGeom.move(playerDirection);
             
             
         }
+        
+        settlerPos = settlerGeom.getLocalTranslation();
 
+    }
+    
+    public Vector3f getSettlerLoc(){
+    
+        return settlerPos;
     }
 
     @Override
