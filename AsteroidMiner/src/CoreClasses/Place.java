@@ -23,4 +23,7 @@ public class Place {
         public Vector3f getLocation(){
             return location;
         };
+        public void setLocation(Vector3f pos){
+            location = pos;
+        };
 }

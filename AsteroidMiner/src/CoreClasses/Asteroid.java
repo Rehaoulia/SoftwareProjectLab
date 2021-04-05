@@ -63,6 +63,7 @@ public class Asteroid extends Place {
         }
         
         public Spatial getModel(){
+            model.setLocalTranslation(super.getLocation());
            return model.clone() ;
         }
 

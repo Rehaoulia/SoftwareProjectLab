@@ -31,24 +31,18 @@ public class Border {
         hheigth =_hheigth;
     }
 
-    boolean contains(Vector3f point) {
+    public boolean contains(Vector3f point) {
         return( point.x < this.pos.x + this.hheigth && point.x > this.pos.x - hheigth &&
                 point.y < this.pos.y + this.hheigth && point.y > this.pos.y - hheigth &&
                 point.z < this.pos.z + this.hheigth && point.z > this.pos.z - hheigth 
-//                !(point.x == this.pos.x + this.hheigth || point.x == this.pos.x - hheigth ||
-//                  point.y == this.pos.y + this.hheigth || point.y == this.pos.y - hheigth ||
-//                  point.z == this.pos.z + this.hheigth || point.z == this.pos.z - hheigth )
+
                 );
     }
     
      boolean containsAsteroid(Asteroid asteroidtf) {
         return( asteroidtf.getLocation().x < this.pos.x + this.hheigth && asteroidtf.getLocation().x > this.pos.x - this.hheigth &&
                 asteroidtf.getLocation().y  < this.pos.y + this.hheigth && asteroidtf.getLocation().y > this.pos.y - this.hheigth &&
-                asteroidtf.getLocation().z  < this.pos.z + this.hheigth && asteroidtf.getLocation().z > this.pos.z - this.hheigth 
-//                !(asteroidtf.getLocation().x == this.asteroid.getLocation().x + this.hheigth || asteroidtf.getLocation().x == this.asteroid.getLocation().x - hheigth ||
-//                  asteroidtf.getLocation().y == this.asteroid.getLocation().y + this.hheigth || asteroidtf.getLocation().y == this.asteroid.getLocation().y - hheigth ||
-//                  asteroidtf.getLocation().z == this.asteroid.getLocation().z + this.hheigth || asteroidtf.getLocation().z == this.asteroid.getLocation().z - hheigth )
-//                
+                asteroidtf.getLocation().z  < this.pos.z + this.hheigth && asteroidtf.getLocation().z > this.pos.z - this.hheigth    
                 );
     }
     
@@ -60,7 +54,7 @@ public class Border {
         green.setLocalTranslation(this.pos);
         Material mat1 = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
-        mat1.setColor("Color", new ColorRGBA(0, 0.4f, 0.6f, 0));
+        mat1.setColor("Color", new ColorRGBA(0.2f, 3f, 0.8f, 0.8f).mult(2f));
         green.setMaterial(mat1);
         
         

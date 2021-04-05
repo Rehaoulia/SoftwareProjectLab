@@ -62,10 +62,13 @@ public class SettlerPlace extends AbstractAppState  {
     private CharacterControl playerControl;
     private Spatial player;
     private final Vector3f playerDirection = Vector3f.ZERO;
-    private final Quaternion playerRotation = Quaternion.ZERO;
+    private final Quaternion playerRotation;
     private Vector3f settlerPos;
+    private Settler s;
+
 
     public SettlerPlace(SimpleApplication app) {
+        this.playerRotation = Quaternion.ZERO;
         rootNode = app.getRootNode();
         assetManager = app.getAssetManager();
         inputManager = app.getInputManager();
@@ -79,7 +82,7 @@ public class SettlerPlace extends AbstractAppState  {
 
         rootNode.attachChild(localRootNode);
 
-        flyCam.setMoveSpeed(4);
+        flyCam.setMoveSpeed(3);
 
         localRootNode.attachChild(loadSettler());
 
@@ -89,6 +92,7 @@ public class SettlerPlace extends AbstractAppState  {
                 boundingbox.getYExtent());
         playerControl = new CharacterControl(playerShape, 1.0f);
         player.addControl(playerControl);
+        
 
         inputManager.addMapping("Forward", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
@@ -117,40 +121,42 @@ public class SettlerPlace extends AbstractAppState  {
         chaseCam.setSmoothMotion(true);
         settlerPos = settlerGeom.getLocalTranslation();
     }
+    
+    
     private final AnalogListener analogListener =  new AnalogListener() {
 
         @Override
         public void onAnalog(String name, float value, float tpf) {
             
-            float x=0.0f,y=0.0f , speed=0.05f;
+            float x=0.0f,y=0.0f , speed=0.09f;
            
-            rotatex = ( "RotateX".equals(name)) && value>0;
-            rotatey = ( "RotateY".equals(name)) && value>0;
-            rotatexm = ( "RotateX_negative".equals(name)) && value>0;
-            rotateym = ( "RotateY_negative".equals(name)) && value>0;
+            rotatex = ( "RotateX".equals(name)) ;
+            rotatey = ( "RotateY".equals(name)) ;
+            rotatexm = ( "RotateX_negative".equals(name)) ;
+            rotateym = ( "RotateY_negative".equals(name));
             rotate = rotatex || rotatey || rotatexm || rotateym;
             if( "RotateX".equals(name) ) {
-                x= (float) (value*speed);
-                y=0;
-
+                x+=  (value*speed);
+               
             }else if("RotateX_negative".equals(name)){
-                x= (float) (-value*speed);
-                y=0;
+                x+= (-value*speed);
+                
             }
             
-            if( "RotateY".equals(name) ) {
-                y= (float) (value*speed);
-                x=0;
+            else if( "RotateY".equals(name) ) {
+                y+=  (value*speed);
+               
             }else if("RotateY_negative".equals(name)){
-                y= (float) (-value*speed);
-                x=0;
+                y+=  (-value*speed);
+                
             }
            
-             playerRotation.fromAngles(x,y,0);
-        }
+             playerRotation.fromAngles(y,y,y);
+        
+      }
     };
 
-    private final ActionListener actionListener = new ActionListener() {
+    private final ActionListener actionListener = new ActionListener()  {
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
             front = name.equals("Forward") && keyPressed;
@@ -163,15 +169,18 @@ public class SettlerPlace extends AbstractAppState  {
 
     public Node loadSettler() {
         Node pNode = new Node("pNode");
-        settlerGeom = (Geometry) assetManager.loadModel("Models/SettlerModel/SettlerModel.j3o");
+        Geometry model =(Geometry) assetManager.loadModel("Models/004/004.j3o");
+        model.setLocalTranslation(0, 0, -5f);
+        settlerGeom =model;
 
-        Vector3f GenLoc = new Vector3f(0, -2, -20);
+        Vector3f GenLoc = new Vector3f(0, -2, -30);
         settlerGeom.setLocalTranslation(GenLoc);
         settlerGeom.setLocalScale(0.3f);
+        //settlerGeom.move(0,-30f,0);   // model 004 needed offset;
         Quaternion quatA = new Quaternion();
         quatA = quatA.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
-        settlerGeom.rotate(quatA);
-        Settler s = new Settler("Placeholder_Name", GenLoc);
+        settlerGeom.setLocalRotation(quatA);
+        s = new Settler("Placeholder_Name", GenLoc);
         s.setModel(settlerGeom);
         pNode.attachChild(s.getModel());
  AmbientLight amb = new AmbientLight();
@@ -183,6 +192,7 @@ public class SettlerPlace extends AbstractAppState  {
         sun.setDirection(new Vector3f(-1f, 0f, 0f).normalizeLocal());
         pNode.addLight(sun);
         pNode.addLight(amb);
+        playerDirection.set(0, 0, 0);
         return pNode;
     }
 
@@ -190,24 +200,25 @@ public class SettlerPlace extends AbstractAppState  {
     public void update(float tpf) {
 
         Vector3f camDir = cam.getDirection().clone();
+        camDir.add(0, 5f, 5f) ;
         Vector3f camLeft = cam.getLeft().clone();
         Quaternion camRot = cam.getRotation().clone();
         camRot.normalizeLocal();
         camDir.normalizeLocal();
         camLeft.normalizeLocal();
-        playerDirection.set(0, 0, 0);
+        
         if (left)
             playerDirection.addLocal(camLeft);
-        if (right)
+        else if (right)
             playerDirection.addLocal(camLeft.negate());
-        if (front)
+        else if (front)
             playerDirection.addLocal(camDir);
-        if (back)
+        else if (back)
             playerDirection.addLocal(camDir.negate());
         
             
         if (player != null) {
-            playerDirection.multLocal(50f).multLocal(tpf);
+            playerDirection.multLocal(20f).multLocal(tpf);
             playerRotation.multLocal(50f).multLocal(tpf);
             playerControl.setWalkDirection(playerRotation.mult(playerDirection));
             
@@ -217,14 +228,21 @@ public class SettlerPlace extends AbstractAppState  {
             
         }
         
-        settlerPos = settlerGeom.getLocalTranslation();
+        s.setLocation(settlerGeom.getLocalTranslation());
+       
 
     }
     
     public Vector3f getSettlerLoc(){
-    
         return settlerPos;
     }
+    public Settler getSettler(){
+        return s;
+    }
+    public void setCurAsteroid(Asteroid cur){
+            s.setAsteroid(cur);
+    }
+  
 
     @Override
     public void cleanup() {

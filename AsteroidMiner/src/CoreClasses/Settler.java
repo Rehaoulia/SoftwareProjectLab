@@ -1,8 +1,10 @@
 
 
 
+
 package CoreClasses;
 
+import Search.Border;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
@@ -36,6 +38,8 @@ public class Settler extends Traveler {
 	public Asteroid getAsteroid() {
 		return currentAsteroid;
 	}
+        
+        
 
 	public void travel(Asteroid asteroid) {
 		
@@ -47,6 +51,9 @@ public class Settler extends Traveler {
 		
 		setAsteroid(asteroid);
 		Controller.updateAsteroid(this.currentAsteroid);
+
+            
+            
 	}
 
 	public void putGate() {
@@ -230,6 +237,14 @@ public class Settler extends Traveler {
 			this.hidden = true;
 		}
 	}
+        
+        public boolean access(){
+            Border closeAstB = new Border(this.getLocation(), 50f);  
+            if(closeAstB.contains(this.getAsteroid().getLocation()))
+                return true ;
+            
+            return false;
+        }
 
 	public String viewInfo() {
 		String str = "Name: " + this.name + "\t\tHidden:" + Boolean.toString(hidden) + "\nminedMinerals: "

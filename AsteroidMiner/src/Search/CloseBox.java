@@ -51,7 +51,7 @@ public class CloseBox {
     public void showBound(){
         if(!this.divided && !this.asteroids.isEmpty() ){
         branch.attachChild(bound.draw(am));
-        //System.out.println(points.size());
+        
         }
     }
     

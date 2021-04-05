@@ -9,6 +9,7 @@ import CoreClasses.Asteroid;
 import CoreClasses.Carbon;
 import CoreClasses.Iron;
 import CoreClasses.Mineral;
+import CoreClasses.Settler;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
 import Search.Border;
@@ -67,6 +68,7 @@ public class Placement extends AbstractAppState {
     private float fDist;
     private final Spatial asteroid1;
     private final AppStateManager stateManager;
+    private Settler settler;
     
     public Placement(SimpleApplication app){
         
@@ -81,6 +83,7 @@ public class Placement extends AbstractAppState {
         AsteroidNode= new Node("intro");
         selectedNode = new Node("selected");
         curAsteroidNode = new Node("selected");
+        rootNode.getChild("pNode");
        //ArrayList<Asteroid> closeOnes
     }
     
@@ -89,15 +92,17 @@ public class Placement extends AbstractAppState {
         super.initialize(stateManager, app);
         
         rootNode.attachChild(localRootNode);
-        Border n = new Border(new Vector3f(0,0,0),400f);
+        Border n = new Border(new Vector3f(0,0,0),200f);
         cBox = new CloseBox(n, 1 , assetManager);
         NeiAst = new ArrayList<Asteroid>(); 
         closeOnes = new ArrayList<Asteroid>();
-        flyCam.setMoveSpeed(14);
-       this.loadAsteroids(800);
+        //flyCam.setMoveSpeed(14);
+       this.loadAsteroids(100);
       
        
-       
+        settler =this.getSettler(); 
+        if(settler.getAsteroid() == null)
+            settler.setAsteroid(curAsteroid);
        
         localRootNode.attachChild(loadSky());
         localRootNode.attachChild(AsteroidNode);
@@ -108,17 +113,7 @@ public class Placement extends AbstractAppState {
     }   
         
         
-//        Node pNode = new Node("pNode");
-//        Spatial settler = assetManager.loadModel("Models/SettlerModel/SettlerModel.j3o");
-//        settler.setLocalTranslation(0,-2,-20);
-//        settler.setLocalScale(0.4f);
-//         Quaternion quatA = new Quaternion();
-//            quatA = quatA.fromAngleAxis(FastMath.PI , Vector3f.UNIT_Y);
-//            settler.rotate(quatA);
-//        
-//        pNode.attachChild(settler);
-        //localRootNode.attachChild(pNode);
-        
+
         
   
     
@@ -130,6 +125,8 @@ public class Placement extends AbstractAppState {
        
        Random rand = new Random();
        this.closter = new Asteroid[NumberOfAsteroid]; 
+       
+       
        
        
        closter[0] = new Asteroid(0 , new Vector3f(-50.1f ,1.1f , 2.2f),6);
@@ -149,7 +146,7 @@ public class Placement extends AbstractAppState {
       
        for(int i=1;i<NumberOfAsteroid;i++ ){
            
-           float max = 400f;
+           float max = 200f;
 
           
            
@@ -215,35 +212,7 @@ public class Placement extends AbstractAppState {
        
        AsteroidNode.attachChild(cBox.getBranch());
      
-      
-       
-       
-       
-       AmbientLight amb = new AmbientLight();
-        amb.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.1f).mult(0.6f));
-         AsteroidNode.addLight(amb);
-        
-        
-            
-            spot = new SpotLight();
-            spot.setSpotRange(25f);                           // distance
-            spot.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
-            spot.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
-            //spot.setColor(new ColorRGBA(0.1f,0.6f,1f,1f).mult(15f));   
-            spot.setColor(new ColorRGBA(0.6f,0.4f,0.7f,1f).mult(15f));   
-            spot.setPosition(Cam.getLocation());               // shine from camera loc
-            spot.setDirection(Cam.getDirection());             // shine forward from camera loc
-            curAsteroidNode.addLight(spot);
 
-
-
-      
-
-        DirectionalLight sun = new DirectionalLight();
-        sun.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.01f).mult(0.8f));
-        sun.setDirection(new Vector3f(-1f,0f,0f).normalizeLocal());
-        AsteroidNode.addLight(sun);
-        
         
          NeiAstB = new Border (curAsteroid.getLocation(), 100f);
        NeiAst = this.nearBy(NeiAstB);
@@ -255,9 +224,9 @@ public class Placement extends AbstractAppState {
             
         }
        
-        
-        
     }
+    
+    
     
     
     public Node loadSky(){
@@ -274,19 +243,43 @@ public class Placement extends AbstractAppState {
         base.attachChild(SkyFactory.createSky(assetManager, west, east, north, south, up, down));
         
         
+        
+        // sun and ambient light
+        
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.01f).mult(0.8f));
+        sun.setDirection(new Vector3f(-1f,0f,0f).normalizeLocal());
+        AsteroidNode.addLight(sun);
+        
+        AmbientLight amb = new AmbientLight();
+        amb.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.1f).mult(0.6f));
+        AsteroidNode.addLight(amb);
+        
+        
+        
         ambiant = new AmbientLight();
              ambiant.setColor(new ColorRGBA(0.4f,0.9f,1f,1f).mult(1f));
             
-            selectedNode.addLight(ambiant);
+        selectedNode.addLight(ambiant);
+        
             
-              ambiantCur = new AmbientLight();
-                        ambiantCur.setColor(new ColorRGBA(0.5f,1.5f,2f,0.5f).mult(2f));
+        ambiantCur = new AmbientLight();
+        ambiantCur.setColor(new ColorRGBA(0.5f,1.5f,2f,0.5f).mult(1.5f));
 
-                        curAsteroidNode.addLight(ambiantCur);
+        curAsteroidNode.addLight(ambiantCur);
                        
         
         
-        
+           spot = new SpotLight();
+            spot.setSpotRange(25f);                           // distance
+            spot.setSpotInnerAngle(25f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
+            spot.setSpotOuterAngle(50f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
+              
+            spot.setColor(new ColorRGBA(2.6f,0.4f,3.7f,0.01f).mult(15f));   
+                       
+            curAsteroidNode.addLight(spot);
+
+
         return base;
     }
     
@@ -294,18 +287,12 @@ public class Placement extends AbstractAppState {
     @Override 
     public void update(float tpf){
      
-//         Quaternion quatA = new Quaternion();
-//            quatA = quatA.fromAngleAxis(FastMath.HALF_PI * tpf/900, Vector3f.UNIT_Y);
-//            localRootNode.rotate(quatA);
+          
             
-            
-            spot.setPosition(Cam.getLocation());               // shine from camera loc
+            spot.setPosition(settler.getLocation());              
             spot.setDirection(Cam.getDirection()); 
-            
-            
-             
-        Vector3f settlerPos =this.getSettlerLoc();     
-       this.placeGuides(closeOnes , settlerPos);
+
+       this.placeGuides(closeOnes , settler.getLocation());
        AsteroidNode.updateGeometricState();
    
        closeOnes.clear(); 
@@ -316,10 +303,9 @@ public class Placement extends AbstractAppState {
     
     public ArrayList<Asteroid> nearBy(Border selected){
         ArrayList<Asteroid> closeOne = new ArrayList<>();
-       //Border selected = new Border (point, 100f);
        closeOne = cBox.query(selected, closeOne);
         return closeOne;
-    }
+      }
     
     
     
@@ -329,13 +315,20 @@ public class Placement extends AbstractAppState {
         ArrayList<Asteroid> closeOnes = new ArrayList<>();
        closeOnes = cBox.query(selected, closeOnes);
         return closeOnes;
-    }
+      }
+     
      
      public Vector3f getSettlerLoc(){
      
          return this.stateManager.getState(SettlerPlace.class).getSettlerLoc();
      }
-     
+     public Settler getSettler(){
+         return this.stateManager.getState(SettlerPlace.class).getSettler();
+     }
+    
+      public void setCurrent(){
+         this.stateManager.getState(SettlerPlace.class).setCurAsteroid(curAsteroid);
+     }
  
      
          
@@ -343,8 +336,11 @@ public class Placement extends AbstractAppState {
         
             Vector3f sPos =_sPos ;
         
-            Border closeAstB = new Border(sPos, 25f);
+            Border closeAstB = new Border(sPos, 50f);
             closeAsteroids = this.nearBy(closeAstB);
+            
+           // System.out.println("Current Asteroid ::::::::::::::::");
+          //  System.out.println(settler.getAsteroid().viewInfo());
             
             fDist = sPos.distance(curAsteroid.getLocation());
          
@@ -357,6 +353,8 @@ public class Placement extends AbstractAppState {
 
                             curAsteroid = closeAsteroids.get(i) ;
                             System.out.println(curAsteroid.viewInfo());
+                            this.setCurrent();
+                            
                              Spatial nc = curAsteroid.getModel();
                                curAsteroidNode.detachAllChildren();                          
                                 nc.setLocalScale(3.9f);
@@ -437,6 +435,12 @@ public class Placement extends AbstractAppState {
         
     }
     
+    public void updateAsteroid(int ID, Asteroid ns){
+            this.closter[ID] = ns ;
+    }
+    public Node getCurNode(){
+        return curAsteroidNode;
+    }
     
     @Override 
     public void cleanup(){

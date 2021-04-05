@@ -6,7 +6,12 @@ import CoreClasses.Iron;
 import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
+import FirstState.InputMan;
+import Local.IntoGameState;
 import FirstState.Placement;
+import FirstState.SettlerPlace;
+
+import Local.Jungle;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -47,7 +52,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-       stateManager.attach(new Placement(this));
+        //stateManager.attach(new Jungle(this));
+     
+       stateManager.attach(new SettlerPlace(this));
+      stateManager.attach(new Placement(this));
+      stateManager.attach(new InputMan(this));
     }
 
     @Override
