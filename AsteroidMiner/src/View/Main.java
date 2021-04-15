@@ -5,7 +5,6 @@ import CoreClasses.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.InputStreamReader;
 
 public class Main {
@@ -31,13 +30,43 @@ public class Main {
 
     public static void mainMenu(Controller c) throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
+        menuItems.add("Settler Controls");
+        menuItems.add("Robot Controls");
+        menuItems.add("Sunstorm Controls");
+        menuItems.add("Perihelion Controls");
+        // menuItems.add("revive");
+        Menu menu = new Menu(menuItems);
+        switch (menu.display()) {
+        case 0:
+            settlerMenu(c);
+            break;
+        case 1: // drill
+            c.settlers.get(0).drill();
+            break;
+        case 2: // mine
+            c.settlers.get(0).mine();
+            break;
+        case 3: // fill
+            Menu minerals = new Menu(c.settlers.get(0).getMinerals());
+            int option = minerals.display();
+            c.settlers.get(0).fill(c.settlers.get(0).getMinerals().get(option));
+            break;
+        default:
+            System.out.println("you didn't choose any action");
+        }
+        System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
+                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
+                + "\n");
+    }
+
+    public static void settlerMenu(Controller c) throws IOException {
+        ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Travel");
         menuItems.add("Drill");
         menuItems.add("Mine");
         menuItems.add("Fill");
         menuItems.add("Hide");
         menuItems.add("Craft");
-        // menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
         case 0:
@@ -70,24 +99,22 @@ public class Main {
         default:
             System.out.println("you didn't choose any action");
         }
-        System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
+        System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
+                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
+                + "\n");
     }
 
-    public static void craftMenu() throws IOException {
+    public static void robotMenu(Controller c) throws IOException {
+        int ids = c.getRobots();
         ArrayList<String> menuItems = new ArrayList<String>();
-        menuItems.add("Robot");
-        menuItems.add("Teleportation Gate");
-        menuItems.add("SpaceStation");
-        Menu menu = new Menu(menuItems);
-        switch (menu.display()) {
-        case 0: // robot
-            break;
-        case 1: // teleportation gate
-            break;
-        case 2: // space station
-            break;
-        default:// bogus
+        for (int i = 0; i < ids; i++) {
+            menuItems.add("Robot " + i);
         }
+        Menu menu = new Menu(menuItems, "Pick a robot to behave");
+        if (menu.display() >= ids || menu.display() < 0) {
+            System.out.println("you didn't choose any action");
+            return;
+        }
+        
     }
-
 }
