@@ -13,11 +13,11 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
-    private static ArrayList<Robot> robots;
+    public ArrayList<Robot> robots = new ArrayList<Robot>();
     private int numAsteroids;
     private int numSettlers;
     public Map<Integer, Asteroid> asteroids;
-    private boolean gamerOver;
+    private boolean gameOver;
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
     private static ArrayList<Integer> sublimingAsteroids;
@@ -26,6 +26,7 @@ public class Controller {
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
     public  String information;
+    public Sunstorm sunstorm = new Sunstorm();
 
     // Methods
     
@@ -36,9 +37,10 @@ public class Controller {
     	this.setupGame();
     	settlers = new ArrayList<Settler>();
     	
-    	
+    	int count=0;
         for (String i : Arrays.asList(names)) {
-        	Settler set = new Settler(i) ;
+        	Settler set = new Settler(i, count) ;
+            count++;
         	set.setAsteroid(asteroids.get(0));
             settlers.add(set);
             information = set.getAsteroid().viewInfo();
@@ -91,7 +93,7 @@ public class Controller {
     }
 
     
-    public static void addRobot(Robot r) { // missing from the sequence diagram
+    public void addRobot(Robot r) { // missing from the sequence diagram
         robots.add(r);
     }
 
@@ -104,6 +106,12 @@ public class Controller {
 
     public void removePlayer(int playerID) {
         settlers.remove(playerID);
+        if(settlers.size()>0){
+            for(int i=0;i<settlers.size();i++){
+                settlers.get(i).setID(i);
+            }
+        }
+        checkGame();
     }
 
     public void removeAsteroid(int asteroidID) {
@@ -113,11 +121,11 @@ public class Controller {
     public void triggerSunStorms() {
         rand = new Random();
         int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
-        Sunstorm.behave(wavelength);
+        sunstorm.behave(this, wavelength);
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
-                if (Sunstorm.getHappening()) {
+                if (sunstorm.getHappening()) {
                     for (Settler s : settlers) {
                         if (!s.getHidden() && !s.getDeath()) {
                             s.die();
@@ -139,10 +147,17 @@ public class Controller {
 
     }
 
-    public boolean checkGame() {
-        boolean flag = false;
-		return flag;
+    //checks the conditions for ending the game
+    public void checkGame() {
+        if(settlers.size()==0){
+            gameOver =true;
+            win =false;
+            endGame();
+        }
     }
+
+    public boolean getGameOver(){ return gameOver;}
+    public boolean getWin(){ return win;}
     
     public static void updateAsteroid(Asteroid asteroid) {
     	

@@ -5,20 +5,25 @@ import CoreClasses.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.InputStreamReader;
 
 public class Main {
 
-    public static int cAsteroid;
-
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args)   throws IOException {
         Controller c = initialize();
-        int i = 0;
-        while (i < 10) {
+        while (c.getGameOver()==false) {
             mainMenu(c);
         }
+        if(c.getWin()==true){
+            System.out.println("You Won! :D");
+        }else{
+            System.out.println("You lost :(");
+        }
     }
+	
+    public static int cAsteroid;
+
+    
 
     public static Controller initialize() throws IOException {
         Controller c = new Controller();
@@ -38,6 +43,7 @@ public class Main {
         menuItems.add("Hide");
         menuItems.add("Craft");
         // menuItems.add("revive");
+        menuItems.add("Make a sunstorm");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
         case 0:
@@ -67,10 +73,14 @@ public class Main {
             break;
         // case 6: // revive
         // break;
+        case 6:
+            c.sunstorm.makeItHappen(c);
+            break;
         default:
             System.out.println("you didn't choose any action");
         }
-        System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
+        if(c.settlers.size()>0)
+            System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
     }
 
     public static void craftMenu() throws IOException {

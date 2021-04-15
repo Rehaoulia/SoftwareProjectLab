@@ -9,6 +9,7 @@ import View.Menu;
 public class Settler extends Traveler {
 
 	private String name;
+	public int ID;
 	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below
 												// in checkRequiredMaterial
 	private TeleportationGate[] gates;
@@ -16,7 +17,8 @@ public class Settler extends Traveler {
 	private boolean dead;
 	private Asteroid currentAsteroid;
 
-	public Settler(String name) {
+	public Settler(String name, int ID) {
+		this.ID = ID;
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
@@ -193,11 +195,6 @@ public class Settler extends Traveler {
 		return timeOfDeath;
 	}
 
-	@Override
-	public void die() {
-		this.dead = true;
-	}
-
 	public boolean getDeath() {
 		return this.dead;
 	}
@@ -215,8 +212,32 @@ public class Settler extends Traveler {
 		return minedMinerals;
 	}
 
-	public void dying() {
+	@Override
+	public void die() {
+		this.dead = true;
+		System.out.println("You are dead :(");
+	}
+
+	public void dying(Controller c) {
 		this.setTimeOfDeath();
+		try {
+			//wait for revival for i seconds
+			int i=3; 
+			while(i>0){
+				long millis = System.currentTimeMillis();
+                System.out.println(name+" waiting for revival...");
+                i--;
+                Thread.sleep(1000 - millis % 1000); //every 1 second
+				if(timeOfDeath==-1) break;	//if revived then break;
+			}
+			//if not revived then die
+			if(timeOfDeath!=-1){
+				die();
+				c.removePlayer(ID);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void hide() {
@@ -230,4 +251,6 @@ public class Settler extends Traveler {
 				+ String.join(" - ", minedMinerals);
 		return str;
 	}
+
+	public void setID(int newID){ ID=newID;}
 }
