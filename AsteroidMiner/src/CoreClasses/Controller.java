@@ -1,5 +1,6 @@
 package CoreClasses;
 
+import java.io.IOException;
 import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +36,9 @@ public class Controller {
     public void startGame(String[] names) {
         this.setupGame();
         settlers = new ArrayList<Settler>();
-
+        robots= new ArrayList<Robot>();
+        robots.add(new Robot(asteroids.get(4)));
+        robots.add(new Robot(asteroids.get(5)));
         for (String i : Arrays.asList(names)) {
             Settler set = new Settler(i);
             set.setAsteroid(asteroids.get(0));
@@ -52,7 +55,6 @@ public class Controller {
         asteroids = new HashMap<Integer, Asteroid>();
         explodingAsteroids = new ArrayList<Integer>();
         sublimingAsteroids = new ArrayList<Integer>();
-
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
@@ -154,9 +156,10 @@ public class Controller {
 
     }
 
-    public static void robotBehave(int id) {
+    public static void robotBehave(int id) throws IOException ,InterruptedException{
         int ast = robots.get(id).currentAsteroid.getID();
-        robots.get(id).behave(asteroids.get((ast + 1) % asteroids.size()));
+        robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
+
     }
 
     public static void removeSublimingAsteroid(int id) {

@@ -11,7 +11,7 @@ public class Main {
 
     public static int cAsteroid;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Controller c = initialize();
         int i = 0;
         while (i < 10) {
@@ -28,7 +28,7 @@ public class Main {
         return c;
     }
 
-    public static void mainMenu(Controller c) throws IOException {
+    public static void mainMenu(Controller c) throws IOException, InterruptedException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Settler Controls");
         menuItems.add("Robot Controls");
@@ -37,11 +37,11 @@ public class Main {
         // menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
-        case 0:
+        case 0: // Settler
             settlerMenu(c);
             break;
-        case 1: // drill
-            c.settlers.get(0).drill();
+        case 1: // Robot
+            robotMenu(c);
             break;
         case 2: // mine
             c.settlers.get(0).mine();
@@ -59,7 +59,7 @@ public class Main {
                 + "\n");
     }
 
-    public static void settlerMenu(Controller c) throws IOException {
+    public static void settlerMenu(Controller c) throws IOException, InterruptedException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Travel");
         menuItems.add("Drill");
@@ -104,17 +104,23 @@ public class Main {
                 + "\n");
     }
 
-    public static void robotMenu(Controller c) throws IOException {
+    public static void robotMenu(Controller c) throws IOException, InterruptedException {
         int ids = c.getRobots();
+        if (ids == 0) {
+            System.out.println("you have no robots currently");
+            return;
+        }
         ArrayList<String> menuItems = new ArrayList<String>();
         for (int i = 0; i < ids; i++) {
             menuItems.add("Robot " + i);
         }
         Menu menu = new Menu(menuItems, "Pick a robot to behave");
-        if (menu.display() >= ids || menu.display() < 0) {
+        int option = menu.display();
+        if (option >= ids || option < 0) {
             System.out.println("you didn't choose any action");
             return;
         }
-        
+        c.robotBehave(option);
+
     }
 }
