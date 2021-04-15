@@ -49,11 +49,17 @@ public class Main {
                 cAsteroid++;
             } else
                 cAsteroid = 0;
+                
+           c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
 
+<<<<<<< Updated upstream
             c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
 
            
                 
+=======
+                          
+>>>>>>> Stashed changes
             break;
         case 1: // drill
             c.settlers.get(0).drill();
@@ -71,10 +77,20 @@ public class Main {
         case 5: // craft
             c.settlers.get(0).showCraftMenu();
             break;
+<<<<<<< Updated upstream
          case 6: c.settlers.get(0).setPairGate();
          break;
          case 7: c.settlers.get(0).teleport(c.settlers.get(0).gates.get(1));;
          break;
+=======
+        case 6:
+             c.settlers.get(0).putGate();
+            break;
+        case 7:
+            c.settlers.get(0).teleport( c.settlers.get(0).gates.get(1));
+            break;
+
+>>>>>>> Stashed changes
         default:
             System.out.println("you didn't choose any action");
         }
