@@ -18,17 +18,24 @@ public class Settler extends Traveler {
 	private String name;
 	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below
 												// in checkRequiredMaterial
-	private TeleportationGate[] gates;
+	public  ArrayList<TeleportationGate> gates;
 	private long timeOfDeath;
 	private boolean dead;
 	private Asteroid currentAsteroid;
+	private int nGate;
 
+<<<<<<< Updated upstream
 	public Settler(String name,Vector3f loc ) {
             super(loc);
+=======
+	public Settler(String name) {
+		//super(currentAsteroid);
+>>>>>>> Stashed changes
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
 		minedMinerals = new ArrayList<String>();
+		gates = new ArrayList<TeleportationGate>();
 	}
 
 	public void setAsteroid(Asteroid asteroid) {
@@ -57,12 +64,27 @@ public class Settler extends Traveler {
 	}
 
 	public void putGate() {
-		if (!gates[0].isDeployed()) {
-			gates[0].setGate(this.currentAsteroid);
-		} else if (gates[0].isDeployed() && !gates[0].isPaired()) {
-			gates[1].setGate(this.currentAsteroid, gates[0]);
+		if (!gates.get(0).isDeployed()) {
+			gates.get(0).setGate(this.currentAsteroid);
+			nGate--;
+		} else if ( !gates.get(0).isPaired() && !gates.get(0).getNeighbour().equals(this.getAsteroid()) ) {
+			gates.get(0).setGate(this.currentAsteroid, gates.get(1));
+			nGate-- ;
+			System.out.println(gates.get(0).getNeighbour().getID() + "<------------->" + gates.get(1).getNeighbour().getID()  );
+			//gates = new ArrayList<>();
+		}else{
+			System.out.println("\n\n ============ you connot place a gate here");
 		}
+
 	}
+	
+	
+    public void teleport(TeleportationGate tg) {
+        if (tg.isPaired()) {
+            currentAsteroid = tg.getPairedGate().getNeighbour();
+        }
+    }
+
 
 	@Override
 	public void drill() {
@@ -144,7 +166,7 @@ public class Settler extends Traveler {
 	// craftTeleportationGate(), craftSpaceStation()
 	public Craftable craft(int craftable) {
 		Craftable c = null;
-		if (checkRequiredMaterial(craftable)) {
+		//if (checkRequiredMaterial(craftable)) {
 
 			switch (craftable) {
 			case 0:
@@ -154,17 +176,8 @@ public class Settler extends Traveler {
 				minedMinerals.remove(minedMinerals.indexOf("Iron"));
 				break;
 			case 1:
-				// check if you already have teleportation gates
-				// add to gates attribute
-				if (gates == null) {
-					gates = new TeleportationGate[2];
-					gates[0] = new TeleportationGate();
-					gates[1] = new TeleportationGate();
-					minedMinerals.remove(minedMinerals.indexOf("Uranium"));
-					minedMinerals.remove(minedMinerals.indexOf("WaterIce"));
-					minedMinerals.remove(minedMinerals.indexOf("Iron"));
-					minedMinerals.remove(minedMinerals.indexOf("Iron"));
-
+				if(this.craftGate()){
+					this.putGate();
 				}
 				break;
 			case 2:
@@ -175,8 +188,8 @@ public class Settler extends Traveler {
 			default:
 				return null;
 			}
-		} else
-			System.out.println("Not enough materials\n");
+		//} else
+		//	System.out.println("Not enough materials\n");
 		return c;
 	}
 
@@ -189,6 +202,7 @@ public class Settler extends Traveler {
 		Craftable c = craft(menu.display());
 		if (c != null)
 			System.out.println(c.getClass().getSimpleName() + " Created successfully");
+			
 	}
 
 	// Removed pairGates() method as gates are paired by default
@@ -248,7 +262,27 @@ public class Settler extends Traveler {
 
 	public String viewInfo() {
 		String str = "Name: " + this.name + "\t\tHidden:" + Boolean.toString(hidden) + "\nminedMinerals: "
-				+ String.join(" - ", minedMinerals);
+				+ String.join(" - ", minedMinerals) + "\n#ofTeleportationGate: " + nGate;
 		return str;
 	}
+
+	
+	public boolean craftGate(){
+		if(nGate==0){
+			gates.add(new TeleportationGate());
+			gates.add(new TeleportationGate());
+			nGate =2;
+			return true ;
+		}
+		return false;
+	}
+
+	public void setPairGate() {
+		if(nGate==1)
+		this.putGate();
+	}
+
+	
+	
+
 }

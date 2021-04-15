@@ -37,6 +37,7 @@ public abstract class Traveler {
     }
 
 
+  
     public boolean getHidden() {
         return hidden;
     }
@@ -46,16 +47,14 @@ public abstract class Traveler {
     }
 
     public void unhide() {
-
         setHidden(false);
+<<<<<<< Updated upstream
 
     }
+=======
+    } 
+>>>>>>> Stashed changes
 
-    public void teleport(TeleportationGate tg) {
-        if (tg.isPaired()) {
-            currentPlace = tg.getPairedGate().getNeighbour();
-        }
-    }
 
     public abstract void hide() throws InterruptedException;
 
