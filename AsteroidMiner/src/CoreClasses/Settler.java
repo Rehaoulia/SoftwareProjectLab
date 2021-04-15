@@ -155,7 +155,7 @@ public class Settler extends Traveler {
 				}
 				break;
 			case 2:
-				if (this.currentAsteroid.getSpaceStation() != null) {
+				if (this.currentAsteroid.getSpaceStation() == null) {
 					c = new SpaceStation(this.currentAsteroid);
 				}
 				break;
@@ -167,15 +167,22 @@ public class Settler extends Traveler {
 		return c;
 	}
 
-	public void showCraftMenu() throws IOException {
+	public int showCraftMenu() throws IOException {
+		int res = 1;
 		ArrayList<String> menuItems = new ArrayList<String>();
 		menuItems.add("Robot || Uranium + Carbon + Iron");
 		menuItems.add("Teleportation Gate || Uranium + WaterIce + 2 x Iron");
 		menuItems.add("SpaceStation || 3xUranium + 3xCarbon + 3xIron + 3xWaterIce");
 		Menu menu = new Menu(menuItems);
 		Craftable c = craft(menu.display());
-		if (c != null)
+		if (c.getClass().getSimpleName().equals("SpaceStation")) {
+			System.out.println("Spacestation building started!");
+			res = -1;
+		}else if(c != null) {
 			System.out.println(c.getClass().getSimpleName() + " Created successfully");
+			res = 1;
+		}
+		return res;
 	}
 
 	// Removed pairGates() method as gates are paired by default
@@ -229,5 +236,19 @@ public class Settler extends Traveler {
 		String str = "Name: " + this.name + "\t\tHidden:" + Boolean.toString(hidden) + "\nminedMinerals: "
 				+ String.join(" - ", minedMinerals);
 		return str;
+	}
+	
+	public void displayResources() throws IOException {
+		Menu menu = new Menu(this.minedMinerals);
+		int choice = menu.display();
+		for(int i = 0; i < this.minedMinerals.size(); i++) {
+			if(i == choice) {
+				addResourceToSpaceStation(minedMinerals.get(i));
+			}
+		}
+	}
+	
+	public void addResourceToSpaceStation(String mineral) {
+		minedMinerals.remove(minedMinerals.indexOf(mineral));
 	}
 }
