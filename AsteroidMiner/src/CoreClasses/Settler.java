@@ -8,8 +8,7 @@ import Search.Border;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
+
 
 import View.Menu;
 
@@ -24,13 +23,10 @@ public class Settler extends Traveler {
 	private Asteroid currentAsteroid;
 	private int nGate;
 
-<<<<<<< Updated upstream
-	public Settler(String name,Vector3f loc ) {
-            super(loc);
-=======
+
 	public Settler(String name) {
 		//super(currentAsteroid);
->>>>>>> Stashed changes
+
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
@@ -252,13 +248,6 @@ public class Settler extends Traveler {
 		}
 	}
         
-        public boolean access(){
-            Border closeAstB = new Border(this.getLocation(), 50f);  
-            if(closeAstB.contains(this.getAsteroid().getLocation()))
-                return true ;
-            
-            return false;
-        }
 
 	public String viewInfo() {
 		String str = "Name: " + this.name + "\t\tHidden:" + Boolean.toString(hidden) + "\nminedMinerals: "

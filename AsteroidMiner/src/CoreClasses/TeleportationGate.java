@@ -12,7 +12,7 @@ public class TeleportationGate extends Place {
 	
 	
 	public TeleportationGate(){
-                super(new Vector3f(0,0,0));
+               // super(new Vector3f(0,0,0));
 		deployed = false;
 		paired = false;
 	}
@@ -36,7 +36,7 @@ public class TeleportationGate extends Place {
 		pair.neighbourAsteroid = pGate_na;
 		pairedGate.deployed =true ;	
 		pairedGate.paired = true ;
-		//System.out.println("\n\n\nthere");		
+			
 		}
 	}
 	public boolean isPaired() {return paired; }
