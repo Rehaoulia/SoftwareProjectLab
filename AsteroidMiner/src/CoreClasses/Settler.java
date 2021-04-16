@@ -238,17 +238,21 @@ public class Settler extends Traveler {
 		return str;
 	}
 	
-	public void displayResources() throws IOException {
+	public boolean displayResources() throws IOException {
+		boolean state = false;
 		Menu menu = new Menu(this.minedMinerals);
 		int choice = menu.display();
 		for(int i = 0; i < this.minedMinerals.size(); i++) {
 			if(i == choice) {
-				addResourceToSpaceStation(minedMinerals.get(i));
+				state = addResourceToSpaceStation(minedMinerals.get(i));
 			}
 		}
+		return state;
 	}
 	
-	public void addResourceToSpaceStation(String mineral) {
+	public boolean addResourceToSpaceStation(String mineral) {
 		minedMinerals.remove(minedMinerals.indexOf(mineral));
+		Controller.addMineralToSpaceStation(this.currentAsteroid.getSpaceStation().getID(), mineral);
+		return Controller.checkSpaceStation(this.currentAsteroid.getSpaceStation().getID());
 	}
 }

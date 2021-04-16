@@ -12,11 +12,16 @@ public class Main {
 
     public static int cAsteroid;
     public static boolean spacestation;
+    public static boolean spacestationstatus;
     public static void main(String[] args) throws IOException {
         Controller c = initialize();
         spacestation = false;
         int i = 0;
         while (i < 10) {
+        	if(spacestationstatus) {
+        		System.out.println("Congratulations you won!");
+        		break;
+        	}
             mainMenu(c);
         }
     }
@@ -73,7 +78,7 @@ public class Main {
             }
             break;
          case 6: // add space station material
-        	 c.settlers.get(0).displayResources();
+        	 spacestationstatus = c.settlers.get(0).displayResources();
         	break;
         default:
             System.out.println("you didn't choose any action");
