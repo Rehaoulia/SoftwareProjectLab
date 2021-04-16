@@ -25,11 +25,140 @@ public class Main {
         System.out.println("please write your name to start the game");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
-        c.startGame(new String[] { name });
+        c.startGame(new String[]{name});
         return c;
     }
 
     public static void mainMenu(Controller c) throws IOException {
+        ArrayList<String> menuItems = new ArrayList<String>();
+        menuItems.add("Settler Controls");
+        menuItems.add("Robot Controls");
+        menuItems.add("Sunstorm Controls");
+        menuItems.add("Perihelion Controls");
+        // menuItems.add("revive");
+        Menu menu = new Menu(menuItems);
+        switch (menu.display()) {
+            case 0:
+                settlerMenu(c);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3: //Perihelion Controls
+                PerihelionMenu(c);
+                break;
+            default:
+                System.out.println("you didn't choose any action");
+        }
+       /* System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
+                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
+                + "\n");*/
+    }
+
+    public static void PerihelionMenu(Controller c) throws IOException {
+        ArrayList<String> menuItems = new ArrayList<String>();
+        menuItems.add("Subliming Asteroids");
+        menuItems.add("Exploding Asteroids");
+        Menu menu = new Menu(menuItems);
+        switch (menu.display()) {
+
+            case 0://Subliming Asteroids
+
+                for (int i = 0; i < c.getSublimingAsteroids().size(); i++) {
+                    int t = c.getSublimingAsteroids().get(i);
+                    System.out.print("\n\n-------Asteroid:" + t + "\n"
+                            + c.asteroids.get(t).viewInfo()
+                            + "\n");
+                }
+                System.out.println("\n" + "choose position");
+                Menu(c);
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("\n" + "choose a subliming asteroid to drill");
+                int miningAsteroid = scanner.nextInt();
+                System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                        + c.asteroids.get(miningAsteroid).viewInfo()
+                        + "\n");
+
+                ArrayList<String> menu1 = new ArrayList<String>();
+                menu1.add("Drill");
+                menu1.add("back");
+                Menu menu2 = new Menu(menu1);
+                while (c.asteroids.get(miningAsteroid).radius != c.asteroids.get(miningAsteroid).getDepth()) {
+                    switch (menu2.display()) {
+                        case 0:
+                            c.asteroids.get(miningAsteroid).getsDrill();
+                            break;
+                        case 1:
+                            Menu(c);
+                            break;
+                        default:
+                            System.out.println("\n" + "you didn't choose any action");
+
+                    }
+                    System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                            + c.asteroids.get(miningAsteroid).viewInfo()
+                            + "\n");
+                }
+                //c.asteroids.get(miningAsteroid).hollow()=true;
+                System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                        + c.asteroids.get(miningAsteroid).viewInfo()
+                        + "\n");
+                c.removeSublimingAsteroid( miningAsteroid);
+                System.out.println("\n" + "WaterIce sublimed  ");
+                break;
+
+
+            case 1: // Exploding Asteroids
+                for (int i = 0; i < c.getExplodingAsteroids().size(); i++) {
+
+                    Integer t = c.getExplodingAsteroids().get(i);
+                    System.out.print("\n\n-------Asteroid:" + t + "\n"
+                            + c.asteroids.get(t).viewInfo()
+                            + "\n" + c.asteroids.get(t).perihelion());
+                }
+                System.out.println("\n" + "choose position");
+                Menu(c);
+                Scanner scanner2 = new Scanner(System.in);
+                System.out.println("\n" + "choose a radioactive asteroid to drill");
+                int explodingAsteroid = scanner2.nextInt();
+                System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                        + c.asteroids.get(explodingAsteroid).viewInfo()
+                        + "\n");
+                ArrayList<String> menu11 = new ArrayList<String>();
+                menu11.add("Drill");
+                menu11.add("back");
+                Menu menu22 = new Menu(menu11);
+                while (c.asteroids.get(explodingAsteroid).radius != c.asteroids.get(explodingAsteroid).getDepth()) {
+                    switch (menu22.display()) {
+                        case 0:
+                            c.asteroids.get(explodingAsteroid).getsDrill();
+                            break;
+                        case 1:
+                            Menu(c);
+                            break;
+                        default:
+                            System.out.println("\n" + "you didn't choose any action");
+
+                    }
+                    System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                            + c.asteroids.get(explodingAsteroid).viewInfo()
+                            + "\n");
+                }
+                c.removeExplodingAsteroid( explodingAsteroid);
+                c.settlers.get(0).dying();
+                c.asteroids.remove(explodingAsteroid);
+                System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies");
+
+
+                break;
+
+            default:
+                System.out.println("you didn't choose any action");
+        }
+    }
+
+    public static void settlerMenu(Controller c) throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Travel");
         menuItems.add("Drill");
@@ -37,57 +166,78 @@ public class Main {
         menuItems.add("Fill");
         menuItems.add("Hide");
         menuItems.add("Craft");
-        // menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
-        case 0:
-            c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
-            if (cAsteroid != c.asteroids.size())
-                cAsteroid++;
-            else
-                cAsteroid = 0;
+            case 0:
+                c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
+                if (cAsteroid != c.asteroids.size())
+                    cAsteroid++;
+                else
+                    cAsteroid = 0;
 
-            break;
-        case 1: // drill
-            c.settlers.get(0).drill();
-            break;
-        case 2: // mine
-            c.settlers.get(0).mine();
-            break;
-        case 3: // fill
-            Menu minerals = new Menu(c.settlers.get(0).getMinerals());
-            int option = minerals.display();
-            c.settlers.get(0).fill(c.settlers.get(0).getMinerals().get(option));
-            break;
-        case 4: // hide
-            c.settlers.get(0).hide();
-            break;
-        case 5: // craft
-            c.settlers.get(0).showCraftMenu();
-            break;
-        // case 6: // revive
-        // break;
-        default:
-            System.out.println("you didn't choose any action");
+                break;
+            case 1: // drill
+                c.settlers.get(0).drill();
+                break;
+            case 2: // mine
+                c.settlers.get(0).mine();
+                break;
+            case 3: // fill
+                Menu minerals = new Menu(c.settlers.get(0).getMinerals());
+                int option = minerals.display();
+                c.settlers.get(0).fill(c.settlers.get(0).getMinerals().get(option));
+                break;
+            case 4: // hide
+                c.settlers.get(0).hide();
+                break;
+            case 5: // craft
+                c.settlers.get(0).showCraftMenu();
+                break;
+
+            default:
+                System.out.println("you didn't choose any action");
         }
-        System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
+       /* System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
+                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
+                + "\n");*/
     }
 
-    public static void craftMenu() throws IOException {
+    public static void robotMenu(Controller c) throws IOException {
+        int ids = c.getRobots();
         ArrayList<String> menuItems = new ArrayList<String>();
-        menuItems.add("Robot");
-        menuItems.add("Teleportation Gate");
-        menuItems.add("SpaceStation");
-        Menu menu = new Menu(menuItems);
-        switch (menu.display()) {
-        case 0: // robot
-            break;
-        case 1: // teleportation gate
-            break;
-        case 2: // space station
-            break;
-        default:// bogus
+        for (int i = 0; i < ids; i++) {
+            menuItems.add("Robot " + i);
         }
+        Menu menu = new Menu(menuItems, "Pick a robot to behave");
+        if (menu.display() >= ids || menu.display() < 0) {
+            System.out.println("you didn't choose any action");
+            return;
+        }
+
     }
+
+    public static boolean Menu(Controller c) throws IOException {
+        ArrayList<String> menu1 = new ArrayList<String>();
+        menu1.add("Perihelion");
+        menu1.add("Aphelion");
+        boolean perihelion = false;
+        Menu menu2 = new Menu(menu1);
+        switch (menu2.display()) {
+            case 0:
+                System.out.println("\n" + "You are  at perhihelion");
+                perihelion = true;
+                break;
+            case 1:
+                System.out.println("\n" + "You are  at Aphelion");
+                perihelion = false;
+                break;
+            default:
+                System.out.println("\n" + "you didn't choose any action");
+
+        }
+        return perihelion;
+
+    }
+
 
 }
