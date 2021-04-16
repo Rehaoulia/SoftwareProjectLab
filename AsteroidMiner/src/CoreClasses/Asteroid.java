@@ -157,6 +157,13 @@ public class Asteroid extends Place {
 	public boolean destroyed() {
 		return isDestroyed;
 	}
+	 public void setHollow(boolean hollow) {
+        isHollow = hollow;
+    }
+
+    public void setPerihelion(boolean perihelion) {
+        isPerihelion = perihelion;
+    }
 
 	public String viewInfo() {
 		String str = "Radius: " + this.radius + "\t\tDepth:" + depth + "\t\tHollow: " + Boolean.toString(isHollow)
