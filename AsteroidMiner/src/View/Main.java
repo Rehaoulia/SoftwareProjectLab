@@ -11,11 +11,17 @@ import java.io.InputStreamReader;
 public class Main {
 
     public static int cAsteroid;
-
+    public static boolean spacestation;
+    public static boolean spacestationstatus;
     public static void main(String[] args) throws IOException {
         Controller c = initialize();
+        spacestation = false;
         int i = 0;
         while (i < 10) {
+        	if(spacestationstatus) {
+        		System.out.println("Congratulations you won!");
+        		break;
+        	}
             mainMenu(c);
         }
     }
@@ -37,6 +43,9 @@ public class Main {
         menuItems.add("Fill");
         menuItems.add("Hide");
         menuItems.add("Craft");
+        if(spacestation) {
+        	menuItems.add("Add Spacestation Material");
+        }
         // menuItems.add("revive");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
@@ -63,31 +72,18 @@ public class Main {
             c.settlers.get(0).hide();
             break;
         case 5: // craft
-            c.settlers.get(0).showCraftMenu();
+            int res = c.settlers.get(0).showCraftMenu();
+            if(res == -1) {
+            	spacestation = true;
+            }
             break;
-        // case 6: // revive
-        // break;
+         case 6: // add space station material
+        	 spacestationstatus = c.settlers.get(0).displayResources();
+        	break;
         default:
             System.out.println("you didn't choose any action");
         }
         System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
-    }
-
-    public static void craftMenu() throws IOException {
-        ArrayList<String> menuItems = new ArrayList<String>();
-        menuItems.add("Robot");
-        menuItems.add("Teleportation Gate");
-        menuItems.add("SpaceStation");
-        Menu menu = new Menu(menuItems);
-        switch (menu.display()) {
-        case 0: // robot
-            break;
-        case 1: // teleportation gate
-            break;
-        case 2: // space station
-            break;
-        default:// bogus
-        }
     }
 
 }
