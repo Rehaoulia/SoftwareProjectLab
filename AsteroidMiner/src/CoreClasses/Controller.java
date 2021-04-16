@@ -14,9 +14,22 @@ public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
     private static ArrayList<Robot> robots;
+
+    public ArrayList<Settler> getSettlers() {
+        return settlers;
+    }
+
+    public static ArrayList<Integer> getExplodingAsteroids() {
+        return explodingAsteroids;
+    }
+
+    public static ArrayList<Integer> getSublimingAsteroids() {
+        return sublimingAsteroids;
+    }
+
     private int numAsteroids;
     private int numSettlers;
-    public Map<Integer, Asteroid> asteroids;
+    public static Map<Integer, Asteroid> asteroids;
     private boolean gamerOver;
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
@@ -25,25 +38,24 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
-    public  String information;
+    public String information;
 
     // Methods
-    
-    public Controller() {}
-    
-    
+
+    public Controller() {
+    }
+
     public void startGame(String[] names) {
-    	this.setupGame();
-    	settlers = new ArrayList<Settler>();
-    	
-    	
+        this.setupGame();
+        settlers = new ArrayList<Settler>();
+
         for (String i : Arrays.asList(names)) {
-        	Settler set = new Settler(i) ;
-        	set.setAsteroid(asteroids.get(0));
+            Settler set = new Settler(i);
+            set.setAsteroid(asteroids.get(0));
             settlers.add(set);
             information = set.getAsteroid().viewInfo();
             System.out.println(information);
-                    
+
         }
     }
 
@@ -58,27 +70,27 @@ public class Controller {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
             switch (mineralSelector) {
-            case 0:
-                M = new Carbon();
-                break;
-            case 1:
-                M = new WaterIce();
-                break;
-            case 2:
-                M = new Iron();
-                break;
-            case 3:
-                M = new Uranium();
-                break;
-            default:
-                M = null;
+                case 0:
+                    M = new Carbon();
+                    break;
+                case 1:
+                    M = new WaterIce();
+                    break;
+                case 2:
+                    M = new Iron();
+                    break;
+                case 3:
+                    M = new Uranium();
+                    break;
+                default:
+                    M = null;
             }
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
-                a = new Asteroid(i,radius);
+                a = new Asteroid(i, radius);
             else
-                a = new Asteroid(i, M,radius);
+                a = new Asteroid(i, M, radius);
 
             asteroids.put(i, a);
             if (mineralSelector == 1)
@@ -90,7 +102,6 @@ public class Controller {
         }
     }
 
-    
     public static void addRobot(Robot r) { // missing from the sequence diagram
         robots.add(r);
     }
@@ -100,6 +111,10 @@ public class Controller {
 
     public void updateGame() {
 
+    }
+
+    public int getRobots() {
+        return robots.size();
     }
 
     public void removePlayer(int playerID) {
@@ -141,24 +156,27 @@ public class Controller {
 
     public boolean checkGame() {
         boolean flag = false;
-		return flag;
+        return flag;
     }
-    
+
     public static void updateAsteroid(Asteroid asteroid) {
-    	
+
     }
-    
+
     public static void updateSettler() {
-    	
+
     }
-    
-    public static void removeSublimingAsteroid(int id) 
-    {
-    	sublimingAsteroids.remove(id);
+
+    public static void robotBehave(int id) {
+        int ast = robots.get(id).currentAsteroid.getID();
+        //robots.get(id).behave(asteroids.get((ast + 1) % asteroids.size()));
     }
-    
-    public static void removeExplodingAsteroid(int id) 
-    {
-    	explodingAsteroids.remove(id);
+
+    public static void removeSublimingAsteroid(int id) {
+        sublimingAsteroids.remove(new Integer(id));
+    }
+
+    public static void removeExplodingAsteroid(int id) {
+        explodingAsteroids.remove(new Integer(id));
     }
 }
