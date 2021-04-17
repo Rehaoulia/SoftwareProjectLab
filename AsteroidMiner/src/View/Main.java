@@ -5,10 +5,10 @@ import CoreClasses.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.InputStreamReader;
 
 public class Main {
+
 
     public static int cAsteroid;
     public static boolean spacestation;
@@ -17,14 +17,23 @@ public class Main {
         Controller c = initialize();
         spacestation = false;
         int i = 0;
-        while (i < 10) {
+        while (c.getGameOver()==false) {
         	if(spacestationstatus) {
         		System.out.println("Congratulations you won!");
         		break;
         	}
             mainMenu(c);
         }
+        if(c.getWin()==true){
+            System.out.println("You Won! :D");
+        }else{
+            System.out.println("You lost :(");
+        }
     }
+	
+    public static int cAsteroid;
+
+    
 
     public static Controller initialize() throws IOException {
         Controller c = new Controller();
@@ -47,6 +56,7 @@ public class Main {
         	menuItems.add("Add Spacestation Material");
         }
         // menuItems.add("revive");
+        menuItems.add("Make a sunstorm");
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
         case 0:
@@ -77,13 +87,15 @@ public class Main {
             	spacestation = true;
             }
             break;
+
          case 6: // add space station material
         	 spacestationstatus = c.settlers.get(0).displayResources();
         	break;
         default:
             System.out.println("you didn't choose any action");
         }
-        System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
+        if(c.settlers.size()>0)
+            System.out.println("\n\n-------Asteroid:"+c.settlers.get(0).getAsteroid().getID()+"\n"+c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()+"\n");
     }
 
 }
