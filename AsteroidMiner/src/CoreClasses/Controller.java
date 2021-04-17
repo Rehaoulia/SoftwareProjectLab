@@ -14,6 +14,8 @@ public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
     public ArrayList<Robot> robots = new ArrayList<Robot>();
+    private static ArrayList<SpaceStation> spacestations;
+
     private int numAsteroids;
     private int numSettlers;
     public Map<Integer, Asteroid> asteroids;
@@ -175,5 +177,23 @@ public class Controller {
     public static void removeExplodingAsteroid(int id) 
     {
     	explodingAsteroids.remove(id);
+    }
+    
+    public static void addMineralToSpaceStation(String spacestationID, String mineral) {
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			s.addResource(mineral);
+    		}
+    	}
+    }
+    
+    public static boolean checkSpaceStation(String spacestationID) {
+    	boolean state = false;
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			state = s.isCraftable();
+    		}
+    	}
+    	return state;
     }
 }
