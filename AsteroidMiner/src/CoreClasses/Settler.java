@@ -8,6 +8,7 @@ import View.Menu;
 public class Settler extends Traveler {
 
 	private String name;
+	public int ID;
 	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below
 												// in checkRequiredMaterial
 	private TeleportationGate[] gates;
@@ -15,7 +16,8 @@ public class Settler extends Traveler {
 	private boolean dead;
 	private Asteroid currentAsteroid;
 
-	public Settler(String name) {
+	public Settler(String name, int ID) {
+		this.ID = ID;
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
@@ -154,7 +156,7 @@ public class Settler extends Traveler {
 				}
 				break;
 			case 2:
-				if (this.currentAsteroid.getSpaceStation() != null) {
+				if (this.currentAsteroid.getSpaceStation() == null) {
 					c = new SpaceStation(this.currentAsteroid);
 				}
 				break;
@@ -166,15 +168,22 @@ public class Settler extends Traveler {
 		return c;
 	}
 
-	public void showCraftMenu() throws IOException {
+	public int showCraftMenu() throws IOException {
+		int res = 1;
 		ArrayList<String> menuItems = new ArrayList<String>();
 		menuItems.add("Robot || Uranium + Carbon + Iron");
 		menuItems.add("Teleportation Gate || Uranium + WaterIce + 2 x Iron");
 		menuItems.add("SpaceStation || 3xUranium + 3xCarbon + 3xIron + 3xWaterIce");
 		Menu menu = new Menu(menuItems);
 		Craftable c = craft(menu.display());
-		if (c != null)
+		if (c.getClass().getSimpleName().equals("SpaceStation")) {
+			System.out.println("Spacestation building started!");
+			res = -1;
+		}else if(c != null) {
 			System.out.println(c.getClass().getSimpleName() + " Created successfully");
+			res = 1;
+		}
+		return res;
 	}
 
 	// Removed pairGates() method as gates are paired by default
@@ -190,11 +199,6 @@ public class Settler extends Traveler {
 	// might be useless
 	public long getTimeOfDeath() {
 		return timeOfDeath;
-	}
-
-	@Override
-	public void die() {
-		this.dead = true;
 	}
 
 	public boolean getDeath() {
@@ -214,8 +218,32 @@ public class Settler extends Traveler {
 		return minedMinerals;
 	}
 
-	public void dying() {
+	@Override
+	public void die() {
+		this.dead = true;
+		System.out.println("You are dead :(");
+	}
+
+	public void dying(Controller c) {
 		this.setTimeOfDeath();
+		try {
+			//wait for revival for i seconds
+			int i=3; 
+			while(i>0){
+				long millis = System.currentTimeMillis();
+                System.out.println(name+" waiting for revival...");
+                i--;
+                Thread.sleep(1000 - millis % 1000); //every 1 second
+				if(timeOfDeath==-1) break;	//if revived then break;
+			}
+			//if not revived then die
+			if(timeOfDeath!=-1){
+				die();
+				c.removePlayer(ID);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void hide() {
@@ -228,5 +256,27 @@ public class Settler extends Traveler {
 		String str = "Name: " + this.name + "\t\tHidden:" + Boolean.toString(hidden) + "\nminedMinerals: "
 				+ String.join(" - ", minedMinerals);
 		return str;
+	}
+
+
+	public void setID(int newID){ ID=newID;}
+
+	
+	public boolean displayResources() throws IOException {
+		boolean state = false;
+		Menu menu = new Menu(this.minedMinerals);
+		int choice = menu.display();
+		for(int i = 0; i < this.minedMinerals.size(); i++) {
+			if(i == choice) {
+				state = addResourceToSpaceStation(minedMinerals.get(i));
+			}
+		}
+		return state;
+	}
+	
+	public boolean addResourceToSpaceStation(String mineral) {
+		minedMinerals.remove(minedMinerals.indexOf(mineral));
+		Controller.addMineralToSpaceStation(this.currentAsteroid.getSpaceStation().getID(), mineral);
+		return Controller.checkSpaceStation(this.currentAsteroid.getSpaceStation().getID());
 	}
 }

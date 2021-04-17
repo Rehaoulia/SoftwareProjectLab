@@ -14,11 +14,15 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
-    private static ArrayList<Robot> robots;
+    public ArrayList<Robot> robots = new ArrayList<Robot>();
+    private static ArrayList<SpaceStation> spacestations;
+
     private int numAsteroids;
     private int numSettlers;
+
     public static Map<Integer, Asteroid> asteroids;
     private boolean gamerOver;
+
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
     private static ArrayList<Integer> sublimingAsteroids;
@@ -26,7 +30,10 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
-    public String information;
+
+    public  String information;
+    public Sunstorm sunstorm = new Sunstorm();
+
 
     // Methods
 
@@ -34,14 +41,14 @@ public class Controller {
     }
 
     public void startGame(String[] names) {
+
         this.setupGame();
         settlers = new ArrayList<Settler>();
         robots= new ArrayList<Robot>();
-        robots.add(new Robot(asteroids.get(4)));
-        robots.add(new Robot(asteroids.get(5)));
         for (String i : Arrays.asList(names)) {
             Settler set = new Settler(i);
             set.setAsteroid(asteroids.get(0));
+
             settlers.add(set);
             information = set.getAsteroid().viewInfo();
             System.out.println(information);
@@ -91,7 +98,9 @@ public class Controller {
         }
     }
 
+
     public static void addRobot(Robot r) { // missing from the sequence diagram
+
         robots.add(r);
     }
 
@@ -108,6 +117,12 @@ public class Controller {
 
     public void removePlayer(int playerID) {
         settlers.remove(playerID);
+        if(settlers.size()>0){
+            for(int i=0;i<settlers.size();i++){
+                settlers.get(i).setID(i);
+            }
+        }
+        checkGame();
     }
 
     public void removeAsteroid(int asteroidID) {
@@ -117,11 +132,11 @@ public class Controller {
     public void triggerSunStorms() {
         rand = new Random();
         int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
-        Sunstorm.behave(wavelength);
+        sunstorm.behave(this, wavelength);
         TimerTask checkDeath = new TimerTask() {
             @Override
             public void run() {
-                if (Sunstorm.getHappening()) {
+                if (sunstorm.getHappening()) {
                     for (Settler s : settlers) {
                         if (!s.getHidden() && !s.getDeath()) {
                             s.die();
@@ -143,10 +158,19 @@ public class Controller {
 
     }
 
-    public boolean checkGame() {
-        boolean flag = false;
-        return flag;
+
+    //checks the conditions for ending the game
+    public void checkGame() {
+        if(settlers.size()==0){
+            gameOver =true;
+            win =false;
+            endGame();
+        }
     }
+
+    public boolean getGameOver(){ return gameOver;}
+    public boolean getWin(){ return win;}
+    
 
     public static void updateAsteroid(Asteroid asteroid) {
 
@@ -168,5 +192,23 @@ public class Controller {
 
     public static void removeExplodingAsteroid(int id) {
         explodingAsteroids.remove(id);
+    }
+    
+    public static void addMineralToSpaceStation(String spacestationID, String mineral) {
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			s.addResource(mineral);
+    		}
+    	}
+    }
+    
+    public static boolean checkSpaceStation(String spacestationID) {
+    	boolean state = false;
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			state = s.isCraftable();
+    		}
+    	}
+    	return state;
     }
 }
