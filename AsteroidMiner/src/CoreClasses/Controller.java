@@ -14,8 +14,23 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
+
     public ArrayList<Robot> robots = new ArrayList<Robot>();
+  
     private static ArrayList<SpaceStation> spacestations;
+
+
+    public ArrayList<Settler> getSettlers() {
+        return settlers;
+    }
+
+    public static ArrayList<Integer> getExplodingAsteroids() {
+        return explodingAsteroids;
+    }
+
+    public static ArrayList<Integer> getSublimingAsteroids() {
+        return sublimingAsteroids;
+    }
 
     private int numAsteroids;
     private int numSettlers;
@@ -31,6 +46,7 @@ public class Controller {
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
 
+
     public  String information;
     public Sunstorm sunstorm = new Sunstorm();
 
@@ -41,6 +57,7 @@ public class Controller {
     }
 
     public void startGame(String[] names) {
+
 
         this.setupGame();
         settlers = new ArrayList<Settler>();
@@ -66,20 +83,20 @@ public class Controller {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
             switch (mineralSelector) {
-            case 0:
-                M = new Carbon();
-                break;
-            case 1:
-                M = new WaterIce();
-                break;
-            case 2:
-                M = new Iron();
-                break;
-            case 3:
-                M = new Uranium();
-                break;
-            default:
-                M = null;
+                case 0:
+                    M = new Carbon();
+                    break;
+                case 1:
+                    M = new WaterIce();
+                    break;
+                case 2:
+                    M = new Iron();
+                    break;
+                case 3:
+                    M = new Uranium();
+                    break;
+                default:
+                    M = null;
             }
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
@@ -97,7 +114,6 @@ public class Controller {
 
         }
     }
-
 
     public static void addRobot(Robot r) { // missing from the sequence diagram
 
@@ -159,6 +175,7 @@ public class Controller {
     }
 
 
+
     //checks the conditions for ending the game
     public void checkGame() {
         if(settlers.size()==0){
@@ -185,13 +202,13 @@ public class Controller {
         robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
 
     }
-
+  
     public static void removeSublimingAsteroid(int id) {
-        sublimingAsteroids.remove(id);
+        sublimingAsteroids.remove(new Integer(id));
     }
 
     public static void removeExplodingAsteroid(int id) {
-        explodingAsteroids.remove(id);
+        explodingAsteroids.remove(new Integer(id));
     }
     
     public static void addMineralToSpaceStation(String spacestationID, String mineral) {
