@@ -1,16 +1,16 @@
 package CoreClasses;
 
-import com.jme3.math.Vector3f;
+//import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 
 public class Place {
 	
-        private Vector3f location; 
+       // private Vector3f location; 
 	private ArrayList<Traveler> currentTravelers;
         
-        public Place(Vector3f loc){
-            location = loc;
-        }
+        // public Place(Vector3f loc){
+        //     location = loc;
+        // }
 	
 	public void addTraveler(Traveler traveler) {
 		this.currentTravelers.add(traveler);
@@ -20,10 +20,10 @@ public class Place {
 		this.currentTravelers.removeIf(t -> t.equals(traveler));
 	}
         
-        public Vector3f getLocation(){
-            return location;
-        };
-        public void setLocation(Vector3f pos){
-            location = pos;
-        };
+        // public Vector3f getLocation(){
+        //     return location;
+        // };
+        // public void setLocation(Vector3f pos){
+        //     location = pos;
+        // };
 }

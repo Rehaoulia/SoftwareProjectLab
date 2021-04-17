@@ -13,6 +13,7 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
+    private static ArrayList<SpaceStation> spacestations;
     private static ArrayList<Robot> robots;
     private int numAsteroids;
     private int numSettlers;
@@ -76,11 +77,11 @@ public class Controller {
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
-//                a = new Asteroid(i,radius);
-//            else
-//                a = new Asteroid(i, M,radius);
-//
-//            asteroids.put(i, a);
+                a = new Asteroid(i,radius);
+            else
+                a = new Asteroid(i, M,radius);
+
+            asteroids.put(i, a);
             if (mineralSelector == 1)
                 sublimingAsteroids.add(i);
 
@@ -160,5 +161,23 @@ public class Controller {
     public static void removeExplodingAsteroid(int id) 
     {
     	explodingAsteroids.remove(id);
+    }
+    
+    public static void addMineralToSpaceStation(String spacestationID, String mineral) {
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			s.addResource(mineral);
+    		}
+    	}
+    }
+    
+    public static boolean checkSpaceStation(String spacestationID) {
+    	boolean state = false;
+    	for(SpaceStation s : spacestations) {
+    		if(s.getID().equals(spacestationID)) {
+    			state = s.isCraftable();
+    		}
+    	}
+    	return state;
     }
 }
