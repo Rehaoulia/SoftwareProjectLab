@@ -1,24 +1,25 @@
 package CoreClasses;
 
 import java.util.ArrayList;
-
+import java.util.UUID;
 public class SpaceStation implements Craftable {
     //required minerals for crafting the spaceStation:
     //String[] RequiredMinerals = {"Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce", "Iron", "Carbon", "Uranium", "waterIce"};
 
     Asteroid currentAsteroid;
-
+    private String spacestationID;
     //minerals designated for crafting the spaceStation:
     private ArrayList<String> spaceStationMinerals;
 
     public SpaceStation(Asteroid currentAsteroid) {
         this.currentAsteroid = currentAsteroid; //Constructor
+        this.spacestationID = UUID.randomUUID().toString();
     }
 
 
     //add the resource to the minerals designated for crafting the spaceStation
-    public void addResource(Mineral resource) {
-        this.spaceStationMinerals.add(resource.toString());
+    public void addResource(String resource) {
+        this.spaceStationMinerals.add(resource);
     }
 
     //get the minerals designated for crafting the spaceStation
@@ -27,8 +28,8 @@ public class SpaceStation implements Craftable {
     }
 
     //remove the resource from the minerals designated for crafting the spaceStation
-    public void removeResource(Mineral resource) {
-        this.spaceStationMinerals.remove(resource.toString());
+    public void removeResource(String resource) {
+        this.spaceStationMinerals.remove(resource);
 
     }
 
@@ -59,7 +60,10 @@ public class SpaceStation implements Craftable {
     public void setAsteroid(Asteroid a) {
         currentAsteroid = a;
     }
-
+    
+    public String getID() {
+    	return this.spacestationID;
+    }
 
 }
 
