@@ -1,5 +1,6 @@
 package CoreClasses;
 
+import java.io.IOException;
 import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +19,10 @@ public class Controller {
 
     private int numAsteroids;
     private int numSettlers;
-    public Map<Integer, Asteroid> asteroids;
-    private boolean gameOver;
+
+    public static Map<Integer, Asteroid> asteroids;
+    private boolean gamerOver;
+
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
     private static ArrayList<Integer> sublimingAsteroids;
@@ -27,27 +30,29 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
+
     public  String information;
     public Sunstorm sunstorm = new Sunstorm();
 
+
     // Methods
-    
-    public Controller() {}
-    
-    
+
+    public Controller() {
+    }
+
     public void startGame(String[] names) {
-    	this.setupGame();
-    	settlers = new ArrayList<Settler>();
-    	
-    	int count=0;
+
+        this.setupGame();
+        settlers = new ArrayList<Settler>();
+        robots= new ArrayList<Robot>();
         for (String i : Arrays.asList(names)) {
-        	Settler set = new Settler(i, count) ;
-            count++;
-        	set.setAsteroid(asteroids.get(0));
+            Settler set = new Settler(i);
+            set.setAsteroid(asteroids.get(0));
+
             settlers.add(set);
             information = set.getAsteroid().viewInfo();
             System.out.println(information);
-                    
+
         }
     }
 
@@ -57,7 +62,6 @@ public class Controller {
         asteroids = new HashMap<Integer, Asteroid>();
         explodingAsteroids = new ArrayList<Integer>();
         sublimingAsteroids = new ArrayList<Integer>();
-
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
@@ -80,9 +84,9 @@ public class Controller {
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
-                a = new Asteroid(i,radius);
+                a = new Asteroid(i, radius);
             else
-                a = new Asteroid(i, M,radius);
+                a = new Asteroid(i, M, radius);
 
             asteroids.put(i, a);
             if (mineralSelector == 1)
@@ -94,8 +98,9 @@ public class Controller {
         }
     }
 
-    
-    public void addRobot(Robot r) { // missing from the sequence diagram
+
+    public static void addRobot(Robot r) { // missing from the sequence diagram
+
         robots.add(r);
     }
 
@@ -104,6 +109,10 @@ public class Controller {
 
     public void updateGame() {
 
+    }
+
+    public int getRobots() {
+        return robots.size();
     }
 
     public void removePlayer(int playerID) {
@@ -149,6 +158,7 @@ public class Controller {
 
     }
 
+
     //checks the conditions for ending the game
     public void checkGame() {
         if(settlers.size()==0){
@@ -161,22 +171,27 @@ public class Controller {
     public boolean getGameOver(){ return gameOver;}
     public boolean getWin(){ return win;}
     
+
     public static void updateAsteroid(Asteroid asteroid) {
-    	
+
     }
-    
+
     public static void updateSettler() {
-    	
+
     }
-    
-    public static void removeSublimingAsteroid(int id) 
-    {
-    	sublimingAsteroids.remove(id);
+
+    public static void robotBehave(int id) throws IOException ,InterruptedException{
+        int ast = robots.get(id).currentAsteroid.getID();
+        robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
+
     }
-    
-    public static void removeExplodingAsteroid(int id) 
-    {
-    	explodingAsteroids.remove(id);
+
+    public static void removeSublimingAsteroid(int id) {
+        sublimingAsteroids.remove(id);
+    }
+
+    public static void removeExplodingAsteroid(int id) {
+        explodingAsteroids.remove(id);
     }
     
     public static void addMineralToSpaceStation(String spacestationID, String mineral) {
