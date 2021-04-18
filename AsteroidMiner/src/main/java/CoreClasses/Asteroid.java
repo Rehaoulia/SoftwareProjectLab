@@ -226,5 +226,4 @@ public class Asteroid extends Place {
     // public Vector3f getLocation(){
     //     return super.getLocation();
     // }
-
 }

@@ -61,7 +61,6 @@ public class Controller {
 
         this.setupGame();
         settlers = new ArrayList<Settler>();
-        robots= new ArrayList<Robot>();
         int count=0;
         for (String i : Arrays.asList(names)) {
             Settler set = new Settler(i, count);
@@ -76,6 +75,8 @@ public class Controller {
     }
 
     public void setupGame() {
+        robots= new ArrayList<Robot>();
+
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
         asteroids = new HashMap<Integer, Asteroid>();
