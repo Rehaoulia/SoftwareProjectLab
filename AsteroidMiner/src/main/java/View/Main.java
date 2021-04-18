@@ -73,7 +73,7 @@ public class Main {
         			+ "\n");
     }
 
-    public static void PerihelionMenu(Controller c) throws IOException {
+        public static void PerihelionMenu(Controller c) throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Subliming Asteroids");
         menuItems.add("Exploding Asteroids");
@@ -92,43 +92,27 @@ public class Main {
                             + "\n" + "Perihelion : " + c.asteroids.get(t).perihelion() + "\n");
                 }
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("\n" + "choose a subliming asteroid to drill");
-                int miningAsteroid = scanner.nextInt();
-                System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
-                        + c.asteroids.get(miningAsteroid).viewInfo()
-                        + "\n" + "Perihelion : " + c.asteroids.get(miningAsteroid).perihelion());
-
+                System.out.println("\n" + "choose an  asteroid to sublime");
+                int sublimingAsteroid = scanner.nextInt();
+                System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                        + c.asteroids.get(sublimingAsteroid).viewInfo()
+                        + "\n" + "Perihelion : " + c.asteroids.get(sublimingAsteroid).perihelion());
                 ArrayList<String> menu1 = new ArrayList<String>();
-                menu1.add("Drill");
+                menu1.add("sublime");
                 menu1.add("back");
                 Menu menu2 = new Menu(menu1);
-                while (c.asteroids.get(miningAsteroid).radius != c.asteroids.get(miningAsteroid).getDepth()) {
-                    switch (menu2.display()) {
-                        case 0:
-                            c.asteroids.get(miningAsteroid).getsDrill();
-                            break;
-                        case 1:
-                            PerihelionMenu(c);
-                            break;
-                        default:
-                            System.out.println("\n" + "you didn't choose any action");
+                switch (menu2.display()) {
+                    case 0:
+                        c.Sublime(c, sublimingAsteroid);
+                        break;
+                    case 1:
+                        PerihelionMenu(c);
+                        break;
+                    default:
+                        System.out.println("\n" + "you didn't choose any action");
 
-                    }
-                    System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
-                            + c.asteroids.get(miningAsteroid).viewInfo()
-                            + "\n" + "Perihelion : " + c.asteroids.get(miningAsteroid).perihelion() + "\n");
                 }
-                if (c.asteroids.get(miningAsteroid).perihelion()) {
-                    c.asteroids.get(miningAsteroid).setHollow(true);
-                    c.removeSublimingAsteroid(miningAsteroid);
-                    System.out.println("\n\n" + "WaterIce sublimed !! ");
-                    System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
-                            + c.asteroids.get(miningAsteroid).viewInfo()
-                            + "\n" + "Perihelion : " + c.asteroids.get(miningAsteroid).perihelion());
-                } else {
-                    System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
-                }
-
+                menu2.display();
                 break;
 
 
@@ -144,40 +128,26 @@ public class Main {
                             + "\n" + "Perihelion : " + c.asteroids.get(t).perihelion() + "\n");
                 }
                 Scanner scanner2 = new Scanner(System.in);
-                System.out.println("\n" + "choose a radioactive asteroid to drill");
+                System.out.println("\n" + "choose a radioactive asteroid to explode");
                 int explodingAsteroid = scanner2.nextInt();
                 System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
                         + c.asteroids.get(explodingAsteroid).viewInfo()
                         + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
                 ArrayList<String> menu11 = new ArrayList<String>();
-                menu11.add("Drill");
+                menu11.add("Explode");
                 menu11.add("back");
                 Menu menu22 = new Menu(menu11);
-                while (c.asteroids.get(explodingAsteroid).radius != c.asteroids.get(explodingAsteroid).getDepth()) {
-                    switch (menu22.display()) {
-                        case 0:
-                            c.asteroids.get(explodingAsteroid).getsDrill();
-                            break;
-                        case 1:
-                            PerihelionMenu(c);
-                            break;
-                        default:
-                            System.out.println("\n" + "you didn't choose any action");
-
-                    }
-                    System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
-                            + c.asteroids.get(explodingAsteroid).viewInfo()
-                            + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
-
+                switch (menu22.display()) {
+                    case 0:
+                        c.Explode(c, explodingAsteroid);
+                        break;
+                    case 1:
+                        PerihelionMenu(c);
+                        break;
+                    default:
+                        System.out.println("\n" + "you didn't choose any action");
                 }
-                if (c.asteroids.get(explodingAsteroid).perihelion()) {
-                    c.removeExplodingAsteroid(explodingAsteroid);
-                    c.settlers.get(0).dying(c);
-                    c.asteroids.remove(explodingAsteroid);
-                    System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
-                } else {
-                    System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
-                }
+
                 break;
 
             default:
