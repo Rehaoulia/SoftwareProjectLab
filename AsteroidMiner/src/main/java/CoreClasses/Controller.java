@@ -236,4 +236,41 @@ public class Controller {
     		}
     	}
     }
+        public void Sublime(Controller c, int sublimingAsteroid) {
+        c.asteroids.get(sublimingAsteroid).setDepth(c.asteroids.get(sublimingAsteroid).radius);
+        if (c.asteroids.get(sublimingAsteroid).perihelion()) {
+            c.asteroids.get(sublimingAsteroid).setHollow(true);
+            c.removeSublimingAsteroid(sublimingAsteroid);
+            System.out.println("\n\n" + "WaterIce sublimed !! ");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + c.asteroids.get(sublimingAsteroid).viewInfo()
+                    + "\n" + "Perihelion : " + c.asteroids.get(sublimingAsteroid).perihelion());
+        } else {
+            System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + c.asteroids.get(sublimingAsteroid).viewInfo()
+                    + "\n" + "Perihelion : " + c.asteroids.get(sublimingAsteroid).perihelion());
+        }
+
+    }
+
+    public void Explode(Controller c, int explodingAsteroid) {
+        c.asteroids.get(explodingAsteroid).setDepth(c.asteroids.get(explodingAsteroid).radius);
+
+        if (c.asteroids.get(explodingAsteroid).perihelion()) {
+            c.removeExplodingAsteroid(explodingAsteroid);
+            //c.asteroids.remove(explodingAsteroid);
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + c.asteroids.get(explodingAsteroid).viewInfo()
+                    + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
+            c.settlers.get(0).dying(c);
+        } else {
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + c.asteroids.get(explodingAsteroid).viewInfo()
+                    + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
+        }
+
+    }
 }
