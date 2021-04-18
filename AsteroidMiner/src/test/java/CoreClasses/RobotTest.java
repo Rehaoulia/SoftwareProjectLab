@@ -46,14 +46,13 @@ public class RobotTest {
         S.mine();
         S.craft(0, c);
         assertTrue("Success: Settler S1 created a robot", c.robots.size() == 2);
-
     }
 
     @Test
     public void TravelTest() {
         int nextAsteroid = R.getCurrentAstroid().getID() + 1;
         R.travel(c.asteroids.get(nextAsteroid));
-        assertTrue("Success: Robot R1 moved to asteroid A" + nextAsteroid, nextAsteroid == 5);
+        assertTrue("Success: Robot R1 moved to asteroid A" + nextAsteroid, R.currentAsteroid.getID() == 5);
     }
 
     @Test
@@ -81,6 +80,9 @@ public class RobotTest {
         R.hide();
         assertTrue("Success: Robot is hiding", R.hidden);
         assertFalse("Success: Asteroid is not hollow anymore", R.getCurrentAstroid().hollow());
+        R.unhide();
+        assertFalse("Success: Robot is not hidint", R.hidden);
+        assertTrue("Success: Asteroid is hollow", R.currentAsteroid.hollow());
     }
 
     @Test
