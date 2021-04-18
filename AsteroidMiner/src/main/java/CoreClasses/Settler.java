@@ -306,7 +306,6 @@ public class Settler extends Traveler {
 	}
 
 
-////////////////////////////////////////////////////////
 
     public void addMineral(String s) {
 		minedMinerals.add(s);

@@ -2,18 +2,14 @@ package CoreClasses;
 
 
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
 import org.junit.Before;
-import CoreClasses.Robot;
-import CoreClasses.Asteroid;
-import CoreClasses.Controller;
 
 import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
-public class DrillingTest 
+public class SettlerDrillingTest 
 {
     
     /**
@@ -34,7 +30,7 @@ public class DrillingTest
 
         
         int destID = 1;
-        player.travel(c.asteroids.get(1));
+        player.travel(Controller.asteroids.get(1));
        Asteroid cur = player.getAsteroid();
         player.travel(cur);
         assertTrue("Success: Settler S1 moved to asteroid A1" , destID == cur.getID() );

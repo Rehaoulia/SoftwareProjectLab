@@ -1,8 +1,6 @@
 package CoreClasses;
 
 import java.util.List;
-//import com.jme3.math.Vector3f;
-//import com.jme3.scene.Spatial;
 
 public class Asteroid extends Place {
 
@@ -10,7 +8,6 @@ public class Asteroid extends Place {
 	private boolean isRadioActive;
 	private boolean isPerihelion;
 	private boolean isMineable;
-	private boolean isBeingDrilled;
 	private boolean isDestroyed;
 
 	private int ID;
@@ -28,7 +25,6 @@ public class Asteroid extends Place {
 		mineral = _mineral;
 		isHollow = false;
 		isMineable = false;
-		isBeingDrilled = false;
 		isDestroyed = false;
 		depth = 0;
 		radius = _radius;
@@ -44,7 +40,6 @@ public class Asteroid extends Place {
 		ID = _ID;
 		isHollow = true;
 		isMineable = false;
-		isBeingDrilled = false;
 		isDestroyed = false;
 		isRadioActive = false;
 		depth = 0;
@@ -82,7 +77,6 @@ public class Asteroid extends Place {
 	{ // this function returns -1 if its mineable
 
 		if (drillable() && !isDestroyed) {
-			isBeingDrilled = true;
 			depth++;
 			if (!isHollow && !drillable())
 				isMineable = true;
@@ -91,7 +85,6 @@ public class Asteroid extends Place {
 			if (isRadioActive && isPerihelion)
 				explode(); // if its radioactive then its not hollow
 			else {
-				isBeingDrilled = false;
 				if (!isHollow)
 					isMineable = true;
 			}
@@ -174,57 +167,4 @@ public class Asteroid extends Place {
 				+ "\nDrillable: " + Boolean.toString(drillable()) + "\t\tMineable :" + Boolean.toString(isMineable);
 		return str;
 	}
-
-	// public getLocation() {}
-	
-	// need to have location aswell
-		// public Asteroid(int _ID,Vector3f loc , Mineral _mineral, int _radius) {
-		// 	super(loc);
-	    //             ID = _ID;
-		// 	mineral = _mineral;
-		// 	isHollow = false;
-		// 	isMineable = false;
-		// 	isBeingDrilled = false;
-		// 	isDestroyed = false;
-		// 	depth = 0;
-		// 	radius = _radius;
-
-
-		// 	if (mineral.toString().equals("Uranium"))
-		// 		isRadioActive = true;
-		// 	else
-		// 		isRadioActive = false;
-		// 	// isAphelion = ??; we need location to set this
-
-		// }
-
-	// public Asteroid(int _ID,Vector3f loc , int _radius) { // this constructor works without mineral and sets hollow
-		// 	super(loc);
-	    //             ID = _ID;
-		// 	isHollow = true;
-		// 	isMineable = false;
-		// 	isBeingDrilled = false;
-		// 	isDestroyed = false;
-		// 	isRadioActive = false;
-		// 	depth = 0;
-		// 	radius = _radius;
-	    //             //model.setLocalScale(_radius);
-		// }
-	
-
-    // public void setModel(Spatial mod){
-    //     mod.setLocalTranslation(super.getLocation());
-    //     model = mod ;
-    // }
-
-    // public Spatial getModel(){
-    //     model.setLocalTranslation(super.getLocation());
-    //    return model.clone() ;
-    // }
-	
-	// @Override
-    // public Vector3f getLocation(){
-    //     return super.getLocation();
-    // }
-
 }

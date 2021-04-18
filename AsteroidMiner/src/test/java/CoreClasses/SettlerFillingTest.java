@@ -2,18 +2,13 @@ package CoreClasses;
 
 
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
 import org.junit.Before;
-import CoreClasses.Robot;
-import CoreClasses.Asteroid;
-import CoreClasses.Controller;
-
 import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
-public class FillingTest 
+public class SettlerFillingTest 
 {
     
     /**

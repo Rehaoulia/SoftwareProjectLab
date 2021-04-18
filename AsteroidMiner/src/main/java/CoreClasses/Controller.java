@@ -1,11 +1,9 @@
 package CoreClasses;
 
 import java.io.IOException;
-import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
@@ -16,9 +14,8 @@ public class Controller {
     public ArrayList<Settler> settlers;
 
     public ArrayList<Robot> robots = new ArrayList<Robot>();
-  
-    private ArrayList<SpaceStation> spacestations = new ArrayList<SpaceStation>();
 
+    private ArrayList<SpaceStation> spacestations = new ArrayList<SpaceStation>();
 
     public ArrayList<Settler> getSettlers() {
         return settlers;
@@ -33,8 +30,6 @@ public class Controller {
     }
 
     private int numAsteroids;
-    private int numSettlers;
-
     public static Map<Integer, Asteroid> asteroids;
     private boolean gameOver;
 
@@ -46,10 +41,8 @@ public class Controller {
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
 
-
-    public  String information;
+    public String information;
     public Sunstorm sunstorm = new Sunstorm();
-
 
     // Methods
 
@@ -58,11 +51,9 @@ public class Controller {
 
     public void startGame(String[] names) {
 
-
         this.setupGame();
         settlers = new ArrayList<Settler>();
-        robots= new ArrayList<Robot>();
-        int count=0;
+        int count = 0;
         for (String i : Arrays.asList(names)) {
             Settler set = new Settler(i, count);
             count++;
@@ -76,6 +67,8 @@ public class Controller {
     }
 
     public void setupGame() {
+        robots = new ArrayList<Robot>();
+
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
         asteroids = new HashMap<Integer, Asteroid>();
@@ -85,20 +78,20 @@ public class Controller {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
             switch (mineralSelector) {
-                case 0:
-                    M = new Carbon();
-                    break;
-                case 1:
-                    M = new WaterIce();
-                    break;
-                case 2:
-                    M = new Iron();
-                    break;
-                case 3:
-                    M = new Uranium();
-                    break;
-                default:
-                    M = null;
+            case 0:
+                M = new Carbon();
+                break;
+            case 1:
+                M = new WaterIce();
+                break;
+            case 2:
+                M = new Iron();
+                break;
+            case 3:
+                M = new Uranium();
+                break;
+            default:
+                M = null;
             }
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
@@ -135,8 +128,8 @@ public class Controller {
 
     public void removePlayer(int playerID) {
         settlers.remove(playerID);
-        if(settlers.size()>0){
-            for(int i=0;i<settlers.size();i++){
+        if (settlers.size() > 0) {
+            for (int i = 0; i < settlers.size(); i++) {
                 settlers.get(i).setID(i);
             }
         }
@@ -176,20 +169,22 @@ public class Controller {
 
     }
 
-
-
-    //checks the conditions for ending the game
+    // checks the conditions for ending the game
     public void checkGame() {
-        if(settlers.size()==0){
-            this.gameOver =true;
-            win =false;
+        if (settlers.size() == 0) {
+            this.gameOver = true;
+            win = false;
             endGame();
         }
     }
 
-    public boolean getGameOver(){ return gameOver;}
-    public boolean getWin(){ return win;}
-    
+    public boolean getGameOver() {
+        return gameOver;
+    }
+
+    public boolean getWin() {
+        return win;
+    }
 
     public static void updateAsteroid(Asteroid asteroid) {
 
@@ -199,41 +194,42 @@ public class Controller {
 
     }
 
-    public void robotBehave(int id) throws IOException ,InterruptedException{
+    public void robotBehave(int id) throws IOException, InterruptedException {
         int ast = robots.get(id).currentAsteroid.getID();
         robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
 
     }
-  
+
     public static void removeSublimingAsteroid(int id) {
-        sublimingAsteroids.remove(new Integer(id));
+        sublimingAsteroids.remove(id);
     }
 
     public static void removeExplodingAsteroid(int id) {
-        explodingAsteroids.remove(new Integer(id));
+        explodingAsteroids.remove(id);
     }
-    
+
     public void addMineralToSpaceStation(String spacestationID, String mineral) {
-    	for(SpaceStation s : spacestations) {
-    		if(s.getID().equals(spacestationID)) {
-    			s.addResource(mineral);
-    		}
-    	}
+        for (SpaceStation s : spacestations) {
+            if (s.getID().equals(spacestationID)) {
+                s.addResource(mineral);
+            }
+        }
     }
-    
-    public void addSpaceStationToAsteroid(SpaceStation s, int id){
-    	asteroids.get(id).setSpaceStation(s);
+
+    public void addSpaceStationToAsteroid(SpaceStation s, int id) {
+        asteroids.get(id).setSpaceStation(s);
     }
-    
+
     public void addSpaceStation(SpaceStation s) {
-    	this.spacestations.add(s);
+        this.spacestations.add(s);
     }
+
     public void checkSpaceStation(String spacestationID) {
-    	for(SpaceStation s : spacestations) {
-    		if(s.getID().equals(spacestationID)) {
-    			win = true;
-    			gameOver = s.isCraftable();
-    		}
-    	}
+        for (SpaceStation s : spacestations) {
+            if (s.getID().equals(spacestationID)) {
+                win = true;
+                gameOver = s.isCraftable();
+            }
+        }
     }
 }

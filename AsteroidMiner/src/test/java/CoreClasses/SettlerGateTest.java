@@ -2,18 +2,14 @@ package CoreClasses;
 
 
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
 import org.junit.Before;
-import CoreClasses.Robot;
-import CoreClasses.Asteroid;
-import CoreClasses.Controller;
 
 import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
-public class TeleportTest 
+public class SettlerGateTest 
 {
     
     /**
@@ -30,16 +26,19 @@ public class TeleportTest
     }
 
     @Test
-    public void TeleportTest()
+    public void GateTest()
     {
-        player.travel(c.asteroids.get(1));
+        player.travel(Controller.asteroids.get(1));
         player.getMatforGate();
+        assertTrue("The mineral(s) added to the inventory of S1The mineral(s) added to the inventory of S1 ", player.getMinerals().size() == 4 );
         player.craftGate();
+        assertTrue("Success: gates created ", player.getNumberOfGates() == 2 );
         player.putGate();
-        player.travel(c.asteroids.get(4));
+        assertTrue("Success: 1st gate deployed ", player.getNumberOfGates() == 1 );
+        player.travel(Controller.asteroids.get(4));
         player.putGate();
-        player.teleport(player.gates.get(1));
-        assertTrue("Success: player teleported ", player.getAsteroid().getID() == 1);
+        assertTrue("Success: 2nd gate deployed  ", player.getNumberOfGates() == 0 );
 
     }
+
 }
