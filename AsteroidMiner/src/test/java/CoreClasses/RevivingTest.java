@@ -20,7 +20,7 @@ public class RevivingTest {
 	}
 	
 	@Test
-	public void sunstormKillsUnhiddenSettlers() {
+	public void settlerRevivesOtherSettler() {
         c.settlers.get(0).dying(c);
         c.settlers.get(1).revive(c.settlers.get(0));
 
