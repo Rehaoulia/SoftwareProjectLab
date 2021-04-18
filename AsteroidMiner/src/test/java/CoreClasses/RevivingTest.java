@@ -1,8 +1,6 @@
 /**************************************************************/
-//This Junit test file is for testing the sunstorm*/
-//Does it happen as expected?
-//Does the alarm get displayed?
-//Does the sunstorm kill the unhidden travelers?
+//This Junit test file is for testing the revival of a dying settler*/
+//Does the settler get revived successfully?
 /**************************************************************/
 
 package CoreClasses;
