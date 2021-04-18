@@ -9,7 +9,7 @@ public class Sunstorm {
     //behaviour of the sunstorm (waiting, displaying countdown and making the sunstorm happen)
     public void behave(Controller c, long _wavelength) {
         try {
-            Thread.sleep(wavelength-15000);
+            Thread.sleep(_wavelength-15000);
             display();
             //for 5 seconds
             for(int i=0; i<5; i++){
