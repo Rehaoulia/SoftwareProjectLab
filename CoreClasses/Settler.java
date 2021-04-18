@@ -32,6 +32,7 @@ public class Settler extends Traveler {
 		this.dead = false;
 		minedMinerals = new ArrayList<String>();
 		gates = new ArrayList<TeleportationGate>();
+		nGate= 0;
 	}
 
 	public void setAsteroid(Asteroid asteroid) {
@@ -271,7 +272,30 @@ public class Settler extends Traveler {
 		this.putGate();
 	}
 
+<<<<<<< Updated upstream:CoreClasses/Settler.java
 	
 	
+=======
+/////////////////////////////////////
+
+	public int getNumberOfGates(){
+		return nGate;
+	}
+
+	public void getMatforGate(){
+
+		minedMinerals.add("Iron");
+		minedMinerals.add("Iron");
+		minedMinerals.add("Uranium");
+		minedMinerals.add("WaterIce");
+
+	}
+
+	public void addMineral(String s){
+		minedMinerals.add(s);
+	}
+
+
+>>>>>>> Stashed changes:AsteroidMiner/src/main/java/CoreClasses/Settler.java
 
 }

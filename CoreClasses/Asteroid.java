@@ -223,5 +223,13 @@ public class Asteroid extends Place {
 		return str;
 	}
 
+
+
+	
+
+
+
+
+
 	// public getLocation() {}
 }
