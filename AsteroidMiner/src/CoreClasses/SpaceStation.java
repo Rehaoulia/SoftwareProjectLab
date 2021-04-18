@@ -14,6 +14,7 @@ public class SpaceStation implements Craftable {
     public SpaceStation(Asteroid currentAsteroid) {
         this.currentAsteroid = currentAsteroid; //Constructor
         this.spacestationID = UUID.randomUUID().toString();
+        this.spaceStationMinerals = new ArrayList<String>();
     }
 
 
@@ -40,15 +41,14 @@ public class SpaceStation implements Craftable {
         int u = 0;
         int w = 0;
         for (int j = 0; j < spaceStationMinerals.size(); j++) {
-
-            switch (spaceStationMinerals.get(i)) {
-                case "Iron" -> i++;
-                case "Carbon" -> c++;
-                case "Uranium" -> u++;
-                case "waterIce" -> w++;
+            switch (spaceStationMinerals.get(j)) {
+                case "Iron" : i++; break;
+                case "Carbon": c++; break;
+                case "Uranium": u++; break;
+                case "WaterIce": w++; break;
             }
         }
-        return (i == 3 && c == 3 && u == 3 && w == 3);
+       return (i >= 3 && c >= 3 && u >= 3 && w >= 3);
     }
 
     @Override

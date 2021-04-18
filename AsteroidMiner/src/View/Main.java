@@ -4,6 +4,8 @@ import CoreClasses.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -20,21 +22,14 @@ public class Main {
         spacestation = false;
         int i = 0;
         while (c.getGameOver()==false) {
-        	if(spacestationstatus) {
-        		System.out.println("Congratulations you won!");
-        		break;
-        	}
             mainMenu(c);
         }
-        if(c.getWin()==true){
-            System.out.println("You Won! :D");
-        }else{
+        if(!c.getWin()){
             System.out.println("You lost :(");
+        }else {
+        		System.out.println("You won :D");
         }
     }
-	
-    public static int cAsteroid;
-
     
 
     public static Controller initialize() throws IOException {
@@ -63,46 +58,19 @@ public class Main {
             robotMenu(c);
             break;
         case 2: // mine
-            c.settlers.get(0).mine();
-            break;
+        	Sunstorm sun = new Sunstorm();
+        	sun.makeItHappen(c);
+        	break;
         case 3: // fill
-            Menu minerals = new Menu(c.settlers.get(0).getMinerals());
-            int option = minerals.display();
-            c.settlers.get(0).fill(c.settlers.get(0).getMinerals().get(option));
+            PerihelionMenu(c);
             break;
         default:
             System.out.println("you didn't choose any action");
         }
-        System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
-                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
-                + "\n");
-    }
-
-    public static void settlerMenu(Controller c) throws IOException, InterruptedException {
-        ArrayList<String> menuItems = new ArrayList<String>();
-        menuItems.add("Settler Controls");
-        menuItems.add("Robot Controls");
-        menuItems.add("Sunstorm Controls");
-        menuItems.add("Perihelion Controls");
-        // menuItems.add("revive");
-        Menu menu = new Menu(menuItems);
-        switch (menu.display()) {
-            case 0:
-                settlerMenu(c);
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3: //Perihelion Controls
-                PerihelionMenu(c);
-                break;
-            default:
-                System.out.println("you didn't choose any action");
-        }
-       /* System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
-                + c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
-                + "\n");*/
+        if(c.settlers.size()>0)
+        	System.out.println("\n\n-------Asteroid:" + c.settlers.get(0).getAsteroid().getID() + "\n"
+        			+ c.settlers.get(0).getAsteroid().viewInfo() + "\n-------Settler:\n" + c.settlers.get(0).viewInfo()
+        			+ "\n");
     }
 
     public static void PerihelionMenu(Controller c) throws IOException {
@@ -204,7 +172,7 @@ public class Main {
                 }
                 if (c.asteroids.get(explodingAsteroid).perihelion()) {
                     c.removeExplodingAsteroid(explodingAsteroid);
-                    c.settlers.get(0).dying();
+                    c.settlers.get(0).dying(c);
                     c.asteroids.remove(explodingAsteroid);
                     System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
                 } else {
@@ -225,22 +193,25 @@ public class Main {
         menuItems.add("Fill");
         menuItems.add("Hide");
         menuItems.add("Craft");
-
-
+        menuItems.add("setGate");
+        menuItems.add("Teleport");
+        
         if(spacestation) {
         	menuItems.add("Add Spacestation Material");
         }
         // menuItems.add("revive");
-        menuItems.add("Make a sunstorm");
 
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
-        case 0:
-            c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
-            if (cAsteroid != c.asteroids.size())
+        case 0: 
+            if (cAsteroid != c.asteroids.size()){
+                cAsteroid= c.settlers.get(0).getAsteroid().getID() ;
                 cAsteroid++;
-            else
+            } else
                 cAsteroid = 0;
+
+           c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
+
 
             break;
         case 1: // drill
@@ -258,14 +229,19 @@ public class Main {
             c.settlers.get(0).hide();
             break;
         case 5: // craft
-            int res = c.settlers.get(0).showCraftMenu();
+            int res = c.settlers.get(0).showCraftMenu(c);
             if(res == -1) {
             	spacestation = true;
             }
             break;
-
-         case 6: // add space station material
-        	 spacestationstatus = c.settlers.get(0).displayResources();
+        case 6:
+            c.settlers.get(0).putGate();
+           break;
+        case 7:
+           c.settlers.get(0).teleport( c.settlers.get(0).gates.get(1));
+           break;
+         case 8: // add space station material
+        	 c.settlers.get(0).displayResources(c);
         	break;
         default:
             System.out.println("you didn't choose any action");

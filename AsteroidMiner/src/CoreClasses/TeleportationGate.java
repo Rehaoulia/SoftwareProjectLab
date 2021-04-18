@@ -1,4 +1,5 @@
 package CoreClasses;
+//import com.jme3.math.Vector3f;
 
 public class TeleportationGate extends Place {
 
@@ -10,6 +11,7 @@ public class TeleportationGate extends Place {
 	
 	
 	public TeleportationGate(){
+        // super(new Vector3f(0,0,0));
 		deployed = false;
 		paired = false;
 	}

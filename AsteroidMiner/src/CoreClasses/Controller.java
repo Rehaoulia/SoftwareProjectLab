@@ -17,7 +17,7 @@ public class Controller {
 
     public ArrayList<Robot> robots = new ArrayList<Robot>();
   
-    private static ArrayList<SpaceStation> spacestations;
+    private ArrayList<SpaceStation> spacestations = new ArrayList<SpaceStation>();
 
 
     public ArrayList<Settler> getSettlers() {
@@ -36,7 +36,7 @@ public class Controller {
     private int numSettlers;
 
     public static Map<Integer, Asteroid> asteroids;
-    private boolean gamerOver;
+    private boolean gameOver;
 
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
@@ -62,8 +62,10 @@ public class Controller {
         this.setupGame();
         settlers = new ArrayList<Settler>();
         robots= new ArrayList<Robot>();
+        int count=0;
         for (String i : Arrays.asList(names)) {
-            Settler set = new Settler(i);
+            Settler set = new Settler(i, count);
+            count++;
             set.setAsteroid(asteroids.get(0));
 
             settlers.add(set);
@@ -115,7 +117,7 @@ public class Controller {
         }
     }
 
-    public static void addRobot(Robot r) { // missing from the sequence diagram
+    public void addRobot(Robot r) { // missing from the sequence diagram
 
         robots.add(r);
     }
@@ -179,7 +181,7 @@ public class Controller {
     //checks the conditions for ending the game
     public void checkGame() {
         if(settlers.size()==0){
-            gameOver =true;
+            this.gameOver =true;
             win =false;
             endGame();
         }
@@ -197,7 +199,7 @@ public class Controller {
 
     }
 
-    public static void robotBehave(int id) throws IOException ,InterruptedException{
+    public void robotBehave(int id) throws IOException ,InterruptedException{
         int ast = robots.get(id).currentAsteroid.getID();
         robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
 
@@ -211,7 +213,7 @@ public class Controller {
         explodingAsteroids.remove(new Integer(id));
     }
     
-    public static void addMineralToSpaceStation(String spacestationID, String mineral) {
+    public void addMineralToSpaceStation(String spacestationID, String mineral) {
     	for(SpaceStation s : spacestations) {
     		if(s.getID().equals(spacestationID)) {
     			s.addResource(mineral);
@@ -219,13 +221,19 @@ public class Controller {
     	}
     }
     
-    public static boolean checkSpaceStation(String spacestationID) {
-    	boolean state = false;
+    public void addSpaceStationToAsteroid(SpaceStation s, int id){
+    	asteroids.get(id).setSpaceStation(s);
+    }
+    
+    public void addSpaceStation(SpaceStation s) {
+    	this.spacestations.add(s);
+    }
+    public void checkSpaceStation(String spacestationID) {
     	for(SpaceStation s : spacestations) {
     		if(s.getID().equals(spacestationID)) {
-    			state = s.isCraftable();
+    			win = true;
+    			gameOver = s.isCraftable();
     		}
     	}
-    	return state;
     }
 }
