@@ -226,5 +226,8 @@ public class Asteroid extends Place {
     // public Vector3f getLocation(){
     //     return super.getLocation();
     // }
+	public void setDepth(int depth) {
+        this.depth = depth;
+    }
 
 }
