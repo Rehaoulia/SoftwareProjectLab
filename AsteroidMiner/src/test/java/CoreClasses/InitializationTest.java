@@ -7,11 +7,6 @@ public class InitializationTest {
 	static Controller c = new Controller();
 	static int numberofSettlers = 2;
 	static int numberofAsteroids;
-/*	public static void setupTest() {
-		String[] names = {"S1", "S2"};
-		c.startGame(names);
-		numberofSettlers = c.getSettlers().size();
-	}*/
 	
 	@Test
 	public void PlayersCreated() {
@@ -23,7 +18,7 @@ public class InitializationTest {
 	@Test
 	public void AsteroidsCreated() {
 		c.setupGame();
-		numberofAsteroids = c.asteroids.size();
+		numberofAsteroids = Controller.asteroids.size();
 		assertTrue(numberofAsteroids + " Asteroids Created", numberofAsteroids >= 40 && numberofAsteroids <= 50);
 	}
 }

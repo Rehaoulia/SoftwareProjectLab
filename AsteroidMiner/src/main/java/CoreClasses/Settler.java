@@ -304,4 +304,21 @@ public class Settler extends Traveler {
 		if(nGate==1)
 		this.putGate();
 	}
+
+
+
+    public void addMineral(String s) {
+		minedMinerals.add(s);
+    }
+
+    public void getMatforGate() {
+		minedMinerals.add("Iron");
+		minedMinerals.add("Iron");
+		minedMinerals.add("WaterIce");
+		minedMinerals.add("Uranium");
+    }
+
+    public int getNumberOfGates() {
+        return nGate;
+    }
 }

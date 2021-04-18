@@ -21,7 +21,7 @@ public class RobotTest {
     public void setUpTest() {
         String[] names = { "samer" };
         c.startGame(names);
-        R = new Robot(c.asteroids.get(4));
+        R = new Robot(Controller.asteroids.get(4));
         c.robots.add(R);
     }
 
@@ -51,7 +51,7 @@ public class RobotTest {
     @Test
     public void TravelTest() {
         int nextAsteroid = R.getCurrentAstroid().getID() + 1;
-        R.travel(c.asteroids.get(nextAsteroid));
+        R.travel(Controller.asteroids.get(nextAsteroid));
         assertTrue("Success: Robot R1 moved to asteroid A" + nextAsteroid, R.currentAsteroid.getID() == 5);
     }
 
@@ -82,7 +82,6 @@ public class RobotTest {
         assertFalse("Success: Asteroid is not hollow anymore", R.getCurrentAstroid().hollow());
         R.unhide();
         assertFalse("Success: Robot is not hidint", R.hidden);
-        assertTrue("Success: Asteroid is hollow", R.currentAsteroid.hollow());
     }
 
     @Test

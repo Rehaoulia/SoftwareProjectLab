@@ -20,7 +20,7 @@ public class MovementTest {
     public void TravelTest() {
     	setUpTest();
     	nextAsteroid =  S.getAsteroid().getID() + 1;
-    	S.travel(c.asteroids.get(nextAsteroid));
+    	S.travel(Controller.asteroids.get(nextAsteroid));
     	assertTrue("S successfully moved to asteroid A"+nextAsteroid, S.getAsteroid().getID() == nextAsteroid);
     }
 }
