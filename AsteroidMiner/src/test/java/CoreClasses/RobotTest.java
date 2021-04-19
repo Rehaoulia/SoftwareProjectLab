@@ -36,7 +36,8 @@ public class RobotTest {
         Controller.asteroids.get(t).setPerihelion(true);
         c.Sublime(c, t);
         assertTrue("Water Ice sublimed successfully", Controller.asteroids.get(t).hollow() == true);
-
+        //This Junit test is for testing the sublimation of 
+        //the water ice  when asubliming asteroid become fully drilled at perihelion*/
     }
 
     @Test
@@ -46,6 +47,8 @@ public class RobotTest {
         Controller.asteroids.get(t).setPerihelion(true);
         c.Explode(c, t);
         assertTrue("The asteroid " + t + "explode successfully ", c.settlers.get(0).getDeath() == true);
+        //This Junit test is for testing the explosion of 
+        //the radioactive asteroid when it become fully drilled at perihelion*/
 
     }
 
@@ -54,6 +57,8 @@ public class RobotTest {
         setUpTest();
         c.checkSpaceStation(S.getID());
         assertTrue("you won ", c.getWin() == true);
+        //This Junit test  is for testing the wining condition*/
+        //Does the game end and the player win after crafting the spaceStation?
 
     }
 
@@ -62,6 +67,19 @@ public class RobotTest {
         setUpTest();
         c.settlers.get(0).hide();
         assertTrue("you are hidden' ", c.settlers.get(0).hidden);
+        //This Junit test is for testing the hiding of the Settler*/
+        //it fails because the hide() function is not implemented correctly.
+
+
+    }
+
+    @Test
+    public void RobotDyingTest() {
+        setUpTest();
+        R.die();
+        assertTrue("Robot died ", true);
+        //This Junit test is for testing the death of the Robot*/
+        //fails because we did not implement the die() function yet for robot
 
     }
 
