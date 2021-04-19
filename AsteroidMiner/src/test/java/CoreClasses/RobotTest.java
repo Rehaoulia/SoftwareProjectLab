@@ -97,10 +97,33 @@ public class RobotTest {
 
     // Automatic Behavior
     @Test
+
     public void BehaviorTest() throws InterruptedException {
         Asteroid A1 = new Asteroid(98, 9); // Hollow Asteroid
         R.behave(A1);
         assertTrue("Success: Robot traveled to Asteroid" + A1.getID(), R.currentAsteroid.getID() == A1.getID());
         assertTrue("Success: Asteroid is drilled", A1.radius == A1.getDepth());
     }
+
+    @Test
+    public void SettlerHidingTest() {
+        setUpTest();
+        c.settlers.get(0).hide();
+        assertTrue("you are hidden' ", c.settlers.get(0).hidden);
+        //This Junit test is for testing the hiding of the Settler*/
+        //it fails because the hide() function is not implemented correctly.
+
+
+    }
+
+    @Test
+    public void RobotDyingTest() {
+        setUpTest();
+        R.die();
+        assertTrue("Robot died ", true);
+        //This Junit test is for testing the death of the Robot*/
+        //fails because we did not implement the die() function yet for robot
+
+    }
+
 }
