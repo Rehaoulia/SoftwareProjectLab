@@ -54,7 +54,7 @@ public class Settler extends Traveler {
 			gates.get(0).setGate(this.currentAsteroid, gates.get(1));
 			nGate-- ;
 			System.out.println(gates.get(0).getNeighbour().getID() + "<------------->" + gates.get(1).getNeighbour().getID()  );
-			//gates = new ArrayList<>();
+			
 		}else{
 			System.out.println("\n\n ============ you connot place a gate here");
 		}
@@ -304,4 +304,21 @@ public class Settler extends Traveler {
 		if(nGate==1)
 		this.putGate();
 	}
+
+
+
+    public void addMineral(String s) {
+		minedMinerals.add(s);
+    }
+
+    public void getMatforGate() {
+		minedMinerals.add("Iron");
+		minedMinerals.add("Iron");
+		minedMinerals.add("WaterIce");
+		minedMinerals.add("Uranium");
+    }
+
+    public int getNumberOfGates() {
+        return nGate;
+    }
 }

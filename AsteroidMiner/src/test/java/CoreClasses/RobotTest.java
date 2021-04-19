@@ -1,65 +1,108 @@
 package CoreClasses;
 
 import static org.junit.Assert.assertTrue;
-import CoreClasses.Robot;
-import CoreClasses.Asteroid;
-import CoreClasses.Controller;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
+import org.junit.Before;
 
-/**
- * Unit test for simple App.
- */
 public class RobotTest {
 
-    /**
-     * Rigorous Test :-)
-     */
+    // Creating the testing environment
     static Controller c = new Controller();
     static Robot R;
-    static Asteroid a;
-    static SpaceStation S;
-    static Settler Settler;
 
-    public static void setUpTest() {
-        String[] names = { "S1" };
+    @Before
+    public void setUpTest() {
+        String[] names = { "samer" };
         c.startGame(names);
-        Settler = c.getSettlers().get(0);
-        S = (SpaceStation) Settler.craft(2, c);
-
+        R = new Robot(Controller.asteroids.get(4));
+        c.robots.add(R);
     }
 
+    // Creating A Robot Test
     @Test
-    public void SublimeTest() {
-        setUpTest();
-        int t = Controller.getSublimingAsteroids().get(0);
-        Controller.asteroids.get(t).setPerihelion(true);
-        c.Sublime(c, t);
-        assertTrue("Water Ice sublimed successfully", Controller.asteroids.get(t).hollow() == true);
-        //This Junit test is for testing the sublimation of 
-        //the water ice  when asubliming asteroid become fully drilled at perihelion*/
+    public void CreateTest() {
+
+        // Crafting Robot with not enough minerals
+        Settler S = new Settler("samer", 99);
+        Carbon C = new Carbon();
+        Asteroid A1 = new Asteroid(99, (Mineral) C, 1);
+        S.setAsteroid(A1);
+        S.drill();
+        S.mine();
+        Uranium U = new Uranium();
+        Asteroid A2 = new Asteroid(99, (Mineral) U, 1);
+        S.setAsteroid(A2);
+        S.drill();
+        S.mine();
+
+        // Crafting Robot with not enough minerals
+        assertFalse("Fail: Could not create the robot", S.checkRequiredMaterial(0)); // 0 is robot
+        Iron I = new Iron();
+        Asteroid A3 = new Asteroid(99, (Mineral) I, 1);
+        S.setAsteroid(A3);
+        S.drill();
+        S.mine();
+        S.craft(0, c);
+        assertTrue("Success: Settler S1 created a robot", c.robots.size() == 2);
     }
 
+    // Traveling The Robot Testing
     @Test
-    public void ExplodeTest() {
-        setUpTest();
-        int t = Controller.getExplodingAsteroids().get(0);
-        Controller.asteroids.get(t).setPerihelion(true);
-        c.Explode(c, t);
-        assertTrue("The asteroid " + t + "explode successfully ", c.settlers.get(0).getDeath() == true);
-        //This Junit test is for testing the explosion of 
-        //the radioactive asteroid when it become fully drilled at perihelion*/
-
+    public void TravelTest() {
+        // current asteroid is 4 from the setup
+        int nextAsteroid = R.getCurrentAstroid().getID() + 1; // 5
+        R.travel(Controller.asteroids.get(nextAsteroid));
+        assertTrue("Success: Robot R1 moved to asteroid A" + nextAsteroid, R.currentAsteroid.getID() == 5);
     }
 
+    // Drilling The Asteroid By The Robot Test
+    // Self Explainatory
     @Test
-    public void winGameTest() {
-        setUpTest();
-        c.checkSpaceStation(S.getID());
-        assertTrue("you won ", c.getWin() == true);
-        //This Junit test  is for testing the wining condition*/
-        //Does the game end and the player win after crafting the spaceStation?
+    public void DrillTest() {
+        assertTrue("Fail: Asteroid is not drilled", R.currentAsteroid.getDepth() == 0);
+        R.drill();
+        assertTrue("Success: Asteroid is drilled", R.currentAsteroid.getDepth() == R.currentAsteroid.radius);
+    }
 
+    // Hiding The Robot Inside Asteroids Test
+    @Test
+    public void HideTest() {
+        // Trying to Hide Inside Undrilled Filled Asteroid
+        Carbon C = new Carbon();
+        Asteroid A1 = new Asteroid(99, C, 9);
+        Asteroid A2 = new Asteroid(98, 9); // hollow
+        R.travel(A1);
+        R.hide();
+        assertFalse("Success: Robot cannot hide because the asteroid is not drilled through", R.hidden);
+        // Trying to Hide Inside Drilled Filled Asteroid
+        R.drill();
+        R.hide();
+        assertFalse("Success: Robot cannot hide because the asteroid is not hollow", R.hidden);
+        // Trying to Hide Inside Undrilled Hollow Asteroid
+        R.travel(A2);
+        R.hide();
+        assertFalse("Success: Robot cannot hide because the asteroid is not drilled through", R.hidden);
+        // Trying to Hide Inside Drilled Hollow Asteroid
+        R.drill();
+        R.hide();
+        assertTrue("Success: Robot is hiding", R.hidden);
+        assertFalse("Success: Asteroid is not hollow anymore", R.getCurrentAstroid().hollow());
+        // Unhiding
+        R.unhide();
+        assertFalse("Success: Robot is not hidint", R.hidden);
+    }
+
+
+    // Automatic Behavior
+    @Test
+
+    public void BehaviorTest() throws InterruptedException {
+        Asteroid A1 = new Asteroid(98, 9); // Hollow Asteroid
+        R.behave(A1);
+        assertTrue("Success: Robot traveled to Asteroid" + A1.getID(), R.currentAsteroid.getID() == A1.getID());
+        assertTrue("Success: Asteroid is drilled", A1.radius == A1.getDepth());
     }
 
     @Test

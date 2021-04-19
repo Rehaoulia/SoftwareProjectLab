@@ -1,20 +1,16 @@
 package CoreClasses;
 
-import java.util.List;
-//import com.jme3.math.Vector3f;
-//import com.jme3.scene.Spatial;
-
+import java.util.ArrayList;
 public class Asteroid extends Place {
 
 	private boolean isHollow;
 	private boolean isRadioActive;
 	private boolean isPerihelion;
 	private boolean isMineable;
-	private boolean isBeingDrilled;
 	private boolean isDestroyed;
 
 	private int ID;
-	private List<TeleportationGate> gates;
+	private ArrayList<TeleportationGate> gates = new ArrayList<TeleportationGate>();
 
 	private Mineral mineral;
 	private int depth;
@@ -28,7 +24,6 @@ public class Asteroid extends Place {
 		mineral = _mineral;
 		isHollow = false;
 		isMineable = false;
-		isBeingDrilled = false;
 		isDestroyed = false;
 		depth = 0;
 		radius = _radius;
@@ -44,12 +39,11 @@ public class Asteroid extends Place {
 		ID = _ID;
 		isHollow = true;
 		isMineable = false;
-		isBeingDrilled = false;
 		isDestroyed = false;
 		isRadioActive = false;
 		depth = 0;
 		radius = _radius;
-        //model.setLocalScale(_radius);
+		// model.setLocalScale(_radius);
 
 	}
 
@@ -82,7 +76,6 @@ public class Asteroid extends Place {
 	{ // this function returns -1 if its mineable
 
 		if (drillable() && !isDestroyed) {
-			isBeingDrilled = true;
 			depth++;
 			if (!isHollow && !drillable())
 				isMineable = true;
@@ -91,7 +84,6 @@ public class Asteroid extends Place {
 			if (isRadioActive && isPerihelion)
 				explode(); // if its radioactive then its not hollow
 			else {
-				isBeingDrilled = false;
 				if (!isHollow)
 					isMineable = true;
 			}
@@ -121,7 +113,7 @@ public class Asteroid extends Place {
 			return false;
 	}
 
-	public List<TeleportationGate> getGates() {
+	public ArrayList<TeleportationGate> getGates() {
 		return gates;
 	}
 
@@ -144,7 +136,7 @@ public class Asteroid extends Place {
 		} else
 			return false;
 	}
-	
+
 	public void getUnhide() {
 		isHollow = true;
 	}
@@ -161,13 +153,14 @@ public class Asteroid extends Place {
 	public boolean destroyed() {
 		return isDestroyed;
 	}
-	 public void setHollow(boolean hollow) {
-        isHollow = hollow;
-    }
 
-    public void setPerihelion(boolean perihelion) {
-        isPerihelion = perihelion;
-    }
+	public void setHollow(boolean hollow) {
+		isHollow = hollow;
+	}
+
+	public void setPerihelion(boolean perihelion) {
+		isPerihelion = perihelion;
+	}
 
 	public String viewInfo() {
 		String str = "Radius: " + this.radius + "\t\tDepth:" + depth + "\t\tHollow: " + Boolean.toString(isHollow)
@@ -175,59 +168,7 @@ public class Asteroid extends Place {
 		return str;
 	}
 
-	// public getLocation() {}
-	
-	// need to have location aswell
-		// public Asteroid(int _ID,Vector3f loc , Mineral _mineral, int _radius) {
-		// 	super(loc);
-	    //             ID = _ID;
-		// 	mineral = _mineral;
-		// 	isHollow = false;
-		// 	isMineable = false;
-		// 	isBeingDrilled = false;
-		// 	isDestroyed = false;
-		// 	depth = 0;
-		// 	radius = _radius;
-
-
-		// 	if (mineral.toString().equals("Uranium"))
-		// 		isRadioActive = true;
-		// 	else
-		// 		isRadioActive = false;
-		// 	// isAphelion = ??; we need location to set this
-
-		// }
-
-	// public Asteroid(int _ID,Vector3f loc , int _radius) { // this constructor works without mineral and sets hollow
-		// 	super(loc);
-	    //             ID = _ID;
-		// 	isHollow = true;
-		// 	isMineable = false;
-		// 	isBeingDrilled = false;
-		// 	isDestroyed = false;
-		// 	isRadioActive = false;
-		// 	depth = 0;
-		// 	radius = _radius;
-	    //             //model.setLocalScale(_radius);
-		// }
-	
-
-    // public void setModel(Spatial mod){
-    //     mod.setLocalTranslation(super.getLocation());
-    //     model = mod ;
-    // }
-
-    // public Spatial getModel(){
-    //     model.setLocalTranslation(super.getLocation());
-    //    return model.clone() ;
-    // }
-	
-	// @Override
-    // public Vector3f getLocation(){
-    //     return super.getLocation();
-    // }
-	public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
+	public void setDepth(int radius2) {
+		this.depth = radius2;
+	}
 }
