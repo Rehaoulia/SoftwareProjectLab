@@ -35,6 +35,6 @@ public class TeleportGateTest
         player.travel(Controller.asteroids.get(4));
         player.putGate();
         player.teleport(player.gates.get(1));
-        assertTrue("Success: player teleported ", player.getAsteroid().getID() == 1);
+        assertTrue("Success: Player teleported ", player.getAsteroid().getID() == 1);
     }
 }

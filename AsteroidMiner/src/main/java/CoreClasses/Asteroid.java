@@ -1,7 +1,6 @@
 package CoreClasses;
 
-import java.util.List;
-
+import java.util.ArrayList;
 public class Asteroid extends Place {
 
 	private boolean isHollow;
@@ -11,7 +10,7 @@ public class Asteroid extends Place {
 	private boolean isDestroyed;
 
 	private int ID;
-	private List<TeleportationGate> gates;
+	private ArrayList<TeleportationGate> gates = new ArrayList<TeleportationGate>();
 
 	private Mineral mineral;
 	private int depth;
@@ -114,7 +113,7 @@ public class Asteroid extends Place {
 			return false;
 	}
 
-	public List<TeleportationGate> getGates() {
+	public ArrayList<TeleportationGate> getGates() {
 		return gates;
 	}
 
