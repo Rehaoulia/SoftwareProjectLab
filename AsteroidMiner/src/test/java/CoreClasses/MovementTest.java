@@ -11,7 +11,7 @@ public class MovementTest {
     static int nextAsteroid;
     
     public static void setUpTest(){
-        String[] names = {"samer"};
+        String[] names = {"S"};
         c.startGame(names);
         S  = c.getSettlers().get(0);
     }
