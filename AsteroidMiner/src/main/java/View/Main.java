@@ -72,7 +72,7 @@ public class Main {
         			+ "\n");
     }
 
-    public static void PerihelionMenu(Controller c) throws IOException {
+        public static void PerihelionMenu(Controller c) throws IOException {
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Subliming Asteroids");
         menuItems.add("Exploding Asteroids");
@@ -98,7 +98,7 @@ public class Main {
                         + "\n" + "Perihelion : " + Controller.asteroids.get(miningAsteroid).perihelion());
 
                 ArrayList<String> menu1 = new ArrayList<String>();
-                menu1.add("Drill");
+                menu1.add("sublime");
                 menu1.add("back");
                 Menu menu2 = new Menu(menu1);
                 while (Controller.asteroids.get(miningAsteroid).radius != Controller.asteroids.get(miningAsteroid).getDepth()) {
@@ -127,7 +127,7 @@ public class Main {
                 } else {
                     System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
                 }
-
+                menu2.display();
                 break;
 
 
@@ -143,13 +143,13 @@ public class Main {
                             + "\n" + "Perihelion : " + Controller.asteroids.get(t).perihelion() + "\n");
                 }
                 Scanner scanner2 = new Scanner(System.in);
-                System.out.println("\n" + "choose a radioactive asteroid to drill");
+                System.out.println("\n" + "choose a radioactive asteroid to explode");
                 int explodingAsteroid = scanner2.nextInt();
                 System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
                         + Controller.asteroids.get(explodingAsteroid).viewInfo()
                         + "\n" + "Perihelion : " + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
                 ArrayList<String> menu11 = new ArrayList<String>();
-                menu11.add("Drill");
+                menu11.add("Explode");
                 menu11.add("back");
                 Menu menu22 = new Menu(menu11);
                 while (Controller.asteroids.get(explodingAsteroid).radius != Controller.asteroids.get(explodingAsteroid).getDepth()) {
@@ -177,6 +177,7 @@ public class Main {
                 } else {
                     System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
                 }
+
                 break;
 
             default:

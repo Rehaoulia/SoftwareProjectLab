@@ -232,4 +232,42 @@ public class Controller {
             }
         }
     }
+
+    public void Sublime(Controller c, int sublimingAsteroid) {
+        Controller.asteroids.get(sublimingAsteroid).setDepth(Controller.asteroids.get(sublimingAsteroid).radius);
+        if (Controller.asteroids.get(sublimingAsteroid).perihelion()) {
+            Controller.asteroids.get(sublimingAsteroid).setHollow(true);
+            Controller.removeSublimingAsteroid(sublimingAsteroid);
+            System.out.println("\n\n" + "WaterIce sublimed !! ");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + Controller.asteroids.get(sublimingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(sublimingAsteroid).perihelion());
+        } else {
+            System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + Controller.asteroids.get(sublimingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(sublimingAsteroid).perihelion());
+        }
+
+    }
+
+    public void Explode(Controller c, int explodingAsteroid) {
+        Controller.asteroids.get(explodingAsteroid).setDepth(Controller.asteroids.get(explodingAsteroid).radius);
+
+        if (Controller.asteroids.get(explodingAsteroid).perihelion()) {
+            Controller.removeExplodingAsteroid(explodingAsteroid);
+            // Controller.asteroids.remove(explodingAsteroid);
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + Controller.asteroids.get(explodingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
+            c.settlers.get(0).dying(c);
+        } else {
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + Controller.asteroids.get(explodingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
+        }
+
+    }
 }

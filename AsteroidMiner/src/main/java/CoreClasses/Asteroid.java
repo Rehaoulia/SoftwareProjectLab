@@ -44,7 +44,7 @@ public class Asteroid extends Place {
 		isRadioActive = false;
 		depth = 0;
 		radius = _radius;
-        //model.setLocalScale(_radius);
+		// model.setLocalScale(_radius);
 
 	}
 
@@ -137,7 +137,7 @@ public class Asteroid extends Place {
 		} else
 			return false;
 	}
-	
+
 	public void getUnhide() {
 		isHollow = true;
 	}
@@ -154,17 +154,22 @@ public class Asteroid extends Place {
 	public boolean destroyed() {
 		return isDestroyed;
 	}
-	 public void setHollow(boolean hollow) {
-        isHollow = hollow;
-    }
 
-    public void setPerihelion(boolean perihelion) {
-        isPerihelion = perihelion;
-    }
+	public void setHollow(boolean hollow) {
+		isHollow = hollow;
+	}
+
+	public void setPerihelion(boolean perihelion) {
+		isPerihelion = perihelion;
+	}
 
 	public String viewInfo() {
 		String str = "Radius: " + this.radius + "\t\tDepth:" + depth + "\t\tHollow: " + Boolean.toString(isHollow)
 				+ "\nDrillable: " + Boolean.toString(drillable()) + "\t\tMineable :" + Boolean.toString(isMineable);
 		return str;
+	}
+
+	public void setDepth(int radius2) {
+		this.depth = radius2;
 	}
 }
