@@ -15,21 +15,20 @@ public class SublimeTest {
     @Before
     public void setUpTest() {
         String[] names = { "S1" };
-        c.startGame(names);
+        c.startGame(names); //creates settler and initializes environment
         player = c.getSettlers().get(0);
-        S = (SpaceStation) player.craft(2, c);
     }
 
     @Test
     public void SublimingTest() {
         setUpTest();
-        int t = Controller.getSublimingAsteroids().get(0);
-        Controller.asteroids.get(t).setPerihelion(false);
+        int t = Controller.getSublimingAsteroids().get(0); //get a waterice asteroid
+        Controller.asteroids.get(t).setPerihelion(false); //set the asteroid at aphelion
         c.Sublime(c, t);
-        assertFalse("Success: WaterIce did not disappear from Asteroid", Controller.asteroids.get(t).hollow());
-        Controller.asteroids.get(t).setPerihelion(true);
+        assertFalse("Success: WaterIce did not disappear from Asteroid", Controller.asteroids.get(t).hollow()); //check if the asteroid turns hollow
+        Controller.asteroids.get(t).setPerihelion(true); //set the asteroid at perihelion
         c.Sublime(c, t);
-        assertTrue("Success: WaterIce disappeared from Asteroid", Controller.asteroids.get(t).hollow());
+        assertTrue("Success: WaterIce disappeared from Asteroid", Controller.asteroids.get(t).hollow()); //check if the asteroid turns hollow
 
     }
 }
