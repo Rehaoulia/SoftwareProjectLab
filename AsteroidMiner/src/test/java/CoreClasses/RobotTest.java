@@ -1,7 +1,5 @@
 package CoreClasses;
 
-package CoreClasses;
-
 import static org.junit.Assert.assertTrue;
 import CoreClasses.Robot;
 import CoreClasses.Asteroid;
