@@ -26,19 +26,15 @@ public class TeleportationTest
     }
 
     @Test
-    public void GateTest()
+    public void TeleportationTest()
     {
-        player.travel(Controller.asteroids.get(1));
-        player.getMatforGate();
-        assertTrue("The mineral(s) added to the inventory of S1The mineral(s) added to the inventory of S1 ", player.getMinerals().size() == 4 );
-        player.craftGate();
-        assertTrue("Success: gates created ", player.getNumberOfGates() == 2 );
+        player.travel(Controller.asteroids.get(1)); // player travels to an asteroid
+        player.getMatforGate();                      // player gets matterials required for crafting Teleportation Gate
+        player.craftGate();                             // crafting gate
         player.putGate();
-        assertTrue("Success: 1st gate deployed ", player.getNumberOfGates() == 1 );
-        player.travel(Controller.asteroids.get(4));
+        player.travel(Controller.asteroids.get(4));     // traveling to another asteroid
         player.putGate();
-        assertTrue("Success: 2nd gate deployed  ", player.getNumberOfGates() == 0 );
-
+        player.teleport(player.gates.get(1));           //teleporting from gate two to its paired gate 
+        assertTrue("Success: Player teleported ", player.getAsteroid().getID() == 1);   // current asteroid is nearby asteroid for second gate
     }
-
 }

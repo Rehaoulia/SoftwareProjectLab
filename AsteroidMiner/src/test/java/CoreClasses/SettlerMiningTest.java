@@ -30,13 +30,13 @@ public class SettlerMiningTest
     @Test 
     public void MiningTest(){
         Mineral m = new Iron();
-       Asteroid ironCore = new Asteroid(0,m,1) ;
-        player.travel(ironCore);
+       Asteroid ironCore = new Asteroid(0,m,1) ;  // test asteroid created
+        player.travel(ironCore);                        // travel to tesd asteroid
         Asteroid cur = player.getAsteroid();
-        player.drill();
+        player.drill();                                 
         assertTrue(" Success: A3 is hollow and drilled through.", cur.radius == cur.getDepth() );
         player.mine();
-        ArrayList<String> x = player.getMinerals();
+        ArrayList<String> x = player.getMinerals();   // checking players mined minerals to see if we have the new material
         assertTrue("Success: player mined  ", x.contains(m.getClass().getSimpleName() ));
         assertTrue("Success: asteroid is not hollow ", cur.hollow() );
     };
