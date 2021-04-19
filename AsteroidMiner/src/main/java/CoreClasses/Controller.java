@@ -264,7 +264,8 @@ public class Controller {
                     + c.asteroids.get(explodingAsteroid).viewInfo()
                     + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
             System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
-            c.settlers.get(0).dying(c);
+            c.settlers.get(0).die();
+
         } else {
             System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
                     + c.asteroids.get(explodingAsteroid).viewInfo()
