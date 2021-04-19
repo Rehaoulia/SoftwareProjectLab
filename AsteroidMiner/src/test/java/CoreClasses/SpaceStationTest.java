@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+//Tests for both the creation and build of the spacestation
 public class SpaceStationTest {
 	static Controller c = new Controller();
 	static SpaceStation S;
@@ -14,9 +15,9 @@ public class SpaceStationTest {
 	@Before
 	public void setupTest() {
 		String[] names = { "S" };
-		c.startGame(names);
+		c.startGame(names); //creates settler and initializes environment
 		player = c.getSettlers().get(0);
-		S = (SpaceStation) player.craft(2, c);
+		S = (SpaceStation) player.craft(2, c); //starts the build of spacestation from this point settlers can add minerlas to the spacestation until it's built
 	}
 
 	@Test
