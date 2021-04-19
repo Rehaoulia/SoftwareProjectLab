@@ -23,14 +23,15 @@ public class LosingTest {
 	
 	@Test
 	public void gameContinuesWithOneSettler() {
-        c.settlers.get(0).die();
-		assertTrue("Success: game keeps going", c.getGameOver()==false);
+        c.settlers.get(0).die(); //kills the first settler
+		assertTrue("Success: game keeps going", c.getGameOver()==false); //check the game ends or not
 	}
 
     @Test
 	public void gameEndsWhenSettlersDie() {
+	//kills both settlers
         c.settlers.get(0).dying(c);
         c.settlers.get(0).dying(c);
-		assertTrue("Success: players lost the game", c.getGameOver()==true && c.getWin()==false);
+		assertTrue("Success: players lost the game", c.getGameOver()==true && c.getWin()==false); //check if the game ends and the status is a lose
 	}
 }
