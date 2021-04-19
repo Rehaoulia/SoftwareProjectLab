@@ -20,7 +20,6 @@ public class Main {
 
         Controller c = initialize();
         spacestation = false;
-        int i = 0;
         while (c.getGameOver()==false) {
             mainMenu(c);
         }
@@ -82,70 +81,101 @@ public class Main {
 
             case 0://Subliming Asteroids
 
-                for (int i = 0; i < c.getSublimingAsteroids().size(); i++) {
-                    int t = c.getSublimingAsteroids().get(i);
+                for (int i = 0; i < Controller.getSublimingAsteroids().size(); i++) {
+                    int t = Controller.getSublimingAsteroids().get(i);
                     Random random = new Random();
                     boolean perihelion = random.nextBoolean();
-                    c.asteroids.get(t).setPerihelion(perihelion);
+                    Controller.asteroids.get(t).setPerihelion(perihelion);
                     System.out.print("\n\n-------Asteroid:" + t + "\n"
-                            + c.asteroids.get(t).viewInfo()
-                            + "\n" + "Perihelion : " + c.asteroids.get(t).perihelion() + "\n");
+                            + Controller.asteroids.get(t).viewInfo()
+                            + "\n" + "Perihelion : " + Controller.asteroids.get(t).perihelion() + "\n");
                 }
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("\n" + "choose an  asteroid to sublime");
-                int sublimingAsteroid = scanner.nextInt();
-                System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
-                        + c.asteroids.get(sublimingAsteroid).viewInfo()
-                        + "\n" + "Perihelion : " + c.asteroids.get(sublimingAsteroid).perihelion());
+                System.out.println("\n" + "choose a subliming asteroid to drill");
+                int miningAsteroid = scanner.nextInt();
+                System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                        + Controller.asteroids.get(miningAsteroid).viewInfo()
+                        + "\n" + "Perihelion : " + Controller.asteroids.get(miningAsteroid).perihelion());
+
                 ArrayList<String> menu1 = new ArrayList<String>();
                 menu1.add("sublime");
                 menu1.add("back");
                 Menu menu2 = new Menu(menu1);
-                switch (menu2.display()) {
-                    case 0:
-                        c.Sublime(c, sublimingAsteroid);
-                        break;
-                    case 1:
-                        PerihelionMenu(c);
-                        break;
-                    default:
-                        System.out.println("\n" + "you didn't choose any action");
+                while (Controller.asteroids.get(miningAsteroid).radius != Controller.asteroids.get(miningAsteroid).getDepth()) {
+                    switch (menu2.display()) {
+                        case 0:
+                            Controller.asteroids.get(miningAsteroid).getsDrill();
+                            break;
+                        case 1:
+                            PerihelionMenu(c);
+                            break;
+                        default:
+                            System.out.println("\n" + "you didn't choose any action");
 
+                    }
+                    System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                            + Controller.asteroids.get(miningAsteroid).viewInfo()
+                            + "\n" + "Perihelion : " + Controller.asteroids.get(miningAsteroid).perihelion() + "\n");
+                }
+                if (Controller.asteroids.get(miningAsteroid).perihelion()) {
+                    Controller.asteroids.get(miningAsteroid).setHollow(true);
+                    Controller.removeSublimingAsteroid(miningAsteroid);
+                    System.out.println("\n\n" + "WaterIce sublimed !! ");
+                    System.out.print("\n\n-------Asteroid:" + miningAsteroid + "\n"
+                            + Controller.asteroids.get(miningAsteroid).viewInfo()
+                            + "\n" + "Perihelion : " + Controller.asteroids.get(miningAsteroid).perihelion());
+                } else {
+                    System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
                 }
                 menu2.display();
                 break;
 
 
             case 1: // Exploding Asteroids
-                for (int i = 0; i < c.getExplodingAsteroids().size(); i++) {
+                for (int i = 0; i < Controller.getExplodingAsteroids().size(); i++) {
 
-                    Integer t = c.getExplodingAsteroids().get(i);
+                    Integer t = Controller.getExplodingAsteroids().get(i);
                     Random random = new Random();
                     boolean perihelion = random.nextBoolean();
-                    c.asteroids.get(t).setPerihelion(perihelion);
+                    Controller.asteroids.get(t).setPerihelion(perihelion);
                     System.out.print("\n\n-------Asteroid:" + t + "\n"
-                            + c.asteroids.get(t).viewInfo()
-                            + "\n" + "Perihelion : " + c.asteroids.get(t).perihelion() + "\n");
+                            + Controller.asteroids.get(t).viewInfo()
+                            + "\n" + "Perihelion : " + Controller.asteroids.get(t).perihelion() + "\n");
                 }
                 Scanner scanner2 = new Scanner(System.in);
                 System.out.println("\n" + "choose a radioactive asteroid to explode");
                 int explodingAsteroid = scanner2.nextInt();
                 System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
-                        + c.asteroids.get(explodingAsteroid).viewInfo()
-                        + "\n" + "Perihelion : " + c.asteroids.get(explodingAsteroid).perihelion() + "\n");
+                        + Controller.asteroids.get(explodingAsteroid).viewInfo()
+                        + "\n" + "Perihelion : " + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
                 ArrayList<String> menu11 = new ArrayList<String>();
                 menu11.add("Explode");
                 menu11.add("back");
                 Menu menu22 = new Menu(menu11);
-                switch (menu22.display()) {
-                    case 0:
-                        c.Explode(c, explodingAsteroid);
-                        break;
-                    case 1:
-                        PerihelionMenu(c);
-                        break;
-                    default:
-                        System.out.println("\n" + "you didn't choose any action");
+                while (Controller.asteroids.get(explodingAsteroid).radius != Controller.asteroids.get(explodingAsteroid).getDepth()) {
+                    switch (menu22.display()) {
+                        case 0:
+                            Controller.asteroids.get(explodingAsteroid).getsDrill();
+                            break;
+                        case 1:
+                            PerihelionMenu(c);
+                            break;
+                        default:
+                            System.out.println("\n" + "you didn't choose any action");
+
+                    }
+                    System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                            + Controller.asteroids.get(explodingAsteroid).viewInfo()
+                            + "\n" + "Perihelion : " + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
+
+                }
+                if (Controller.asteroids.get(explodingAsteroid).perihelion()) {
+                    Controller.removeExplodingAsteroid(explodingAsteroid);
+                    c.settlers.get(0).dying(c);
+                    Controller.asteroids.remove(explodingAsteroid);
+                    System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
+                } else {
+                    System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
                 }
 
                 break;
@@ -174,13 +204,13 @@ public class Main {
         Menu menu = new Menu(menuItems);
         switch (menu.display()) {
         case 0: 
-            if (cAsteroid != c.asteroids.size()){
+            if (cAsteroid != Controller.asteroids.size()){
                 cAsteroid= c.settlers.get(0).getAsteroid().getID() ;
                 cAsteroid++;
             } else
                 cAsteroid = 0;
 
-           c.settlers.get(0).travel(c.asteroids.get(cAsteroid));
+           c.settlers.get(0).travel(Controller.asteroids.get(cAsteroid));
 
 
             break;
