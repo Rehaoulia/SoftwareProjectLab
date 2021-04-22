@@ -93,12 +93,12 @@ public class Placement extends AbstractAppState {
         super.initialize(stateManager, app);
         
         rootNode.attachChild(localRootNode);
-        Border n = new Border(new Vector3f(0,0,0),1000f);
+        Border n = new Border(new Vector3f(0,0,0),400f);
         cBox = new CloseBox(n, 1 , assetManager);
         NeiAst = new ArrayList<Asteroid>(); 
         closeOnes = new ArrayList<Asteroid>();
         //flyCam.setMoveSpeed(14);
-       this.loadAsteroids(5000);
+       this.loadAsteroids(1000);
       
        
         settler =this.getSettler(); 
@@ -185,7 +185,7 @@ public class Placement extends AbstractAppState {
       
        for(int i=1;i<NumberOfAsteroid;i++ ){
            
-           float max = 800f;
+           float max = 400f;
 
           
            
