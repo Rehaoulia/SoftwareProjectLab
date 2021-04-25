@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * auth : Mehdi Moazami
+ * team : BugBuster
+ * 
  */
 package States;
 
@@ -60,7 +60,7 @@ public class Placement extends AbstractAppState {
     private Geometry asteroid;
     private AmbientLight ambiant;
     private AmbientLight ambiantCur;
-    private Asteroid[] closter ;
+    private Asteroid[] cluster ;
     private ArrayList<Asteroid> closeOnes;
     private Asteroid curAsteroid ;
     private ArrayList<Asteroid> NeiAst ;
@@ -77,15 +77,19 @@ public class Placement extends AbstractAppState {
         flyCam = app.getFlyByCamera();
         Cam = app.getCamera();
         stateManager = app.getStateManager();
+        
+        //loading asteroids model
         asteroid = (Geometry)assetManager.loadModel("Models/AsteroidModel/LowP0002.j3o");
         asteroid1 = (Geometry)assetManager.loadModel("Models/LowP04/LowP04.j3o");
-        localRootNode= new Node("intro");
-        AsteroidNode= new Node("intro");
-        selectedNode = new Node("selected");
-        curAsteroidNode = new Node("selected");
         
-        rootNode.getChild("pNode");
-       //ArrayList<Asteroid> closeOnes
+        
+        localRootNode= new Node("intro");
+        AsteroidNode= new Node("astNode");    // contains all asteroid Node
+        selectedNode = new Node("selected");    // selected asteroids Node
+        curAsteroidNode = new Node("curAstNode");  // current ateroid Node
+        
+
+       
     }
     
     @Override
@@ -93,10 +97,10 @@ public class Placement extends AbstractAppState {
         super.initialize(stateManager, app);
         
         rootNode.attachChild(localRootNode);
-        Border n = new Border(new Vector3f(0,0,0),400f);
-        cBox = new CloseBox(n, 1 , assetManager);
-        NeiAst = new ArrayList<Asteroid>(); 
-        closeOnes = new ArrayList<Asteroid>();
+        Border n = new Border(new Vector3f(0,0,0),400f);  // initialize world border
+        cBox = new CloseBox(n, 1 , assetManager);   // initializing close box search algorithm 
+        NeiAst = new ArrayList<>();   // array of neighbouring asteroids to the current asteroid 
+        closeOnes = new ArrayList<>();  // array of close asteroids to the settler 
         //flyCam.setMoveSpeed(14);
        this.loadAsteroids(1000);
       
@@ -107,8 +111,9 @@ public class Placement extends AbstractAppState {
        
         
         this.loadSky();
-         // sun and ambient light
         
+        
+         // sun and ambient light
         DirectionalLight sun = new DirectionalLight();
         sun.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.01f).mult(0.8f));
         sun.setDirection(new Vector3f(-1f,0f,0f).normalizeLocal());
@@ -159,36 +164,36 @@ public class Placement extends AbstractAppState {
     public void loadAsteroids(int NumberOfAsteroid){
     
        //Node AsteroidNode = new Node("Asteroids");
-       Geometry asteroid = (Geometry)assetManager.loadModel("Models/AsteroidModel/LowP0002.j3o");
+       //Geometry asteroid = (Geometry)assetManager.loadModel("Models/AsteroidModel/LowP0002.j3o");
        
        Random rand = new Random();
-       this.closter = new Asteroid[NumberOfAsteroid]; 
+       this.cluster = new Asteroid[NumberOfAsteroid];  // createing a cluster with given num of asteroids
        
        
        
-       
-       closter[0] = new Asteroid(0 , new Vector3f(-50.1f ,1.1f , 2.2f),6);
+       // initializing first asteroid manually 
+       cluster[0] = new Asteroid(0 , new Vector3f(-50.1f ,1.1f , 2.2f),6);
        Geometry n = asteroid.clone();
            n.setLocalScale(3f);
 
-           closter[0].setModel(n);
+           cluster[0].setModel(n);
            
-           curAsteroid =closter[0];
+           curAsteroid =cluster[0];
            AsteroidNode.attachChild(curAsteroid.getModel());
-           Geometry cA = closter[0].getModel();
+           Geometry cA = cluster[0].getModel();
                                    
            cA.setLocalScale(3.9f);
            curAsteroidNode.attachChild(cA);
-           cBox.insert(closter[0]);
+           cBox.insert(cluster[0]);     
            fDist = curAsteroid.getLocation().distance(this.getSettlerLoc());
            
       
+           
        for(int i=1;i<NumberOfAsteroid;i++ ){
            
            float max = 400f;
 
-          
-           
+           // generating random asteroids 
            float randx = ThreadLocalRandom.current().nextFloat()*max*2 -max ;
            while( Math.round(randx) == randx ) randx = ThreadLocalRandom.current().nextFloat()*max*2 -max ;
            float randy = ThreadLocalRandom.current().nextFloat()*max*2 - (max) ;
@@ -226,10 +231,10 @@ public class Placement extends AbstractAppState {
             
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector >= 4)
-                closter[i] = new Asteroid(i , GenLoc,radius);
+                cluster[i] = new Asteroid(i , GenLoc,radius);  // creating an hallow asteroid object
             
             else
-                closter[i] = new Asteroid(i , GenLoc, M,radius);
+                cluster[i] = new Asteroid(i , GenLoc, M,radius); // creating an asteroid object
            if(randMod==1)
                n = asteroid.clone();
            if(randMod==2)
@@ -241,10 +246,10 @@ public class Placement extends AbstractAppState {
             n.setLocalRotation( roll );
            n.setLocalScale(3f);
           
-           closter[i].setModel(n);
-           cBox.insert(closter[i]);
+           cluster[i].setModel(n);
+           cBox.insert(cluster[i]);  // adding to the search list
 
-           AsteroidNode.attachChild(closter[i].getModel());
+           AsteroidNode.attachChild(cluster[i].getModel());
             
        }
        
@@ -252,9 +257,9 @@ public class Placement extends AbstractAppState {
        AsteroidNode.attachChild(cBox.getBranch());
      
 
-        
+        // init neighbouring asteroids to the current asteroid
          NeiAstB = new Border (curAsteroid.getLocation(), 100f);
-       NeiAst = this.nearBy(NeiAstB);
+       NeiAst = this.nearBy(NeiAstB);      
         for(int j =0 ;j< NeiAst.size() ; j++){
                   
             Geometry nca = NeiAst.get(j).getModel();
@@ -269,6 +274,9 @@ public class Placement extends AbstractAppState {
     
     
     public void loadSky(){
+        
+        
+        // loading sky
         
         Node base = new Node("Sky");
        
@@ -305,6 +313,9 @@ public class Placement extends AbstractAppState {
     }
     
     
+    ///***** this methods returns asteroids in a given border(area to search )
+    //(can be wrapped in another state )
+    
     public ArrayList<Asteroid> nearBy(Border selected){
         ArrayList<Asteroid> closeOne = new ArrayList<>();
        closeOne = cBox.query(selected, closeOne);
@@ -312,6 +323,8 @@ public class Placement extends AbstractAppState {
       }
     
     
+    ///***** this methods returns close asteroids in a given center  and  bound
+    // (can be wrapped in another state )
     
      public ArrayList<Asteroid> nearBy( Vector3f pos , float bound){
         
@@ -321,6 +334,9 @@ public class Placement extends AbstractAppState {
         return closeOnes;
       }
      
+     
+     
+     // wraped methods from diffrent states 
      
      public Vector3f getSettlerLoc(){
      
@@ -340,10 +356,11 @@ public class Placement extends AbstractAppState {
         
             Vector3f sPos =_sPos ;
         
+            // loading close asteroids to the settler 
             Border closeAstB = new Border(sPos, 50f);
             closeAsteroids = this.nearBy(closeAstB);
 
-            
+            // final distance to current asteroid 
             fDist = sPos.distance(curAsteroid.getLocation());
             //Border bound = new Border(curAsteroid.getLocation() , curAsteroid.getModel().getLocalScale().x );
             
@@ -352,12 +369,12 @@ public class Placement extends AbstractAppState {
           for(int i = 0; i<closeAsteroids.size();i++ ){
             
             
-            if( NeiAst.contains(closeAsteroids.get(i)) ){
+            if( NeiAst.contains(closeAsteroids.get(i)) ){  // if neighbouring asteroids contains close asteroids To settler 
                    
                              float dist = sPos.distance(closeAsteroids.get(i).getLocation());
                              
                         if(fDist>dist ){
-
+                             // changing current asteroids
                             curAsteroid = closeAsteroids.get(i) ;
                             System.out.println(curAsteroid.viewInfo());
                             this.setCurrent();
@@ -366,7 +383,7 @@ public class Placement extends AbstractAppState {
                                curAsteroidNode.detachAllChildren();                          
                                 nc.setLocalScale(3.9f);
                                curAsteroidNode.attachChild(nc);
-                              //fDist = Cam.getLocation().distance(curAsteroid.getLocation());
+                              // renewing neighbouring asteroids to the current asteroid 
                             NeiAstB = new Border(curAsteroid.getLocation(), 100f);
                             NeiAst.clear();
                             NeiAst = this.nearBy(NeiAstB);
@@ -442,8 +459,10 @@ public class Placement extends AbstractAppState {
         
     }
     
+    
+    // updating the cluster (can be wrapped in another state )
     public void updateAsteroid(int ID, Asteroid ns){
-            this.closter[ID] = ns ;
+            this.cluster[ID] = ns ;
     }
     public Node getCurNode(){
         return curAsteroidNode;
