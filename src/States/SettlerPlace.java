@@ -6,11 +6,6 @@
 package States;
 
 import CoreClasses.Asteroid;
-import CoreClasses.Carbon;
-import CoreClasses.Iron;
-import CoreClasses.Mineral;
-import CoreClasses.Uranium;
-import CoreClasses.WaterIce;
 import CoreClasses.Settler;
 
 import com.jme3.app.Application;
@@ -30,7 +25,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -54,8 +48,7 @@ public class SettlerPlace extends AbstractAppState  {
     private final AssetManager assetManager;
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
-    private boolean front = false, back = false, left = false, right = false,
-            rotatex=false,rotatey=false,rotatexm =false,rotateym=false, rotate=false , rotating =false;
+    private boolean front = false, back = false, left = false, right = false;
     private ChaseCamera chaseCam;
     private Geometry settlerGeom;
     private final Camera cam;
@@ -64,7 +57,7 @@ public class SettlerPlace extends AbstractAppState  {
     private final Vector3f playerDirection = Vector3f.ZERO;
     private final Quaternion playerRotation;
     private Vector3f settlerPos;
-    private Settler s;
+    public Settler s;
   
 
     public SettlerPlace(SimpleApplication app) {
@@ -86,7 +79,7 @@ public class SettlerPlace extends AbstractAppState  {
 
         localRootNode.attachChild(loadSettler());
 
-       player = localRootNode.getChild("pNode");
+        player = localRootNode.getChild("pNode");
         BoundingBox boundingbox = (BoundingBox) player.getWorldBound();
         CapsuleCollisionShape playerShape = new CapsuleCollisionShape(boundingbox.getXExtent(),
                 boundingbox.getYExtent());
@@ -98,65 +91,41 @@ public class SettlerPlace extends AbstractAppState  {
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("Rotating",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        
+        inputManager.addMapping("Drill", new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addMapping("Mine", new KeyTrigger(KeyInput.KEY_F));
+        inputManager.addMapping("Fill", new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping("Craft", new KeyTrigger(KeyInput.KEY_C));
+        inputManager.addMapping("Hide", new KeyTrigger(KeyInput.KEY_R));
+        
+       
+        
         inputManager.addListener(actionListener, "Forward");
         inputManager.addListener(actionListener, "Backward");
         inputManager.addListener(actionListener, "Left");
         inputManager.addListener(actionListener, "Right");
-        inputManager.addListener(actionListener, "Rotating");
-        inputManager.addMapping("RotateX", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inputManager.addMapping("RotateX_negative", new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        inputManager.addMapping("RotateY", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        inputManager.addMapping("RotateY_negative", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        inputManager.addListener(analogListener,"RotateX");
-        inputManager.addListener(analogListener,"RotateX_negative");
-        inputManager.addListener(analogListener,"RotateY");
-        inputManager.addListener(analogListener,"RotateY_negative");
-           
+        inputManager.addListener(actionListener, "Drill");
+        inputManager.addListener(actionListener, "Mine");
+        inputManager.addListener(actionListener, "Fill");
+        inputManager.addListener(actionListener, "Craft");
+        inputManager.addListener(actionListener, "Hide");
         
         
         
         flyCam.setEnabled(false);
         chaseCam = new ChaseCamera(cam, settlerGeom, inputManager);
         chaseCam.setSmoothMotion(true);
+        chaseCam.setDefaultDistance(20);
+        chaseCam.setMinDistance(15);
+        chaseCam.setMaxDistance(25);
+        chaseCam.setDefaultVerticalRotation( 0);
+        chaseCam.setMinVerticalRotation(-FastMath.PI/2);
+        chaseCam.setMaxVerticalRotation(FastMath.PI/2);
         settlerPos = settlerGeom.getLocalTranslation();
        
     }
     
     
-    private final AnalogListener analogListener =  new AnalogListener() {
-
-        @Override
-        public void onAnalog(String name, float value, float tpf) {
-            
-            float x=0.0f,y=0.0f , speed=0.09f;
-           
-            rotatex = ( "RotateX".equals(name)) ;
-            rotatey = ( "RotateY".equals(name)) ;
-            rotatexm = ( "RotateX_negative".equals(name)) ;
-            rotateym = ( "RotateY_negative".equals(name));
-            rotate = rotatex || rotatey || rotatexm || rotateym;
-            if( "RotateX".equals(name) ) {
-                x+=  (value*speed);
-               
-            }else if("RotateX_negative".equals(name)){
-                x+= (-value*speed);
-                
-            }
-            
-            else if( "RotateY".equals(name) ) {
-                y+=  (value*speed);
-               
-            }else if("RotateY_negative".equals(name)){
-                y+=  (-value*speed);
-                
-            }
-           
-             playerRotation.fromAngles(y,y,y);
-        
-      }
-    };
-
     private final ActionListener actionListener = new ActionListener()  {
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
@@ -165,7 +134,8 @@ public class SettlerPlace extends AbstractAppState  {
             back = name.equals("Backward") && keyPressed  ;
             left = name.equals("Left") && keyPressed   ;
             right = name.equals("Right") && keyPressed  ;
-            rotating = name.equals("Rotating") && keyPressed ;
+            if(name.equals("Drill"))s.drill();
+            if(name.equals("Mine"))s.mine();
         }
     };
 
@@ -178,14 +148,14 @@ public class SettlerPlace extends AbstractAppState  {
         Vector3f GenLoc = new Vector3f(0, -2, -30);
         settlerGeom.setLocalTranslation(GenLoc);
         settlerGeom.setLocalScale(0.3f);
-        //settlerGeom.move(0,-30f,0);   // model 004 needed offset;
         Quaternion quatA = new Quaternion();
         quatA = quatA.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
         settlerGeom.setLocalRotation(quatA);
         s = new Settler("Placeholder_Name", GenLoc);
         s.setModel(settlerGeom);
         pNode.attachChild(s.getModel());
- AmbientLight amb = new AmbientLight();
+        
+        AmbientLight amb = new AmbientLight();
         amb.setColor(new ColorRGBA(1.0f, 1.0f, 1.0f, 0.001f).mult(0.1f));
         pNode.addLight(amb);
 
@@ -231,8 +201,6 @@ public class SettlerPlace extends AbstractAppState  {
             s.setLocation(settlerGeom.getLocalTranslation());
             
              
-            
-            
         }
         
        

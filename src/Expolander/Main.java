@@ -6,6 +6,7 @@ import CoreClasses.Iron;
 import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
+import States.HUD;
 import States.InputMan;
 import States.Placement;
 import States.SettlerPlace;
@@ -24,7 +25,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
+import com.jme3.ui.Picture;
 import com.jme3.util.SkyFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +54,10 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         //stateManager.attach(new Jungle(this));
      
-       stateManager.attach(new SettlerPlace(this));
+      stateManager.attach(new SettlerPlace(this));
       stateManager.attach(new Placement(this));
       stateManager.attach(new InputMan(this));
+      stateManager.attach(new HUD(this,settings));
     }
 
     @Override

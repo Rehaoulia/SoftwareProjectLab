@@ -97,7 +97,6 @@ public class Placement extends AbstractAppState {
         cBox = new CloseBox(n, 1 , assetManager);
         NeiAst = new ArrayList<Asteroid>(); 
         closeOnes = new ArrayList<Asteroid>();
-        //flyCam.setMoveSpeed(14);
        this.loadAsteroids(5000);
       
        

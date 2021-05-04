@@ -186,8 +186,13 @@ public class Asteroid extends Place {
 	}
 
 	public String viewInfo() {
-		String str = "Radius: " + this.radius + "\t\tDepth:" + depth + "\t\tHollow: " + Boolean.toString(isHollow)
-				+ "\nDrillable: " + Boolean.toString(drillable()) + "\t\tMineable :" + Boolean.toString(isMineable);
+                
+		String str = "Asteroid: "+this.ID +
+                        "\nRadius: " + this.radius +
+                             "\nDepth:" + depth +
+                                 "\nHollow: " + Boolean.toString(isHollow)
+				+ "\nDrillable: " + Boolean.toString(drillable()) + 
+                                "\nMineable :" + Boolean.toString(isMineable);
 		return str;
 	}
 
