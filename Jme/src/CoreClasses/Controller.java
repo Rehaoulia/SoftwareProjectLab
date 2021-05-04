@@ -1,10 +1,9 @@
 package CoreClasses;
 
-import java.nio.file.Watchable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
@@ -13,11 +12,27 @@ import java.util.TimerTask;
 public class Controller {
     // Attributes
     public ArrayList<Settler> settlers;
-    //private static ArrayList<Robot> robots;
+
+    public ArrayList<Robot> robots = new ArrayList<Robot>();
+
+    private ArrayList<SpaceStation> spacestations = new ArrayList<SpaceStation>();
+
+    public ArrayList<Settler> getSettlers() {
+        return settlers;
+    }
+
+    public static ArrayList<Integer> getExplodingAsteroids() {
+        return explodingAsteroids;
+    }
+
+    public static ArrayList<Integer> getSublimingAsteroids() {
+        return sublimingAsteroids;
+    }
+
     private int numAsteroids;
-    private int numSettlers;
-    public Map<Integer, Asteroid> asteroids;
-    private boolean gamerOver;
+    public static Map<Integer, Asteroid> asteroids;
+    private boolean gameOver;
+
     private boolean win;
     private static ArrayList<Integer> explodingAsteroids;
     private static ArrayList<Integer> sublimingAsteroids;
@@ -25,35 +40,40 @@ public class Controller {
     private final int fps = 60; // necessary for sunstorm
     private Timer Thread; // all threads to stop them
     private Map<String, TimerTask> ThreadTasks; // all tasks to stop them
-    public  String information;
+
+    public String information;
+    public Sunstorm sunstorm = new Sunstorm();
 
     // Methods
-    
-    public Controller() {}
-    
-    
+
+    public Controller() {
+    }
+
     public void startGame(String[] names) {
-    	this.setupGame();
-    	settlers = new ArrayList<Settler>();
-    	
-    	
+
+        this.setupGame();
+        settlers = new ArrayList<Settler>();
+        int count = 0;
         for (String i : Arrays.asList(names)) {
-        	//Settler set = new Settler(i) ;
-        	//set.setAsteroid(asteroids.get(0));
-           // settlers.add(set);
-            //information = set.getAsteroid().viewInfo();
+            Settler set = new Settler(i, count);
+            count++;
+            set.setAsteroid(asteroids.get(0));
+
+            settlers.add(set);
+            information = set.getAsteroid().viewInfo();
             System.out.println(information);
-                    
+
         }
     }
 
     public void setupGame() {
+        robots = new ArrayList<Robot>();
+
         rand = new Random();
         numAsteroids = rand.nextInt(10) + 40; // between 40 and 50
         asteroids = new HashMap<Integer, Asteroid>();
         explodingAsteroids = new ArrayList<Integer>();
         sublimingAsteroids = new ArrayList<Integer>();
-
         for (int i = 0; i < numAsteroids; i++) {
             Mineral M;
             int mineralSelector = rand.nextInt(5);
@@ -76,11 +96,11 @@ public class Controller {
             Asteroid a;
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector == 4)
-//                a = new Asteroid(i,radius);
-//            else
-//                a = new Asteroid(i, M,radius);
-//
-//            asteroids.put(i, a);
+                a = new Asteroid(i, radius);
+            else
+                a = new Asteroid(i, M, radius);
+
+            asteroids.put(i, a);
             if (mineralSelector == 1)
                 sublimingAsteroids.add(i);
 
@@ -90,10 +110,10 @@ public class Controller {
         }
     }
 
-    
-//    public static void addRobot(Robot r) { // missing from the sequence diagram
-//        robots.add(r);
-//    }
+    public void addRobot(Robot r) { // missing from the sequence diagram
+
+        robots.add(r);
+    }
 
     public void endGame() {
     }
@@ -102,63 +122,152 @@ public class Controller {
 
     }
 
+    public int getRobots() {
+        return robots.size();
+    }
+
     public void removePlayer(int playerID) {
         settlers.remove(playerID);
+        if (settlers.size() > 0) {
+            for (int i = 0; i < settlers.size(); i++) {
+                settlers.get(i).setID(i);
+            }
+        }
+        checkGame();
     }
 
     public void removeAsteroid(int asteroidID) {
         asteroids.remove(asteroidID);
     }
 
-//    public void triggerSunStorms() {
-//        rand = new Random();
-//        int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
-//        Sunstorm.behave(wavelength);
-//        TimerTask checkDeath = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (Sunstorm.getHappening()) {
-//                    for (Settler s : settlers) {
-//                        if (!s.getHidden() && !s.getDeath()) {
-//                            s.die();
-//                        }
-//                    }
-//                    for (Robot r : robots) {
-//                        if (!r.getHidden()) {
-//                            r.die();
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//        ThreadTasks.put("sunstorm", checkDeath);
-//        Thread.schedule(ThreadTasks.get("sunstorm"), wavelength, 1000 / fps);
-//    }
+    public void triggerSunStorms() {
+        rand = new Random();
+        int wavelength = (rand.nextInt(3) + 3) * 60 * 1000; // between 3 and 5 minutes
+        sunstorm.behave(this, wavelength);
+        TimerTask checkDeath = new TimerTask() {
+            @Override
+            public void run() {
+                if (sunstorm.getHappening()) {
+                    for (Settler s : settlers) {
+                        if (!s.getHidden() && !s.getDeath()) {
+                            s.die();
+                        }
+                    }
+                    for (Robot r : robots) {
+                        if (!r.getHidden()) {
+                            r.die();
+                        }
+                    }
+                }
+            }
+        };
+        ThreadTasks.put("sunstorm", checkDeath);
+        Thread.schedule(ThreadTasks.get("sunstorm"), wavelength, 1000 / fps);
+    }
 
     public void explodeAsteroids() {
 
     }
 
-    public boolean checkGame() {
-        boolean flag = false;
-		return flag;
+    // checks the conditions for ending the game
+    public void checkGame() {
+        if (settlers.size() == 0) {
+            this.gameOver = true;
+            win = false;
+            endGame();
+        }
     }
-    
+
+    public boolean getGameOver() {
+        return gameOver;
+    }
+
+    public boolean getWin() {
+        return win;
+    }
+
     public static void updateAsteroid(Asteroid asteroid) {
-    	
+
     }
-    
+
     public static void updateSettler() {
-    	
+
     }
-    
-    public static void removeSublimingAsteroid(int id) 
-    {
-    	sublimingAsteroids.remove(id);
+
+    public void robotBehave(int id) throws IOException, InterruptedException {
+        int ast = robots.get(id).currentAsteroid.getID();
+        robots.get(id).robotMenu(asteroids.get((ast + 1) % asteroids.size()));
+
     }
-    
-    public static void removeExplodingAsteroid(int id) 
-    {
-    	explodingAsteroids.remove(id);
+
+    public static void removeSublimingAsteroid(int id) {
+        sublimingAsteroids.remove(id);
+    }
+
+    public static void removeExplodingAsteroid(int id) {
+        explodingAsteroids.remove(id);
+    }
+
+    public void addMineralToSpaceStation(String spacestationID, String mineral) {
+        for (SpaceStation s : spacestations) {
+            if (s.getID().equals(spacestationID)) {
+                s.addResource(mineral);
+            }
+        }
+    }
+
+    public void addSpaceStationToAsteroid(SpaceStation s, int id) {
+        asteroids.get(id).setSpaceStation(s);
+    }
+
+    public void addSpaceStation(SpaceStation s) {
+        this.spacestations.add(s);
+    }
+
+    public void checkSpaceStation(String spacestationID) {
+        for (SpaceStation s : spacestations) {
+            if (s.getID().equals(spacestationID)) {
+                win = true;
+                gameOver = s.isCraftable();
+            }
+        }
+    }
+
+    public void Sublime(Controller c, int sublimingAsteroid) {
+        Controller.asteroids.get(sublimingAsteroid).setDepth(Controller.asteroids.get(sublimingAsteroid).radius);
+        if (Controller.asteroids.get(sublimingAsteroid).perihelion()) {
+            Controller.asteroids.get(sublimingAsteroid).setHollow(true);
+            Controller.removeSublimingAsteroid(sublimingAsteroid);
+            System.out.println("\n\n" + "WaterIce sublimed !! ");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + Controller.asteroids.get(sublimingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(sublimingAsteroid).perihelion());
+        } else {
+            System.out.println("\n" + " The asteroid is fully drilled and the WaterIce didn't sublime !");
+            System.out.print("\n\n-------Asteroid:" + sublimingAsteroid + "\n"
+                    + Controller.asteroids.get(sublimingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(sublimingAsteroid).perihelion());
+        }
+
+    }
+
+    public void Explode(Controller c, int explodingAsteroid) {
+        Controller.asteroids.get(explodingAsteroid).setDepth(Controller.asteroids.get(explodingAsteroid).radius);
+
+        if (Controller.asteroids.get(explodingAsteroid).perihelion()) {
+            Controller.removeExplodingAsteroid(explodingAsteroid);
+            // Controller.asteroids.remove(explodingAsteroid);
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + Controller.asteroids.get(explodingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + "Asteroid " + explodingAsteroid + " explodes and settler dies ! !");
+            c.settlers.get(0).dying(c);
+        } else {
+            System.out.print("\n\n-------Asteroid:" + explodingAsteroid + "\n"
+                    + Controller.asteroids.get(explodingAsteroid).viewInfo() + "\n" + "Perihelion : "
+                    + Controller.asteroids.get(explodingAsteroid).perihelion() + "\n");
+            System.out.println("\n" + " The asteroid is fully drilled and it didn't explode !");
+        }
+
     }
 }
