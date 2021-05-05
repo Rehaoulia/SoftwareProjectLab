@@ -33,7 +33,6 @@ import java.util.Iterator;
  */
 public class HUD extends AbstractAppState {
 
-    ArrayList<Picture> hotbar;
     private final Node guiNode;
     private final Node localRootNode = new Node("HUD");
     private final AssetManager assetManager;
@@ -107,17 +106,15 @@ public class HUD extends AbstractAppState {
             craft = name.equals("Craft") && keyPressed;
             cancelcraft = name.equals("CancelCraft") && keyPressed;
             if (name.equals("Fill") && keyPressed) {
-                
-                if ((inputManager.getCursorPosition().getX() > settings.getWidth() / 2 - 250)
-                        &&  (inputManager.getCursorPosition().getX() <settings.getWidth() / 2   + 250)
-                        && (inputManager.getCursorPosition().getY() > 25)
-                        &&  (inputManager.getCursorPosition().getY() < 75)) {
-                    fillId = (int)(inputManager.getCursorPosition().getX() -(settings.getWidth() / 2 - 250)) /50;
-                    
-                        
 
-                }
-                else fillId=-1;
+                if ((inputManager.getCursorPosition().getX() > settings.getWidth() / 2 - 250)
+                        && (inputManager.getCursorPosition().getX() < settings.getWidth() / 2 + 250)
+                        && (inputManager.getCursorPosition().getY() > 25)
+                        && (inputManager.getCursorPosition().getY() < 75)) {
+                    fillId = (int) (inputManager.getCursorPosition().getX() - (settings.getWidth() / 2 - 250)) / 50;
+
+                } else
+                    fillId = -1;
             }
         }
     };
@@ -133,7 +130,7 @@ public class HUD extends AbstractAppState {
                 frame.setImage(assetManager, "Interface/HUD/Empty.png", false);
             }
         }
-        if(fillId>=0 && fillId < s.getMinerals().size()  ) {
+        if (fillId >= 0 && fillId < s.getMinerals().size()) {
             s.fill(s.getMinerals().get(fillId));
             fillId = -1;
         }

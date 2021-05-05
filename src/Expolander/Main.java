@@ -10,6 +10,7 @@ import States.HUD;
 import States.InputMan;
 import States.Placement;
 import States.SettlerPlace;
+import States.StartScreen;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
@@ -37,39 +38,49 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * This is the Main Class of your Game. You should only do initialization here.
  * Move your Logic into AppStates or Controls
+ * 
  * @author normenhansen
  */
 public class Main extends SimpleApplication {
 
-    
-    
-    
+    private StartScreen startScreen;
+    private boolean starting;
+
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
     }
 
-
     @Override
     public void simpleInitApp() {
-        //stateManager.attach(new Jungle(this));
-     
-      stateManager.attach(new SettlerPlace(this));
-      stateManager.attach(new Placement(this));
-      stateManager.attach(new InputMan(this));
-      stateManager.attach(new HUD(this,settings));
+        starting = true;
+        startScreen = new StartScreen(this, settings);
+        stateManager.attach(startScreen);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-   
+        if (startScreen.start && starting) {
+            starting = false;
+            new Thread(() -> {
+                stateManager.attach(new SettlerPlace(this));
+                stateManager.attach(new Placement(this));
+                stateManager.attach(new InputMan(this));
+                stateManager.attach(new HUD(this, settings));
+                startScreen.guiNode.detachAllChildren();
+                startScreen.cleanup();
+                stateManager.detach(startScreen);
+            }).start();
+            startScreen.starting = true;
+            
 
-           
-       
+
+        }
+
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
+        // TODO: add render code
     }
 }

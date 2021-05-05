@@ -6,7 +6,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 public abstract class Traveler {
-    protected boolean hidden;
+    public boolean hidden;
     protected Place currentPlace;
     private Spatial model;
     private Vector3f location;
@@ -14,7 +14,8 @@ public abstract class Traveler {
     public Traveler(Vector3f loc) {
         location = loc ;
     }
-
+    
+    public Traveler(){}
     
      public void setModel(Spatial mod) {
          mod.setLocalTranslation(location);

@@ -4,8 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/Placement.java</file>
+            <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/InputMan.java</file>
             <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/Expolander/Main.java</file>
             <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/HUD.java</file>
+            <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/CoreClasses/Asteroid.java</file>
+            <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/CoreClasses/Settler.java</file>
+            <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/StartScreen.java</file>
+            <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/nState.java</file>
             <file>file:/home/samer/Projects/jme/SoftwareProjectLab/src/States/SettlerPlace.java</file>
         </group>
     </open-files>
