@@ -33,11 +33,7 @@ public class Asteroid extends Place {
 		isDestroyed = false;
 		depth = 0;
 		radius = _radius;
-
-		if (mineral.toString().equals("Uranium"))
-			isRadioActive = true;
-		else
-			isRadioActive = false;
+                isRadioActive = mineral.getClass().getSimpleName().equals("Uranium");
 		// isAphelion = ??; we need location to set this
 
 	}
@@ -64,12 +60,7 @@ public class Asteroid extends Place {
 		isDestroyed = false;
 		depth = 0;
 		radius = _radius;
-		if (mineral.toString().equals("Uranium"))
-			isRadioActive = true;
-		else
-			isRadioActive = false;
-		// isAphelion = ??; we need location to set this
-
+                isRadioActive = mineral.getClass().getSimpleName().equals("Uranium");
 	}
 
 	public Asteroid(int _ID, int _radius) { // this constructor works without mineral and sets hollow
@@ -89,10 +80,19 @@ public class Asteroid extends Place {
 
 		model = mod;
 	}
+        
+        public void removeModel(){
+            model.removeFromParent();
+            
+        }
 
 	public Geometry getModel() {
 		model.setLocalTranslation(super.getLocation());
 		return model.clone();
+	}
+        
+        	public Geometry getModelNotCloned() {
+		return model;
 	}
 
 	public int getID() {
@@ -196,7 +196,6 @@ public class Asteroid extends Place {
 
 	private void explode() {
 		isDestroyed = true;
-		// animation();
 	}
 
 	public boolean destroyed() {
@@ -215,7 +214,10 @@ public class Asteroid extends Place {
 
 		String str = "Asteroid: " + this.ID + "\nRadius: " + this.radius + "\nDepth:" + depth + "\nHollow: "
 				+ Boolean.toString(isHollow) + "\nDrillable: " + Boolean.toString(drillable()) + "\nMineable :"
-				+ Boolean.toString(isMineable);
+				+ Boolean.toString(isMineable) + "\nRadioactive :"+ Boolean.toString(isRadioActive)
+                                + "\nPerihelion :"+ Boolean.toString(this.isPerihelion)
+                                + "\nDestroyed :"+ Boolean.toString(this.isDestroyed)
+                        ;
 		return str;
 	}
 

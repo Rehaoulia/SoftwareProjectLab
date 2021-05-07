@@ -60,10 +60,13 @@ public class Placement extends AbstractAppState {
     private Geometry asteroid;
     private AmbientLight ambiant;
     private AmbientLight ambiantCur;
-    private Asteroid[] closter;
+   // private Asteroid[] closter;
+    public ArrayList<Asteroid> closter= new ArrayList<Asteroid>();
     private ArrayList<Asteroid> closeOnes;
     private Asteroid curAsteroid;
     private ArrayList<Asteroid> NeiAst;
+    public ArrayList<Asteroid> explodingAsteroids = new ArrayList<Asteroid>();
+    public ArrayList<Asteroid> sublimingAsteroids = new ArrayList<Asteroid>();
     private Border NeiAstB;
     private float fDist;
     private final Geometry asteroid1;
@@ -146,21 +149,20 @@ public class Placement extends AbstractAppState {
         Geometry asteroid = (Geometry) assetManager.loadModel("Models/AsteroidModel/LowP0002.j3o");
 
         Random rand = new Random();
-        this.closter = new Asteroid[NumberOfAsteroid];
 
-        closter[0] = new Asteroid(0, new Vector3f(-50.1f, 1.1f, 2.2f), 6);
+        closter.add(new Asteroid(0, new Vector3f(-50.1f, 1.1f, 2.2f), 6)) ;
         Geometry n = asteroid.clone();
         n.setLocalScale(3f);
 
-        closter[0].setModel(n);
+        closter.get(0).setModel(n);
 
-        curAsteroid = closter[0];
+        curAsteroid = closter.get(0);
         AsteroidNode.attachChild(curAsteroid.getModel());
-        Geometry cA = closter[0].getModel();
+        Geometry cA = closter.get(0).getModel();
 
         cA.setLocalScale(3.9f);
         curAsteroidNode.attachChild(cA);
-        cBox.insert(closter[0]);
+        cBox.insert(closter.get(0));
         fDist = curAsteroid.getLocation().distance(this.getSettlerLoc());
 
         for (int i = 1; i < NumberOfAsteroid; i++) {
@@ -182,7 +184,8 @@ public class Placement extends AbstractAppState {
             Vector3f GenLoc = new Vector3f(randx, randy, randz);
 
             Mineral M;
-            int mineralSelector = rand.nextInt(10);
+            //int mineralSelector = rand.nextInt(10);
+            int mineralSelector = 1;
             switch (mineralSelector) {
                 case 0:
                     M = new Carbon();
@@ -200,28 +203,30 @@ public class Placement extends AbstractAppState {
                 default:
                     M = null;
             }
-
+            
             int radius = rand.nextInt(5) + 5;
             if (mineralSelector >= 4)
-                closter[i] = new Asteroid(i, GenLoc, radius);
+                closter.add(new Asteroid(i, GenLoc, radius));
 
             else
-                closter[i] = new Asteroid(i, GenLoc, M, radius);
+                closter.add(new Asteroid(i, GenLoc, M, radius));
+            
             if (randMod == 1)
                 n = asteroid.clone();
             if (randMod == 2)
                 n = asteroid1.clone();
-
+            if(mineralSelector == 1) sublimingAsteroids.add(closter.get(i));
+            if(mineralSelector == 3) explodingAsteroids.add(closter.get(i));
             Quaternion roll = new Quaternion();
             roll.fromAngleAxis(FastMath.PI, new Vector3f(randy, randx, randz));
 
             n.setLocalRotation(roll);
             n.setLocalScale(3f);
 
-            closter[i].setModel(n);
-            cBox.insert(closter[i]);
+            closter.get(i).setModel(n);
+            cBox.insert(closter.get(i));
 
-            AsteroidNode.attachChild(closter[i].getModel());
+            AsteroidNode.attachChild(closter.get(i).getModel());
 
         }
 
@@ -292,6 +297,26 @@ public class Placement extends AbstractAppState {
 
     public void setCurrent() {
         this.stateManager.getState(SettlerPlace.class).setCurAsteroid(curAsteroid);
+    }
+    
+    public void removeAsteroid(Asteroid toRemove){
+        System.out.println("\n\nAsteroidNode: "+AsteroidNode.getQuantity());
+        AsteroidNode.detachChild(toRemove.getModel());
+        System.out.println("New AsteroidNode: "+AsteroidNode.getQuantity());
+        
+        System.out.println("\n\nrootNode: "+rootNode.getQuantity());
+        rootNode.detachChild(toRemove.getModel());
+        System.out.println("New rootNode: "+rootNode.getQuantity());
+        
+        System.out.println("Closter size: "+closter.size());
+        closter.remove(toRemove);
+        System.out.println("New closter size: "+closter.size());
+        
+        System.out.println("explodingAsteroids size: "+explodingAsteroids.size());
+        explodingAsteroids.remove(toRemove);
+        System.out.println("New explodingAsteroids size: "+explodingAsteroids.size());
+        
+        toRemove.removeModel();
     }
 
     public void placeGuides(ArrayList<Asteroid> closeAsteroids, Vector3f _sPos) {
@@ -385,7 +410,7 @@ public class Placement extends AbstractAppState {
     }
 
     public void updateAsteroid(int ID, Asteroid ns) {
-        this.closter[ID] = ns;
+        this.closter.set(ID, ns);
     }
 
     public Node getCurNode() {

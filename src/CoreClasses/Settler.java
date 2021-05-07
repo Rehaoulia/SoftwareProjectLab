@@ -79,7 +79,8 @@ public class Settler extends Traveler {
 	@Override
 	public void drill() {
 		this.currentAsteroid.getsDrill();
-		Controller.updateAsteroid(this.currentAsteroid);
+                if(this.currentAsteroid.destroyed())
+                die();
 	}
 
 	public void mine() {
@@ -239,7 +240,6 @@ public class Settler extends Traveler {
 	@Override
 	public void die() {
 		this.dead = true;
-		System.out.println("You are dead :(");
 	}
 
 	public void dying(Controller c) {

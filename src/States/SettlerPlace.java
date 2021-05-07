@@ -140,7 +140,6 @@ public class SettlerPlace extends AbstractAppState {
                 s.mine();
             if (name.equals("Hide") && keyPressed) s.hide();
                 
-            System.out.println(Boolean.toString(s.getHidden()));
         }
     };
 

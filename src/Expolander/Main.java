@@ -8,6 +8,7 @@ import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
 import States.HUD;
 import States.InputMan;
+import States.PerihelionState;
 import States.Placement;
 import States.SettlerPlace;
 import States.StartScreen;
@@ -68,8 +69,10 @@ public class Main extends SimpleApplication {
                 stateManager.attach(new SettlerPlace(this));
                 stateManager.attach(new Placement(this));
                 stateManager.attach(new InputMan(this));
+                stateManager.attach(new PerihelionState(this));
                 stateManager.attach(new HUD(this, settings));
-                stateManager.attach(new SunstormState(this, settings));
+                //stateManager.attach(new SunstormState(this, settings));
+
                 startScreen.guiNode.detachAllChildren();
                 startScreen.cleanup();
                 stateManager.detach(startScreen);
