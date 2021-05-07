@@ -23,7 +23,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author mehdimo
  */
 public class InputMan extends AbstractAppState  {
-
+    
+    private final SimpleApplication app;
     private final Node rootNode;
     private final AssetManager assetManager;
     private Spatial localRootNode;
@@ -33,6 +34,7 @@ public class InputMan extends AbstractAppState  {
     
 
         public InputMan(SimpleApplication app){
+        this.app = app;
         rootNode = app.getRootNode();
         assetManager = app.getAssetManager();
         inputManager = app.getInputManager();
@@ -48,15 +50,17 @@ public class InputMan extends AbstractAppState  {
         curNode = new Node("curNode");
         rootNode.attachChild(curNode);
         inputManager.addMapping("Settler Drill", new KeyTrigger(KeyInput.KEY_E));
-        inputManager.addListener(actionListener, new String[]{"Settler Drill"});
+        inputManager.addListener(actionListener, "Settler Drill");
+        inputManager.addMapping("Settler Crafts Robot", new KeyTrigger(KeyInput.KEY_R));
+        inputManager.addListener(actionListener, "Settler Crafts Robot");
         
-        
-        //rootNode.attachChild(localRootNode);
+//        rootNode.attachChild(localRootNode);
     }
     
     
-    private ActionListener actionListener = new ActionListener() {
-  public void onAction(String name, boolean keyPressed, float tpf) {
+    private final ActionListener actionListener = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean keyPressed, float tpf) {
             float time = 0;
            
             if (name.equals("Settler Drill") && !keyPressed && getSettler().access()  ) {  
@@ -80,12 +84,12 @@ public class InputMan extends AbstractAppState  {
                     }
                     stateManager.getState(Placement.class).updateAsteroid(s.getAsteroid().getID(), s.getAsteroid());
                    System.out.println(s.getAsteroid().viewInfo());
-                  curNode.detachChild(diged);
-                   
-                   
+                  curNode.detachChild(diged);    
             }
-            
-      
+            if (name.equals("Settler Crafts Robot") && !keyPressed && getSettler().access()) {
+                Settler s = getSettler();
+                stateManager.attach(new RobotState(app, s));
+            }
         }
     };
     
