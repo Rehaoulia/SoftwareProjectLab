@@ -17,36 +17,34 @@ import com.jme3.scene.Spatial;
  *
  * @author mehdimo
  */
-public class nState extends AbstractAppState  {
+public class nState extends AbstractAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;
     private Spatial localRootNode;
-    
 
-        public nState(SimpleApplication app){
+    public nState(SimpleApplication app) {
         rootNode = app.getRootNode();
         assetManager = app.getAssetManager();
-        //flyCam = app.getFlyByCamera();
+        // flyCam = app.getFlyByCamera();
     }
-    
+
     @Override
-    public void initialize(AppStateManager stateManager , Application app){
+    public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
+
         rootNode.attachChild(localRootNode);
     }
-    
-    
-    @Override 
-    public void update(float tpf){
+
+    @Override
+    public void update(float tpf) {
     }
-    
-    @Override 
-    public void cleanup(){
+
+    @Override
+    public void cleanup() {
         rootNode.detachChild(localRootNode);
-        
+
         super.cleanup();
     }
-        
+
 }
