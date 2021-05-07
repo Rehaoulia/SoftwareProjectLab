@@ -12,14 +12,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
 import com.jme3.input.InputManager;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.system.AppSettings;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -80,8 +75,6 @@ public class PerihelionState extends AbstractAppState {
             
             //if x and y are higher than the perihelion coordinates add the asteroid to the exploding asteroids
             //if((x > perihelionX)&&(y > perihelionY)){
-                //explodingAsteroids.add(tempExplodingAsteroids.get(i));
-                
                 //just set the perihelion of that asteroid to true
                 app.getStateManager().getState(Placement.class).explodingAsteroids.get(i).setPerihelion(true);
             //}
@@ -95,27 +88,17 @@ public class PerihelionState extends AbstractAppState {
             y = tempSublimingAsteroids.get(i).getLocation().y;
             
             //if x and y are higher than the perihelion coordinates add the asteroid to the exploding asteroids
-            //if((x > perihelionX)&&(y > perihelionY)){
-                //sublimingAsteroids.add(tempSublimingAsteroids.get(i));
-                
-                //just set the perihelion of that asteroid to true
+            if((x > perihelionX)&&(y > perihelionY)){
                 app.getStateManager().getState(Placement.class).sublimingAsteroids.get(i).setPerihelion(true);
-            //}
+            }
         }
     }
     
     //state update loop
     @Override
     public void update(float tpf) {
+        /* EXPLOSION */
         
-        
-        
-//        for(int i=0; i<sublimingAsteroids.size();i++){
-//            if(sublimingAsteroids.get(i).hollow()){
-//                //destroy the asteroids
-//            }
-//        }
-
         /*THIS PART WORKS*/
         //It does find the destroyed asteroid and call the removing method
 
@@ -133,12 +116,8 @@ public class PerihelionState extends AbstractAppState {
                 i--;
             }
         }
-        /*
-        for(int i=0; i<app.getStateManager().getState(Placement.class).explodingAsteroids.size();i++){
-            if(app.getStateManager().getState(Placement.class).explodingAsteroids.get(i).destroyed()){
-                
-            }
-        }*/
+        
+        /* SUBLIMATION */
         
         //go through the subliming asteroids in the placement class
         for(int i=0; i<app.getStateManager().getState(Placement.class).sublimingAsteroids.size();i++){

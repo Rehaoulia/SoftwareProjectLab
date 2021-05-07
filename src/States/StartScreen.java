@@ -43,6 +43,8 @@ public class StartScreen extends AbstractAppState {
     BitmapText AsteroidStats;
     private final FlyByCamera flyCam;
 
+    public boolean help;
+    
     public StartScreen(SimpleApplication app, AppSettings _settings) {
         this.Buttons = new ArrayList<>();
         guiNode = app.getGuiNode();
@@ -64,6 +66,7 @@ public class StartScreen extends AbstractAppState {
         Background.setHeight(settings.getHeight());
         guiNode.attachChild(Background);
 
+        //Start Button
         Picture StartButton = new Picture("StartButton");
         StartButton.setImage(assetManager, "Interface/StartScreen/StartButton.png", false);
         StartButton.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 20, -2);
@@ -76,6 +79,18 @@ public class StartScreen extends AbstractAppState {
         start = false;
         doneStarting = false;
         starting = false;
+        
+        //Help Button
+        Picture HelpButton = new Picture("HelpButton");
+        HelpButton.setImage(assetManager, "Interface/StartScreen/HelpButton.png", false);
+        HelpButton.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 70, -2);
+        HelpButton.setWidth(140);
+        HelpButton.setHeight(40);
+        guiNode.attachChild(HelpButton);
+
+        inputManager.addMapping("Help", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addListener(actionListener, "Help");
+        help = false;
     }
 
     private final ActionListener actionListener = new ActionListener() {
@@ -87,20 +102,24 @@ public class StartScreen extends AbstractAppState {
                         && (inputManager.getCursorPosition().getY() > settings.getHeight() / 2 - 20)
                         && (inputManager.getCursorPosition().getY() < settings.getHeight() / 2 + 20));
             }
+            else if (name.equals("Help") && keyPressed){
+                help = ((inputManager.getCursorPosition().getX() > settings.getWidth() / 2 - 70)
+                        && (inputManager.getCursorPosition().getX() < settings.getWidth() / 2 + 70)
+                        && (inputManager.getCursorPosition().getY() > settings.getHeight() / 2 - 70)
+                        && (inputManager.getCursorPosition().getY() < settings.getHeight() / 2 - 50));
+            }
         }
     };
 
     @Override
     public void update(float tpf) {
-
-        if (starting) {
+        if (starting||help) {
             guiNode.detachChildNamed("StartButton");
+            guiNode.detachChildNamed("HelpButton");
         }
         if (doneStarting) {
-
             guiNode.detachChildNamed("backgroundscreen");
         }
-
     }
 
     @Override

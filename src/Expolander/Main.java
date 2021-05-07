@@ -7,6 +7,7 @@ import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
 import States.HUD;
+import States.HelpScreen;
 import States.InputMan;
 import States.PerihelionState;
 import States.Placement;
@@ -48,6 +49,8 @@ public class Main extends SimpleApplication {
     private StartScreen startScreen;
     private boolean starting;
     
+    private HelpScreen helpScreen; 
+            
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -59,11 +62,12 @@ public class Main extends SimpleApplication {
         startScreen = new StartScreen(this, settings);
         stateManager.attach(startScreen);
         
+        helpScreen = new HelpScreen(this, settings);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        if (startScreen.start && starting) {
+        if (startScreen.start && starting) {  
             starting = false;
             new Thread(() -> {
                 stateManager.attach(new SettlerPlace(this));
@@ -78,8 +82,34 @@ public class Main extends SimpleApplication {
                 stateManager.detach(startScreen);
             }).start();
             startScreen.starting = true;
+        }else if(startScreen.help){     //if help is clicked
+            //detach the start screen
+            startScreen.guiNode.detachAllChildren();
+            startScreen.cleanup();
+            stateManager.detach(startScreen);
+            
+            //attach the help screen
+            stateManager.attach(helpScreen);
+            
+            //set help to false (otherwise it will always get inside this if)
+            startScreen.help=false;
         }
-
+        
+        //if the help screen is closed
+        if(helpScreen.close){
+                //detach the help screen
+                helpScreen.guiNode.detachAllChildren();
+                helpScreen.cleanup();
+                stateManager.detach(helpScreen);
+                
+                //attach the start screen again
+                starting = true;
+                startScreen = new StartScreen(this, settings);
+                stateManager.attach(startScreen);
+                
+                //set the close to false again (otherwise it will always get inside this if)
+                helpScreen.close=false;
+            }
     }
 
     @Override

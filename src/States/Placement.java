@@ -19,12 +19,10 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.bounding.BoundingSphere;
 import com.jme3.input.FlyByCamera;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.SpotLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -33,7 +31,6 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import java.util.ArrayList;
@@ -185,7 +182,7 @@ public class Placement extends AbstractAppState {
 
             Mineral M;
             //int mineralSelector = rand.nextInt(10);
-            int mineralSelector = 1;
+            int mineralSelector = 3;
             switch (mineralSelector) {
                 case 0:
                     M = new Carbon();
