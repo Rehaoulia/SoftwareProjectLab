@@ -3,6 +3,8 @@
 package CoreClasses;
 
 import com.jme3.math.Vector3f;
+
+
 import java.util.ArrayList;
 //import com.jme3.math.Vector3f;
 
@@ -10,11 +12,14 @@ public class Place {
 
         private Vector3f location; 
 	private ArrayList<Traveler> currentTravelers;
+       // private Node model;
         
         public Place(Vector3f loc){
             location = loc;
         }
-        public Place (){};
+        public Place (){
+        location = new Vector3f(0,0,0);
+        };
 	
 	public void addTraveler(Traveler traveler) {
 		this.currentTravelers.add(traveler);
@@ -25,10 +30,22 @@ public class Place {
 	}
         
         public Vector3f getLocation(){
-            return location;
+            return this.location;
         };
-        public void setLocation(Vector3f pos){
-            location = pos;
-        };
+        
+//        public void setModel(Node mod){
+//            mod.setLocalTranslation(location);
+//            model = mod ;
+//        }
+//        
+//        public Node getModel(){
+//            //model.setLocalTranslation(super.getLocation());
+//           return model.clone(true);
+//        }
+
+        
+//        public void setLocation(Vector3f pos){
+//            location = pos;
+//        };
 }
 

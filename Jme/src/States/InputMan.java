@@ -1,7 +1,7 @@
 /*
- * auth : Mehdi Moazami
- * team : BugBuster
- * 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package States;
 
@@ -59,7 +59,7 @@ public class InputMan extends AbstractAppState  {
   public void onAction(String name, boolean keyPressed, float tpf) {
             float time = 0;
            
-            if (name.equals("Settler Drill") && !keyPressed && getSettler().access()  ) {  
+            if (name.equals("Settler Drill")   ) {  
                     Settler s = getSettler(); 
                    /// heereee 
                          Spatial diged = s.getAsteroid().getModel();

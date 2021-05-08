@@ -1,7 +1,7 @@
 /*
- * auth : Mehdi Moazami
- * team : BugBuster
- * 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package Search;
 
@@ -85,6 +85,33 @@ public class CloseBox {
             this.dne.insert(asteroid);
             this.dsw.insert(asteroid);
             this.dse.insert(asteroid);
+            
+        }
+    }
+
+ 
+ 
+     
+ public void remove(Asteroid asteroid){
+        
+      if(!this.bound.containsAsteroid(asteroid)){
+        return;
+        }
+
+        if(this.asteroids.contains(asteroid) ){
+        this.asteroids.remove(asteroid);
+        
+        
+        }else{
+            
+            this.unw.remove(asteroid);
+            this.une.remove(asteroid);
+            this.usw.remove(asteroid);
+            this.use.remove(asteroid);
+            this.dnw.remove(asteroid);
+            this.dne.remove(asteroid);
+            this.dsw.remove(asteroid);
+            this.dse.remove(asteroid);
             
         }
     }

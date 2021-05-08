@@ -2,6 +2,7 @@ package CoreClasses;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import java.util.ArrayList;
 
 public class Asteroid extends Place {
@@ -15,11 +16,12 @@ public class Asteroid extends Place {
 	private boolean isDestroyed;
 
 	private int ID;
-	private ArrayList<TeleportationGate> gates = new ArrayList<TeleportationGate>();
+	//private static ArrayList<TeleportationGate> gates ;
         private Geometry model;
 	private Mineral mineral;
 	private int depth;
 	private SpaceStation station;
+        private TeleportationGate gate ;
         
 
 	public int radius;
@@ -87,23 +89,29 @@ public class Asteroid extends Place {
 		// model.setLocalScale(_radius);
 
 	}
-        public void setModel(Geometry mod){
+      
+          public void setModel(Geometry mod){
             mod.setLocalTranslation(super.getLocation());
-            
             model = mod ;
         }
         
         public Geometry getModel(){
-            model.setLocalTranslation(super.getLocation());
-           return model.clone() ;
+            //model.setLocalTranslation(super.getLocation());
+           return model.clone();
         }
-
 
 
 	public int getID() {
 		return ID;
 	}
-
+        
+        public void setCloseGate(TeleportationGate tg){
+        gate = tg;
+        }
+        public TeleportationGate getCloseGate(){
+          return gate;
+        }
+        
 	public boolean hollow() {
 		return isHollow;
 	}
@@ -166,13 +174,13 @@ public class Asteroid extends Place {
 			return false;
 	}
 
-	public ArrayList<TeleportationGate> getGates() {
-		return gates;
-	}
-
-	public void setGates(TeleportationGate nGate) {
-		gates.add(nGate);
-	}
+//	public ArrayList<TeleportationGate> getGates() {
+//		return gates;
+//	}
+//
+//	public void setGates(TeleportationGate nGate) {
+//		gates.add(nGate);
+//	}
 
 	public SpaceStation getSpaceStation() {
 		return station;

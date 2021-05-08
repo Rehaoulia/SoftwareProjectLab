@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package States;
 
 import CoreClasses.Asteroid;
-import CoreClasses.Carbon;
-import CoreClasses.Iron;
-import CoreClasses.Mineral;
-import CoreClasses.Uranium;
-import CoreClasses.WaterIce;
 import CoreClasses.Settler;
+import CoreClasses.TeleportationGate;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -30,10 +21,10 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -42,6 +33,8 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.ArrayList;
+import java.util.Objects;
 /**
  *
  * @author mehdimo
@@ -54,8 +47,7 @@ public class SettlerPlace extends AbstractAppState  {
     private final AssetManager assetManager;
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
-    private boolean front = false, back = false, left = false, right = false,
-            rotatex=false,rotatey=false,rotatexm =false,rotateym=false, rotate=false , rotating =false;
+    private boolean front = false, back = false, left = false, right = false;
     private ChaseCamera chaseCam;
     private Geometry settlerGeom;
     private final Camera cam;
@@ -64,7 +56,14 @@ public class SettlerPlace extends AbstractAppState  {
     private final Vector3f playerDirection = Vector3f.ZERO;
     private final Quaternion playerRotation;
     private Vector3f settlerPos;
-    private Settler s;
+    public Settler s;
+    private Geometry[] gParts;
+    private Node gateNode ;
+    private final AppStateManager stateManager;
+    private int candGate;
+    private TeleportationGate t;
+    
+    
   
 
     public SettlerPlace(SimpleApplication app) {
@@ -74,6 +73,7 @@ public class SettlerPlace extends AbstractAppState  {
         inputManager = app.getInputManager();
         flyCam = app.getFlyByCamera();
         cam = app.getCamera();
+        stateManager = app.getStateManager();
     }
 
     @Override
@@ -81,12 +81,12 @@ public class SettlerPlace extends AbstractAppState  {
         super.initialize(stateManager, app);
 
         rootNode.attachChild(localRootNode);
-
+        gateNode = new Node("gateNode");
         flyCam.setMoveSpeed(3);
-
+  
         localRootNode.attachChild(loadSettler());
-
-       player = localRootNode.getChild("pNode");
+        localRootNode.attachChild(gateNode);
+        player = localRootNode.getChild("pNode");
         BoundingBox boundingbox = (BoundingBox) player.getWorldBound();
         CapsuleCollisionShape playerShape = new CapsuleCollisionShape(boundingbox.getXExtent(),
                 boundingbox.getYExtent());
@@ -98,65 +98,48 @@ public class SettlerPlace extends AbstractAppState  {
         inputManager.addMapping("Backward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("Rotating",new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        
+        inputManager.addMapping("Drill", new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addMapping("Mine", new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping("Fill", new KeyTrigger(KeyInput.KEY_F));
+        inputManager.addMapping("Craft", new KeyTrigger(KeyInput.KEY_C));
+        inputManager.addMapping("del ast", new KeyTrigger(KeyInput.KEY_X));
+        inputManager.addMapping("Hide", new KeyTrigger(KeyInput.KEY_R));
+        
+       
+        
         inputManager.addListener(actionListener, "Forward");
         inputManager.addListener(actionListener, "Backward");
         inputManager.addListener(actionListener, "Left");
         inputManager.addListener(actionListener, "Right");
-        inputManager.addListener(actionListener, "Rotating");
-        inputManager.addMapping("RotateX", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inputManager.addMapping("RotateX_negative", new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        inputManager.addMapping("RotateY", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        inputManager.addMapping("RotateY_negative", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        inputManager.addListener(analogListener,"RotateX");
-        inputManager.addListener(analogListener,"RotateX_negative");
-        inputManager.addListener(analogListener,"RotateY");
-        inputManager.addListener(analogListener,"RotateY_negative");
-           
+        inputManager.addListener(actionListener, "Drill");
+        inputManager.addListener(actionListener, "Mine");
+        inputManager.addListener(actionListener, "Fill");
+        inputManager.addListener(actionListener, "Craft");
+        inputManager.addListener(actionListener, "del ast");
+        inputManager.addListener(actionListener, "Hide");
         
         
         
         flyCam.setEnabled(false);
-        chaseCam = new ChaseCamera(cam, settlerGeom, inputManager);
+        chaseCam = new ChaseCamera(cam, s.getModel(), inputManager);
         chaseCam.setSmoothMotion(true);
-        settlerPos = settlerGeom.getLocalTranslation();
+        chaseCam.setDefaultDistance(20);
+        chaseCam.setMinDistance(15);
+        chaseCam.setMaxDistance(25);
+        chaseCam.setDefaultVerticalRotation( 0);
+        chaseCam.setMinVerticalRotation(-FastMath.PI/2);
+        chaseCam.setMaxVerticalRotation(FastMath.PI/2);
+
+        settlerPos = s.getLocation();
+
+        gParts = new Geometry[8];
+        candGate = -1;
+
        
     }
     
-    
-    private final AnalogListener analogListener =  new AnalogListener() {
-
-        @Override
-        public void onAnalog(String name, float value, float tpf) {
-            
-            float x=0.0f,y=0.0f , speed=0.09f;
-           
-            rotatex = ( "RotateX".equals(name)) ;
-            rotatey = ( "RotateY".equals(name)) ;
-            rotatexm = ( "RotateX_negative".equals(name)) ;
-            rotateym = ( "RotateY_negative".equals(name));
-            rotate = rotatex || rotatey || rotatexm || rotateym;
-            if( "RotateX".equals(name) ) {
-                x+=  (value*speed);
-               
-            }else if("RotateX_negative".equals(name)){
-                x+= (-value*speed);
-                
-            }
-            
-            else if( "RotateY".equals(name) ) {
-                y+=  (value*speed);
-               
-            }else if("RotateY_negative".equals(name)){
-                y+=  (-value*speed);
-                
-            }
-           
-             playerRotation.fromAngles(y,y,y);
-        
-      }
-    };
-
+     
     private final ActionListener actionListener = new ActionListener()  {
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
@@ -165,10 +148,66 @@ public class SettlerPlace extends AbstractAppState  {
             back = name.equals("Backward") && keyPressed  ;
             left = name.equals("Left") && keyPressed   ;
             right = name.equals("Right") && keyPressed  ;
-            rotating = name.equals("Rotating") && keyPressed ;
+            if(name.equals("Drill")&& !keyPressed)s.drill();
+            else if(name.equals("Mine")&& !keyPressed)s.mine();
+            else if(name.equals("del ast")&& !keyPressed) removeAsteroidb();
+            else if(name.equals("Craft") && !keyPressed){
+                //s.setLocation(settlerPos);
+                   if( s.craftGate()){
+                    Node temp = loadTeleGate();
+                    temp = s.putGate(temp);
+                    if(temp!=null)
+                    gateNode.attachChild(temp);
+                   System.out.println("blaaaaaaaaaah");
+                    
+                   }
+                else if(s.getNumberOfGates()==1){
+                    Node temp = loadTeleGate();
+                    temp = s.putGate(temp);
+                    if(temp!=null)
+                    gateNode.attachChild(temp); 
+                   
+                }
+            
+            }
         }
     };
 
+    
+    public Node loadTeleGate(){
+    
+        Node localGateNode = new Node("localGateNode");
+        // loc = s.getLocation();
+        Geometry sample = (Geometry) assetManager.loadModel("Models/GatePart/01.j3o");
+        //sample.setLocalTranslation(loc);
+        
+        for(int i =0 ;i<8;i+=2){
+        sample.setLocalScale(8+(i-0.5f));
+        gParts[i] = sample.clone();
+        ColorRGBA col = new ColorRGBA(0.4f+i*0.05f, 0.4f+i*0.05f, 9.0f, 1.0f);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", col);
+        gParts[i].setMaterial(mat);
+       
+        localGateNode.attachChild(gParts[i]);
+        
+        Quaternion roll180 = new Quaternion();
+        roll180.fromAngleAxis( FastMath.PI , new Vector3f(0,0,1) );
+        gParts[i+1] = sample.clone() ;
+        gParts[i+1].setLocalRotation( roll180 );
+        gParts[i+1].setMaterial(mat);
+        
+        
+        localGateNode.attachChild(gParts[i+1]);
+        }
+       // gates.add(gParts);
+        AmbientLight amb = new AmbientLight();
+        amb.setColor(new ColorRGBA(1.0f, 1.0f, 6.0f, 0.001f).mult(10f));
+        localGateNode.addLight(amb);
+         return localGateNode;
+        
+    } 
+    
     public Node loadSettler() {
         Node pNode = new Node("pNode");
         Geometry model =(Geometry) assetManager.loadModel("Models/004/004.j3o");
@@ -178,14 +217,14 @@ public class SettlerPlace extends AbstractAppState  {
         Vector3f GenLoc = new Vector3f(0, -2, -30);
         settlerGeom.setLocalTranslation(GenLoc);
         settlerGeom.setLocalScale(0.3f);
-        //settlerGeom.move(0,-30f,0);   // model 004 needed offset;
         Quaternion quatA = new Quaternion();
         quatA = quatA.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
         settlerGeom.setLocalRotation(quatA);
         s = new Settler("Placeholder_Name", GenLoc);
         s.setModel(settlerGeom);
         pNode.attachChild(s.getModel());
- AmbientLight amb = new AmbientLight();
+        
+        AmbientLight amb = new AmbientLight();
         amb.setColor(new ColorRGBA(1.0f, 1.0f, 1.0f, 0.001f).mult(0.1f));
         pNode.addLight(amb);
 
@@ -197,10 +236,29 @@ public class SettlerPlace extends AbstractAppState  {
         playerDirection.set(0, 0, 0);
         return pNode;
     }
-
+//
+//    public Node updateGate(int index ,float tpf){
+//
+//       //gateNode.detachChildAt(index);
+//       Node temp = s.gates.get(index).getModel();
+//     for(int i = 0 ;i<8 ;i+=2){ 
+//        
+//        temp.getChild(i).rotate(0,0,(7/(i+2.4f))*tpf);
+//        //temp.attachChild(gates.get(index)[i].clone());
+//        //temp = s.gates.get(index).getModel().getChild(i+1);
+//        temp.getChild(i+1).rotate(0,0,(7/(i+2.4f))*tpf);
+//       // temp.attachChild(gates.get(index)[i+1].clone());
+//        }
+//       return temp;
+//        //return temp;
+//     
+//    }
+    
     @Override
     public void update(float tpf) {
-
+        
+        
+        
         Vector3f camDir = cam.getDirection().clone();
         camDir.add(0, 5f, 5f) ;
         Vector3f camLeft = cam.getLeft().clone();
@@ -220,28 +278,41 @@ public class SettlerPlace extends AbstractAppState  {
         
             
         if (player != null) {
-            
+
             settlerGeom.setLocalRotation(camRot);
-            
-             
             playerDirection.multLocal(20f).multLocal(tpf);
             playerRotation.multLocal(50f).multLocal(tpf);
             playerControl.setWalkDirection(playerRotation.mult(playerDirection));
             settlerGeom.move(playerDirection); 
-            s.setLocation(settlerGeom.getLocalTranslation());
             
-             
-            
-            
-        }
-        
-       
-       
 
-    }
+             if(!Objects.isNull(s.getAsteroid())){
+                if(!Objects.isNull(s.getAsteroid().getCloseGate()) && s.getAsteroid().getCloseGate().isPaired()){
+                TeleportationGate curGate =s.getAsteroid().getCloseGate();
+                    if(s.getLocation().distance( curGate.getLocation())<4f){
+                       Vector3f nLoc =curGate.getPairedGate().getLocation();
+                       System.out.println("......"+curGate.getPairedGate().getLocation().toString()+".....");
+                       System.out.println("......"+curGate.getLocation().toString()+".....");
+                       settlerGeom.setLocalTranslation(nLoc.add(0,0, 20));
+                       s.setAsteroid(curGate.getPairedGate().getNeighbour());
+                       s.setTeleported(true);
+                       }
+
+                }
+             }
+             
+             s.setLocation(settlerGeom.getLocalTranslation().clone()); 
+        }
+       
+      }
+    
+    
+    
+   
+    
     
     public Vector3f getSettlerLoc(){
-        return settlerPos;
+        return s.getLocation();
     }
     public Settler getSettler(){
         return s;
@@ -250,7 +321,19 @@ public class SettlerPlace extends AbstractAppState  {
             s.setAsteroid(cur);
     }
   
+    public int getPossibleGate(){
+
+         return this.stateManager.getState(Placement.class).getPossibleGate();
+     }
     
+    
+    public void removeAsteroidb(){
+       if(s.getAsteroid()!=null){
+        this.stateManager.getState(Placement.class).removeAsteroid(s.getAsteroid());
+        s.setAsteroid(null);
+       }
+        
+     }
 
     @Override
     public void cleanup() {

@@ -1,30 +1,36 @@
 package CoreClasses;
 
-import Search.Border;
 import java.util.ArrayList;
 import java.io.IOException;
 
 import View.Menu;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import java.util.Objects;
 
 public class Settler extends Traveler {
 
 	private String name;
 	public int ID;
-	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below
-												// in checkRequiredMaterial
-	public  ArrayList<TeleportationGate> gates;
+	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below										// in checkRequiredMaterial         public  ArrayList<TeleportationGate> gates;
+        //public  Vector3f[] arrGates;
 	private long timeOfDeath;
 	private boolean dead;
 	private Asteroid currentAsteroid;
 	private int nGate;
+        public ArrayList<TeleportationGate> gates;
+        private boolean teleported;
 
         public Settler(String name,Vector3f loc ) {
-            super(loc);
+                super(loc);
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
-		minedMinerals = new ArrayList<String>();
+		minedMinerals = new ArrayList<>();
+                gates = new ArrayList<>();
+                nGate =0 ;
+                
+                
 	}
         
 	public Settler(String name, int ID) {
@@ -32,8 +38,11 @@ public class Settler extends Traveler {
 		this.name = name;
 		this.timeOfDeath = 0;
 		this.dead = false;
-		minedMinerals = new ArrayList<String>();
-		gates = new ArrayList<TeleportationGate>();
+		minedMinerals = new ArrayList<>();
+                gates = new ArrayList<>();
+                nGate =0 ;
+               
+		
 	}
 
 	public void setAsteroid(Asteroid asteroid) {
@@ -44,32 +53,77 @@ public class Settler extends Traveler {
 		return currentAsteroid;
 	}
 
-	public void travel(Asteroid asteroid) {
-		
-		if(this.getHidden()) {
-		unhide();
-		currentAsteroid.getUnhide();   
-		// if we dont unhide asteroid, it gonna stay hollow false !!
-		}
-		
-		setAsteroid(asteroid);
-		Controller.updateAsteroid(this.currentAsteroid);
-	}
+//	public void travel(Asteroid asteroid) {
+//		
+//		if(this.getHidden()) {
+//		unhide();
+//		currentAsteroid.getUnhide();   
+//		// if we dont unhide asteroid, it gonna stay hollow false !!
+//		}
+//		
+//		setAsteroid(asteroid);
+//		Controller.updateAsteroid(this.currentAsteroid);
+//	}
 
-	public void putGate() {
-		if (!gates.get(0).isDeployed()) {
-			gates.get(0).setGate(this.currentAsteroid);
-			nGate--;
-		} else if ( !gates.get(0).isPaired() && !gates.get(0).getNeighbour().equals(this.getAsteroid()) ) {
-			gates.get(0).setGate(this.currentAsteroid, gates.get(1));
-			nGate-- ;
-			System.out.println(gates.get(0).getNeighbour().getID() + "<------------->" + gates.get(1).getNeighbour().getID()  );
-			
-		}else{
+	public Node putGate(Node gate) {
+            Vector3f loc;
+ 
+            if(Objects.isNull(currentAsteroid.getCloseGate())){
+
+                        loc = this.getLocation().add(0,0,6) ;
+            System.out.println("  puting Gate ");
+            if(nGate ==2 && Objects.isNull(currentAsteroid.getCloseGate()) ){
+            
+            System.out.println("  put first ");
+        
+          // Vector3f loc = this.getLocation().add(0,0,6) ;
+            TeleportationGate firstG = new TeleportationGate(loc);
+            Node newGate = gate;
+            firstG.setModel(newGate);
+            firstG.setGate(this.currentAsteroid);
+            gates.add(firstG);
+            int i = gates.size()-1;
+            currentAsteroid.setCloseGate(firstG);
+            gates.get(i).setGate(this.currentAsteroid);
+            System.out.println("index : "+i +" loc: "+ gates.get(i).getLocation()+ "    " );
+            nGate--;
+
+            return firstG.getModel();
+
+            }else
+                if(nGate ==1   ){
+            System.out.println("  put sec ");
+            int oldG = gates.size()-1;
+  
+            TeleportationGate secG = new TeleportationGate(loc);
+            
+            Node newGate = gate.clone(true);
+            secG.setModel(newGate);
+           
+            currentAsteroid.setCloseGate(secG);
+            gates.get(oldG).setGate(this.currentAsteroid , secG );
+            
+            gates.add(secG);
+            int index = gates.size()-1;
+           
+          
+            System.out.println("index : "+index +" loc: "+ gates.get(index).getLocation()+ "    " );
+            System.out.println("index : "+(index) +" loc: "+ gates.get(index).getPairedGate().getLocation()+ "    " );
+            nGate--;
+
+            return secG.getModel();
+            }else{
 			System.out.println("\n\n ============ you connot place a gate here");
-		}
-	}
-	
+                        System.out.println("size : "+ gates.size() +"  ");
+                        System.out.println("nGate : "+ nGate +"  ");
+                        return null;
+                }
+            }
+            return null;
+ }
+
+            
+        
 	 public void teleport(TeleportationGate tg) {
 	        if (tg.isPaired()) {
 	            currentAsteroid = tg.getPairedGate().getNeighbour();
@@ -80,6 +134,7 @@ public class Settler extends Traveler {
 	public void drill() {
 		this.currentAsteroid.getsDrill();
 		Controller.updateAsteroid(this.currentAsteroid);
+                
 	}
 
 	public void mine() {
@@ -167,9 +222,9 @@ public class Settler extends Traveler {
 				con.addRobot((Robot)c);
 				break;
 			case 1:
-				if(this.craftGate()){
-					this.putGate();
-				}
+//				if(this.craftGate()){
+//					this.putGate();
+//				}
 				break;
 			case 2:
 				if (this.currentAsteroid.getSpaceStation() == null) {
@@ -245,7 +300,7 @@ public class Settler extends Traveler {
 	public void dying(Controller c) {
 		this.setTimeOfDeath();
 		try {
-			//wait for revival for i seconds
+			//wait for revival for index seconds
 			int i=3; 
 			while(i>0){
 				long millis = System.currentTimeMillis();
@@ -297,24 +352,24 @@ public class Settler extends Traveler {
 	}
 	
 	public boolean craftGate(){
-		if(nGate==0){
-			minedMinerals.remove(minedMinerals.indexOf("Uranium"));
-			minedMinerals.remove(minedMinerals.indexOf("WaterIce"));
-			minedMinerals.remove(minedMinerals.indexOf("Iron"));
-			minedMinerals.remove(minedMinerals.indexOf("Iron"));
-			gates.add(new TeleportationGate());
-			gates.add(new TeleportationGate());
-			nGate =2;
-			return true ;
-		}
-		return false;
-	}
-
-	public void setPairGate() {
-		if(nGate==1)
-		this.putGate();
-	}
-
+            System.out.println("craft");
+            switch (nGate) {
+                case 0:
+                    getMatforGate();
+                    minedMinerals.remove(minedMinerals.indexOf("Uranium"));
+                    minedMinerals.remove(minedMinerals.indexOf("WaterIce"));
+                    minedMinerals.remove(minedMinerals.indexOf("Iron"));
+                    minedMinerals.remove(minedMinerals.indexOf("Iron"));
+                  
+                    
+                    nGate =2;
+                    return true ;
+                case 1:
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
 
     public void addMineral(String s) {
@@ -331,12 +386,12 @@ public class Settler extends Traveler {
     public int getNumberOfGates() {
         return nGate;
     } 
-    
-    public boolean access(){
-            Border closeAstB = new Border(this.getLocation(), 50f);  
-            if(closeAstB.contains(this.getAsteroid().getLocation()))
-                return true ;
-            
-            return false;
-        }
+
+    public void setTeleported(boolean b) {
+        teleported = b;
+    }
+    public boolean getTeleported() {
+       return teleported;
+    }
+   
 }

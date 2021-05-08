@@ -17,24 +17,23 @@ public abstract class Traveler {
     
     public Traveler(){}
     
-     public void setModel(Spatial mod) {
+    public void setModel(Spatial mod) {
          mod.setLocalTranslation(location);
         model = mod;
     }
      
     public Spatial getModel(){
-        model.setLocalTranslation(location);
+       model.setLocalTranslation(location);
         return model ;
      }
     
     public void setLocation(Vector3f loc){
     
-        location = loc ;
+        this.location = loc ;
     }
   
      public Vector3f getLocation(){
-    
-       return location ;
+       return this.location ;
     }
 
 
@@ -52,11 +51,11 @@ public abstract class Traveler {
 
     }
 
-    public void teleport(TeleportationGate tg) {
-        if (tg.isPaired()) {
-            currentPlace = tg.getPairedGate().getNeighbour();
-        }
-    }
+//    public void teleport(TeleportationGate tg) {
+//        if (tg.isPaired()) {
+//            currentPlace = tg.getPairedGate().getNeighbour();
+//        }
+//    }
 
     public abstract void hide() throws InterruptedException;
 

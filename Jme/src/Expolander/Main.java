@@ -6,6 +6,7 @@ import CoreClasses.Iron;
 import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
+import States.HUD;
 import States.InputMan;
 import States.Placement;
 import States.SettlerPlace;
@@ -49,11 +50,12 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        //stateManager.attach(new Jungle(this));
+       
      
        stateManager.attach(new SettlerPlace(this));
       stateManager.attach(new Placement(this));
-      stateManager.attach(new InputMan(this));
+     // stateManager.attach(new InputMan(this));
+      stateManager.attach(new HUD(this, settings));
     }
 
     @Override

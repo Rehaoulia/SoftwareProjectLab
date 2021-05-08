@@ -125,7 +125,7 @@ public class Robot extends Traveler implements Craftable {
 			unhide();
 			break;
 		case 5: // Teleport
-			teleport(null);
+			//teleport(null);
 			break;
 		default:
 			System.out.println("you didn't choose any action");
