@@ -50,7 +50,7 @@ public class SettlerPlace extends AbstractAppState {
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
     private boolean front = false, back = false, left = false, right = false, hidden=false;
-    private ChaseCamera chaseCam;
+    public ChaseCamera chaseCam;
     private Geometry settlerGeom;
     private final Camera cam;
     private CharacterControl playerControl;
@@ -62,12 +62,14 @@ public class SettlerPlace extends AbstractAppState {
     private Vector3f scale;
 
     SimpleApplication application;
+    private final AppStateManager appStateManager;
     
     public SettlerPlace(SimpleApplication app) {
         this.playerRotation = Quaternion.ZERO;
         rootNode = app.getRootNode();
         assetManager = app.getAssetManager();
         inputManager = app.getInputManager();
+        appStateManager = app.getStateManager();
         flyCam = app.getFlyByCamera();
         cam = app.getCamera();
         
@@ -220,12 +222,7 @@ public class SettlerPlace extends AbstractAppState {
         }
 
         if(s.getDeath()){
-            //application.destroy();  //not the best solution but at least it exits
-            
-            //this lets the other states visible :(
-            /*application.getStateManager().detach(this);
-            application.simpleInitApp();*/
-            
+                       
         }
     }
 

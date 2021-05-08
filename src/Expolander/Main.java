@@ -6,6 +6,7 @@ import CoreClasses.Iron;
 import CoreClasses.Mineral;
 import CoreClasses.Uranium;
 import CoreClasses.WaterIce;
+import States.Endscreen;
 import States.HUD;
 import States.HelpScreen;
 import States.InputMan;
@@ -46,40 +47,61 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Main extends SimpleApplication {
 
+    public static Main app;
+
     private StartScreen startScreen;
-    private boolean starting;
+    private boolean starting, started;
     
     private HelpScreen helpScreen; 
     
     public static void main(String[] args) {
-        Main app = new Main();
+        app = new Main();
         app.start();
+        
     }
-
+    private SettlerPlace settlerPlace;
+    
+    private SunstormState sunstorm;
+    private Endscreen lost;
+    private Endscreen won;
     @Override
     public void simpleInitApp() {
+        setupGame();
+    }
+    
+    public void setupGame(){
         starting = true;
+        started = false;
         startScreen = new StartScreen(this, settings);
         stateManager.attach(startScreen);
-        
+        settlerPlace = new SettlerPlace(this);
+        sunstorm = new SunstormState(this, settings);
         helpScreen = new HelpScreen(this, settings);
+        lost = new Endscreen(this, settings,false);
+        lost.setEnabled(false);
+        
+        won = new Endscreen(this, settings,true);
+        won.setEnabled(false);
+    
     }
-
+    
     @Override
     public void simpleUpdate(float tpf) {
         if (startScreen.start && starting) {  
             starting = false;
             new Thread(() -> {
-                stateManager.attach(new SettlerPlace(this));
+                stateManager.attach(settlerPlace);
                 stateManager.attach(new Placement(this));
                 stateManager.attach(new InputMan(this));
                 stateManager.attach(new PerihelionState(this));
                 stateManager.attach(new HUD(this, settings));
-                //stateManager.attach(new SunstormState(this, settings));
+                stateManager.attach(sunstorm);
 
+                
                 startScreen.guiNode.detachAllChildren();
                 startScreen.cleanup();
                 stateManager.detach(startScreen);
+                started = true;
             }).start();
             startScreen.starting = true;
         }else if(startScreen.help){     //if help is clicked
@@ -113,15 +135,28 @@ public class Main extends SimpleApplication {
         
         //if exit is clicked
         if(startScreen.exit){
-            //detach the start screen
-            startScreen.guiNode.detachAllChildren();
-            startScreen.cleanup();
-            stateManager.detach(startScreen);
-            
             //exit
             System.exit(0);
         }
+        
+        if(started){
+            if(settlerPlace.s.getDeath()){
+            stateManager.attach(won);
+            stateManager.attach(lost);
+            settlerPlace.setEnabled(false);
+            settlerPlace.chaseCam.setEnabled(false);
+            sunstorm.setEnabled(false);
+            lost.setEnabled(true);
+
+            started = false;
+            }
+
+        }
+        if(lost.exit) System.exit(0);
+        
     }
+    
+    
 
     @Override
     public void simpleRender(RenderManager rm) {
