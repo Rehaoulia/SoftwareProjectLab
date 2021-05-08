@@ -43,7 +43,7 @@ public class StartScreen extends AbstractAppState {
     BitmapText AsteroidStats;
     private final FlyByCamera flyCam;
 
-    public boolean help;
+    public boolean help, exit;
     
     public StartScreen(SimpleApplication app, AppSettings _settings) {
         this.Buttons = new ArrayList<>();
@@ -91,6 +91,18 @@ public class StartScreen extends AbstractAppState {
         inputManager.addMapping("Help", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(actionListener, "Help");
         help = false;
+        
+        //Exit Button
+        Picture ExitButton = new Picture("ExitButton");
+        ExitButton.setImage(assetManager, "Interface/StartScreen/ExitButton.png", false);
+        ExitButton.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 120, -2);
+        ExitButton.setWidth(140);
+        ExitButton.setHeight(40);
+        guiNode.attachChild(ExitButton);
+
+        inputManager.addMapping("Exit", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addListener(actionListener, "Exit");
+        exit = false;
     }
 
     private final ActionListener actionListener = new ActionListener() {
@@ -106,7 +118,13 @@ public class StartScreen extends AbstractAppState {
                 help = ((inputManager.getCursorPosition().getX() > settings.getWidth() / 2 - 70)
                         && (inputManager.getCursorPosition().getX() < settings.getWidth() / 2 + 70)
                         && (inputManager.getCursorPosition().getY() > settings.getHeight() / 2 - 70)
-                        && (inputManager.getCursorPosition().getY() < settings.getHeight() / 2 - 50));
+                        && (inputManager.getCursorPosition().getY() < settings.getHeight() / 2 - 30));
+            }
+            else if (name.equals("Exit") && keyPressed){
+                exit = ((inputManager.getCursorPosition().getX() > settings.getWidth() / 2 - 70)
+                        && (inputManager.getCursorPosition().getX() < settings.getWidth() / 2 + 70)
+                        && (inputManager.getCursorPosition().getY() > settings.getHeight() / 2 - 120)
+                        && (inputManager.getCursorPosition().getY() < settings.getHeight() / 2 - 80));
             }
         }
     };
@@ -116,8 +134,15 @@ public class StartScreen extends AbstractAppState {
         if (starting||help) {
             guiNode.detachChildNamed("StartButton");
             guiNode.detachChildNamed("HelpButton");
+            guiNode.detachChildNamed("ExitButton");
         }
         if (doneStarting) {
+            guiNode.detachChildNamed("backgroundscreen");
+        }
+        if(exit){
+            guiNode.detachChildNamed("StartButton");
+            guiNode.detachChildNamed("HelpButton");
+            guiNode.detachChildNamed("ExitButton");
             guiNode.detachChildNamed("backgroundscreen");
         }
     }

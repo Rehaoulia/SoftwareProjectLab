@@ -50,7 +50,7 @@ public class Main extends SimpleApplication {
     private boolean starting;
     
     private HelpScreen helpScreen; 
-            
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -97,19 +97,30 @@ public class Main extends SimpleApplication {
         
         //if the help screen is closed
         if(helpScreen.close){
-                //detach the help screen
-                helpScreen.guiNode.detachAllChildren();
-                helpScreen.cleanup();
-                stateManager.detach(helpScreen);
-                
-                //attach the start screen again
-                starting = true;
-                startScreen = new StartScreen(this, settings);
-                stateManager.attach(startScreen);
-                
-                //set the close to false again (otherwise it will always get inside this if)
-                helpScreen.close=false;
-            }
+            //detach the help screen
+            helpScreen.guiNode.detachAllChildren();
+            helpScreen.cleanup();
+            stateManager.detach(helpScreen);
+
+            //attach the start screen again
+            starting = true;
+            startScreen = new StartScreen(this, settings);
+            stateManager.attach(startScreen);
+
+            //set the close to false again (otherwise it will always get inside this if)
+            helpScreen.close=false;
+        }
+        
+        //if exit is clicked
+        if(startScreen.exit){
+            //detach the start screen
+            startScreen.guiNode.detachAllChildren();
+            startScreen.cleanup();
+            stateManager.detach(startScreen);
+            
+            //exit
+            System.exit(0);
+        }
     }
 
     @Override
