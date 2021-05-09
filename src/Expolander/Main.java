@@ -42,6 +42,8 @@ public class Main extends SimpleApplication {
     private Endscreen lost;
     private Endscreen won;
     
+    private CraftScreen craftScreen;
+    
     @Override
     public void simpleInitApp() {
         setupGame();
@@ -60,6 +62,8 @@ public class Main extends SimpleApplication {
         
         won = new Endscreen(this, settings,true);
         won.setEnabled(false);
+        
+        craftScreen=new CraftScreen(this,settings);
     }
     
     @Override
@@ -131,6 +135,28 @@ public class Main extends SimpleApplication {
         }
         if(lost.exit) System.exit(0);
         
+        if(settlerPlace.craft){
+            //craftScreen= new CraftScreen(this,settings);
+            stateManager.attach(craftScreen);
+            if(craftScreen.close){
+                stateManager.detach(craftScreen);
+                craftScreen.close=false;
+                settlerPlace.craft=false;
+            }
+            if(craftScreen.teleportationGate){
+                settlerPlace.craftTeleGate();
+                if(settlerPlace.cannotCraft==false){    //if it was crafted successfully
+                    stateManager.detach(craftScreen);
+                    craftScreen.setEnabled(false);
+                    settlerPlace.craft=false;
+                }
+                else{
+                    settlerPlace.cannotCraft=false;
+                }
+                craftScreen.teleportationGate=false;
+                
+            }
+        }
     }
     
     

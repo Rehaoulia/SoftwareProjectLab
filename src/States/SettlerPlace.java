@@ -73,6 +73,8 @@ public class SettlerPlace extends AbstractAppState {
     //private final AppStateManager appStateManager;
     private final AppStateManager stateManager;
     
+    public boolean craft, cannotCraft;
+    
     public SettlerPlace(SimpleApplication app) {
         this.playerRotation = Quaternion.ZERO;
         rootNode = app.getRootNode();
@@ -154,6 +156,9 @@ public class SettlerPlace extends AbstractAppState {
         
         gParts = new Geometry[8];
         candGate = -1;
+        
+        craft=false;
+        cannotCraft=false;
     }
 
     private final ActionListener actionListener = new ActionListener() {
@@ -176,26 +181,36 @@ public class SettlerPlace extends AbstractAppState {
             else if(name.equals("Mine")&& !keyPressed)s.mine();
             else if(name.equals("del ast")&& !keyPressed) removeAsteroidb();
             else if(name.equals("Craft") && !keyPressed){
-                //s.setLocation(settlerPos);
-                   if( s.craftGate()){
-                    Node temp = loadTeleGate();
-                    temp = s.putGate(temp);
-                    if(temp!=null)
-                    gateNode.attachChild(temp);
-                   System.out.println("blaaaaaaaaaah");
-                    
-                   }
-                else if(s.getNumberOfGates()==1){
-                    Node temp = loadTeleGate();
-                    temp = s.putGate(temp);
-                    if(temp!=null)
-                    gateNode.attachChild(temp); 
-                   
-                }
-            
+                craft=true;
             }
         }
     };
+    
+    //////////////////////////////////////////////////////////////
+    //Added for crafting teleportation gates
+    //////////////////////////////////////////////////////////////
+    public void craftTeleGate(){
+        if(s.checkRequiredMaterial(1)){
+            //s.setLocation(settlerPos);
+            if( s.craftGate()){
+                Node temp = loadTeleGate();
+                temp = s.putGate(temp);
+                if(temp!=null)
+                gateNode.attachChild(temp);
+                //System.out.println("blaaaaaaaaaah");
+            }
+            else if(s.getNumberOfGates()==1){
+                Node temp = loadTeleGate();
+                temp = s.putGate(temp);
+                if(temp!=null)
+                gateNode.attachChild(temp); 
+            }  
+        }
+        else if(!s.checkRequiredMaterial(1)){
+            cannotCraft=true;
+        }
+    }
+    ////////////////////////////////////////////////////////////
     
     public Node loadTeleGate(){
     

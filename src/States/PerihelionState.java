@@ -74,10 +74,10 @@ public class PerihelionState extends AbstractAppState {
             y = tempExplodingAsteroids.get(i).getLocation().y;
             
             //if x and y are higher than the perihelion coordinates add the asteroid to the exploding asteroids
-            //if((x > perihelionX)&&(y > perihelionY)){
+            if((x > perihelionX)&&(y > perihelionY)){
                 //just set the perihelion of that asteroid to true
                 app.getStateManager().getState(Placement.class).explodingAsteroids.get(i).setPerihelion(true);
-            //}
+            }
         }
         
         //subliming asteroids

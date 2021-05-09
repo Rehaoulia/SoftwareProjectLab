@@ -15,7 +15,7 @@ public class Settler extends Traveler {
 	public int ID;
 	private ArrayList<String> minedMinerals; // minedMinerals should be changed to a string ArrayList, explanation below
 												// in checkRequiredMaterial
-	public  ArrayList<TeleportationGate> gates;
+	public  ArrayList<TeleportationGate> gates = new ArrayList<TeleportationGate>();
 	private long timeOfDeath;
 	private boolean dead;
 	private Asteroid currentAsteroid;
@@ -192,6 +192,7 @@ public class Settler extends Traveler {
 	// minedMinerals needs to be a string arrayList to allow calling method
 	// containsAll(), or else this part of the code will be much more complicated
 	public boolean checkRequiredMaterial(int craftable) {
+            if(this.minedMinerals.size()==0) return false;
 		ArrayList<Boolean> flags = new ArrayList<Boolean>();
 		boolean canCraft = false;
 		ArrayList<String> temp = new ArrayList<String>(minedMinerals);
@@ -206,9 +207,8 @@ public class Settler extends Traveler {
 			flags.add((temp.indexOf("Uranium")) != -1); // Uranium
 			flags.add((temp.indexOf("WaterIce")) != -1); // WaterIce
 			flags.add((temp.indexOf("Iron")) != -1); // Iron
-			temp.remove(temp.indexOf("Iron"));
-			flags.add((temp.indexOf("Iron")) != -1); // Iron
-
+                        temp.remove(temp.indexOf("Iron"));
+                        flags.add((temp.indexOf("Iron")) != -1); // Iron
 			break;
 		}
 		canCraft = flags.stream().reduce(true, (a, b) -> a && b);
