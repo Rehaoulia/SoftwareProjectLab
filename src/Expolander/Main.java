@@ -140,15 +140,16 @@ public class Main extends SimpleApplication {
         }
         
         if(started){
+            //if the settler is dead show the "Players lost" screen
             if(settlerPlace.s.getDeath()){
-            stateManager.attach(won);
-            stateManager.attach(lost);
-            settlerPlace.setEnabled(false);
-            settlerPlace.chaseCam.setEnabled(false);
-            sunstorm.setEnabled(false);
-            lost.setEnabled(true);
+                stateManager.attach(won);
+                stateManager.attach(lost);
+                settlerPlace.setEnabled(false);
+                settlerPlace.chaseCam.setEnabled(false);
+                sunstorm.setEnabled(false);
+                lost.setEnabled(true);
 
-            started = false;
+                started = false;
             }
 
         }

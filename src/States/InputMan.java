@@ -30,7 +30,7 @@ public class InputMan extends AbstractAppState {
     private final com.jme3.input.InputManager inputManager;
     private final AppStateManager stateManager;
     private Node curNode;
-
+    
     public InputMan(SimpleApplication app) {
         rootNode = app.getRootNode();
         assetManager = app.getAssetManager();
@@ -39,7 +39,7 @@ public class InputMan extends AbstractAppState {
 
         // flyCam = app.getFlyByCamera();
     }
-
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -51,13 +51,15 @@ public class InputMan extends AbstractAppState {
 
         // rootNode.attachChild(localRootNode);
     }
-
+      
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
             float time = 0;
-
-            if (name.equals("Settler Drill") && !keyPressed && getSettler().access()) {
+                       
+            if (name.equals("Settler Drill")   ) {  
+            //if (name.equals("Settler Drill") && !keyPressed && getSettler().access()) {
                 Settler s = getSettler();
+                
                 /// heereee
                 Spatial diged = s.getAsteroid().getModel();
                 diged.setLocalScale(6f);
@@ -75,6 +77,7 @@ public class InputMan extends AbstractAppState {
                     // }
 
                 }
+                
                 stateManager.getState(Placement.class).updateAsteroid(s.getAsteroid().getID(), s.getAsteroid());
                 System.out.println(s.getAsteroid().viewInfo());
                 curNode.detachChild(diged);
@@ -83,7 +86,7 @@ public class InputMan extends AbstractAppState {
 
         }
     };
-
+    
     private Settler getSettler() {
         return this.stateManager.getState(SettlerPlace.class).getSettler();
     }
@@ -103,5 +106,4 @@ public class InputMan extends AbstractAppState {
 
         super.cleanup();
     }
-
 }

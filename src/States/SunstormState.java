@@ -88,8 +88,8 @@ public class SunstormState extends AbstractAppState {
             //generating a random wavelength
             int low = 30;
             int high = 100;
-            //wavelength = r.nextInt(high-low) + low;
-            wavelength=16;
+            wavelength = r.nextInt(high-low) + low;
+            //wavelength=16;
             
             //initializing the flags
             waitingTime=0;

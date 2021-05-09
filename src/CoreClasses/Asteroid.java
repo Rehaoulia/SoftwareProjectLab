@@ -19,6 +19,7 @@ public class Asteroid extends Place {
 	private Mineral mineral;
 	private int depth;
 	private SpaceStation station;
+        private TeleportationGate gate ;
 
 	public int radius;
 
@@ -99,6 +100,13 @@ public class Asteroid extends Place {
 		return ID;
 	}
 
+        public void setCloseGate(TeleportationGate tg){
+        gate = tg;
+        }
+        public TeleportationGate getCloseGate(){
+          return gate;
+        }
+        
 	public boolean hollow() {
 		return isHollow;
 	}

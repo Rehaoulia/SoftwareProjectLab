@@ -26,6 +26,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  *
@@ -44,10 +45,12 @@ public class HUD extends AbstractAppState {
     ArrayList<Picture> fullGatesHotBar;
     BitmapText AsteroidStats;
 
+    ArrayList<Picture> hotbar;
+    
     private boolean craft, cancelcraft;
     private int fillId;
     private Settler s;
-
+    
     public HUD(SimpleApplication app, AppSettings _settings) {
         this.emptyMineralsHotBar = new ArrayList<>();
         this.fullMineralsHotBar = new ArrayList<>();
@@ -60,7 +63,7 @@ public class HUD extends AbstractAppState {
         fillId = -1;
 
     }
-
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -70,6 +73,7 @@ public class HUD extends AbstractAppState {
         inputManager.addListener(actionListener, "Craft");
         inputManager.addListener(actionListener, "CancelCraft");
         inputManager.addListener(actionListener, "Fill");
+        
         for (int i = 0; i < 10; i++) {
             Picture frame = new Picture("emptyMineralsHotBar" + i);
             frame.setImage(assetManager, "Interface/HUD/Empty.png", false);
@@ -79,6 +83,7 @@ public class HUD extends AbstractAppState {
             emptyMineralsHotBar.add(frame);
             guiNode.attachChild(frame);
         }
+        
         for (int i = 0; i < 2; i++) {
             Picture frame = new Picture("emptyGateHotBar" + i);
             frame.setImage(assetManager, "Interface/HUD/Empty.png", false);
@@ -88,6 +93,7 @@ public class HUD extends AbstractAppState {
             emptyGatesHotBar.add(frame);
             guiNode.attachChild(frame);
         }
+        
         s = app.getStateManager().getState(SettlerPlace.class).s;
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/ROG.fnt");
         AsteroidStats = new BitmapText(guiFont, false);
@@ -97,8 +103,8 @@ public class HUD extends AbstractAppState {
         AsteroidStats.setLocalTranslation(settings.getWidth() / 2 + 300, AsteroidStats.getLineHeight() * 6 + 25, 0); // position
         guiNode.attachChild(AsteroidStats);
 
-    }
-
+    } 
+    
     private final ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
@@ -117,7 +123,7 @@ public class HUD extends AbstractAppState {
                     fillId = -1;
             }
         }
-    };
+    };     
 
     @Override
     public void update(float tpf) {
@@ -134,10 +140,11 @@ public class HUD extends AbstractAppState {
             s.fill(s.getMinerals().get(fillId));
             fillId = -1;
         }
+        
+        if(!Objects.isNull(s.getAsteroid()))
         AsteroidStats.setText(s.getAsteroid().viewInfo());
-
     }
-
+    
     @Override
     public void cleanup() {
         guiNode.detachChild(localRootNode);

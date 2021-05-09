@@ -89,6 +89,33 @@ public class CloseBox {
         }
     }
 
+ 
+ 
+     
+ public void remove(Asteroid asteroid){
+        
+      if(!this.bound.containsAsteroid(asteroid)){
+        return;
+        }
+
+        if(this.asteroids.contains(asteroid) ){
+        this.asteroids.remove(asteroid);
+        
+        
+        }else{
+            
+            this.unw.remove(asteroid);
+            this.une.remove(asteroid);
+            this.usw.remove(asteroid);
+            this.use.remove(asteroid);
+            this.dnw.remove(asteroid);
+            this.dne.remove(asteroid);
+            this.dsw.remove(asteroid);
+            this.dse.remove(asteroid);
+            
+        }
+    }
+
 
     private void subdivide() {
         
@@ -184,5 +211,3 @@ public class CloseBox {
 
     
 }
-
-
