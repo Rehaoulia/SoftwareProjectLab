@@ -1,6 +1,7 @@
 //BUG: Clicking on the center inside the game shows the help menu and goes backto the start screen!!!
 package Expolander;
 
+import States.CraftScreen;
 import States.Endscreen;
 import States.HUD;
 import States.HelpScreen;
@@ -13,6 +14,7 @@ import States.SunstormState;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
+import com.jme3.system.AppSettings;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -39,6 +41,7 @@ public class Main extends SimpleApplication {
     private SunstormState sunstorm;
     private Endscreen lost;
     private Endscreen won;
+    
     @Override
     public void simpleInitApp() {
         setupGame();
@@ -57,7 +60,6 @@ public class Main extends SimpleApplication {
         
         won = new Endscreen(this, settings,true);
         won.setEnabled(false);
-    
     }
     
     @Override

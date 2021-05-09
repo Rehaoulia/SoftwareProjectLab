@@ -54,9 +54,9 @@ public class CraftScreen extends AbstractAppState{
         //Craft Teleportation Gate Banner
         Picture TeleportationBanner = new Picture("TeleportationGate");
         TeleportationBanner.setImage(assetManager, "Interface/CraftMenu/Teleportation.png", false);
-        TeleportationBanner.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 70, -2);
-        TeleportationBanner.setWidth(350);
-        TeleportationBanner.setHeight(550);
+        TeleportationBanner.move(100 , 200, -2);
+        TeleportationBanner.setWidth(500);
+        TeleportationBanner.setHeight(750);
         guiNode.attachChild(TeleportationBanner);
 
         inputManager.addMapping("TeleportationGate", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -66,9 +66,9 @@ public class CraftScreen extends AbstractAppState{
         //Craft Robot Banner
         Picture RobotBanner = new Picture("Robot");
         RobotBanner.setImage(assetManager, "Interface/CraftMenu/Robot.png", false);
-        RobotBanner.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 70, -2);
-        RobotBanner.setWidth(350);
-        RobotBanner.setHeight(550);
+        RobotBanner.move(700, 200, -2);
+        RobotBanner.setWidth(500);
+        RobotBanner.setHeight(750);
         guiNode.attachChild(RobotBanner);
 
         inputManager.addMapping("Robot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -78,9 +78,9 @@ public class CraftScreen extends AbstractAppState{
         //Craft Space Station Banner
         Picture SpaceStationBanner = new Picture("SpaceStation");
         SpaceStationBanner.setImage(assetManager, "Interface/CraftMenu/SpaceStation.png", false);
-        SpaceStationBanner.move(settings.getWidth() / 2 - 70, settings.getHeight() / 2 - 70, -2);
-        SpaceStationBanner.setWidth(350);
-        SpaceStationBanner.setHeight(550);
+        SpaceStationBanner.move(1300, 200, -2);
+        SpaceStationBanner.setWidth(500);
+        SpaceStationBanner.setHeight(750);
         guiNode.attachChild(SpaceStationBanner);
 
         inputManager.addMapping("SpaceStation", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -90,7 +90,7 @@ public class CraftScreen extends AbstractAppState{
         /* CLOSE BUTTON */
         Picture CloseButton = new Picture("CloseButton");                                   //name
         CloseButton.setImage(assetManager, "Interface/CraftMenu/Cancel.png", false);        //reference
-        CloseButton.move(settings.getWidth()-100, settings.getHeight()-100, -2);            //position
+        CloseButton.move(settings.getWidth()/2 -70, 100, -2);            //position
         CloseButton.setWidth(140);                                                          //width
         CloseButton.setHeight(40);                                                          //height
         guiNode.attachChild(CloseButton);
@@ -105,37 +105,53 @@ public class CraftScreen extends AbstractAppState{
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
             if (name.equals("TeleportationGate") && keyPressed) {
-                close = ((inputManager.getCursorPosition().getX() > settings.getWidth()-100)
-                        && (inputManager.getCursorPosition().getX() < settings.getWidth()-50)
-                        && (inputManager.getCursorPosition().getY() > settings.getHeight()-100)
-                        && (inputManager.getCursorPosition().getY() < settings.getHeight()-50));
+                teleportationGate = ((inputManager.getCursorPosition().getX() > 100)
+                                    && (inputManager.getCursorPosition().getX() < 600)
+                                    && (inputManager.getCursorPosition().getY() > 200)
+                                    && (inputManager.getCursorPosition().getY() < 950));
             }
             else if (name.equals("Robot") && keyPressed) {
-                close = ((inputManager.getCursorPosition().getX() > settings.getWidth()-100)
-                        && (inputManager.getCursorPosition().getX() < settings.getWidth()-50)
-                        && (inputManager.getCursorPosition().getY() > settings.getHeight()-100)
-                        && (inputManager.getCursorPosition().getY() < settings.getHeight()-50));
+                robot = ((inputManager.getCursorPosition().getX() > 700)
+                        && (inputManager.getCursorPosition().getX() < 1200)
+                        && (inputManager.getCursorPosition().getY() > 200)
+                        && (inputManager.getCursorPosition().getY() < 950));
             }
             else if (name.equals("SpaceStation") && keyPressed) {
-                close = ((inputManager.getCursorPosition().getX() > settings.getWidth()-100)
-                        && (inputManager.getCursorPosition().getX() < settings.getWidth()-50)
-                        && (inputManager.getCursorPosition().getY() > settings.getHeight()-100)
-                        && (inputManager.getCursorPosition().getY() < settings.getHeight()-50));
+                spaceStation = ((inputManager.getCursorPosition().getX() > 1300)
+                                && (inputManager.getCursorPosition().getX() < 1800)
+                                && (inputManager.getCursorPosition().getY() > 200)
+                                && (inputManager.getCursorPosition().getY() < 950));
             }
             else if (name.equals("Close") && keyPressed) {
-                close = ((inputManager.getCursorPosition().getX() > settings.getWidth()-100)
-                        && (inputManager.getCursorPosition().getX() < settings.getWidth()-50)
-                        && (inputManager.getCursorPosition().getY() > settings.getHeight()-100)
-                        && (inputManager.getCursorPosition().getY() < settings.getHeight()-50));
+                close = ((inputManager.getCursorPosition().getX() > settings.getWidth() /2 -70)
+                        && (inputManager.getCursorPosition().getX() < settings.getWidth()/2 +70)
+                        && (inputManager.getCursorPosition().getY() > 100)
+                        && (inputManager.getCursorPosition().getY() < 140));
             }
         }
     };
 
     @Override
     public void update(float tpf) {
+        //if cancel is clicked detach all children
         if (close) {
+            guiNode.detachChildNamed("TeleportationGate");
+            guiNode.detachChildNamed("Robot");
+            guiNode.detachChildNamed("SpaceStation");
             guiNode.detachChildNamed("CloseButton");
             guiNode.detachChildNamed("backgroundscreen");
+        }
+        //if teleportation gate banner is clicked try to craft a teleportation gate
+        if(teleportationGate){
+            
+        }
+        //if robot banner is clicked try to craft a robot
+        if(robot){
+            
+        }
+        //if space station banner is clicked try to craft a space station
+        if(spaceStation){
+            
         }
 
     }
