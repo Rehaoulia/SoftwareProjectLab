@@ -169,10 +169,9 @@ public class SettlerPlace extends AbstractAppState {
             if (name.equals("Drill") && keyPressed)
                 s.drill();
             if (name.equals("Mine") && keyPressed)
-                s.mine();
-            if (name.equals("Hide") && keyPressed) s.hide();
-            */
+                s.mine();*/
             
+            if (name.equals("Hide") && keyPressed) s.hide();
             if(name.equals("Drill")&& !keyPressed)s.drill();
             else if(name.equals("Mine")&& !keyPressed)s.mine();
             else if(name.equals("del ast")&& !keyPressed) removeAsteroidb();

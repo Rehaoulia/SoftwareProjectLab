@@ -212,8 +212,8 @@ public class Placement extends AbstractAppState {
             Vector3f GenLoc = new Vector3f(randx, randy, randz);
 
             Mineral M;
-            //int mineralSelector = rand.nextInt(10);
-            int mineralSelector = 3;
+            int mineralSelector = rand.nextInt(10);
+            //int mineralSelector = 3;
             switch (mineralSelector) {
                 case 0:
                     M = new Carbon();

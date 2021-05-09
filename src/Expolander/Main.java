@@ -1,11 +1,6 @@
+//BUG: Clicking on the center inside the game shows the help menu and goes backto the start screen!!!
 package Expolander;
 
-import CoreClasses.Asteroid;
-import CoreClasses.Carbon;
-import CoreClasses.Iron;
-import CoreClasses.Mineral;
-import CoreClasses.Uranium;
-import CoreClasses.WaterIce;
 import States.Endscreen;
 import States.HUD;
 import States.HelpScreen;
@@ -17,27 +12,7 @@ import States.StartScreen;
 import States.SunstormState;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
-import com.jme3.system.AppSettings;
-import com.jme3.texture.Texture;
-import com.jme3.ui.Picture;
-import com.jme3.util.SkyFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -97,7 +72,6 @@ public class Main extends SimpleApplication {
                 stateManager.attach(new HUD(this, settings));
                 stateManager.attach(sunstorm);
 
-                
                 startScreen.guiNode.detachAllChildren();
                 startScreen.cleanup();
                 stateManager.detach(startScreen);
