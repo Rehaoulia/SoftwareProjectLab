@@ -355,15 +355,19 @@ public class Settler extends Traveler {
             System.out.println("craft");
             switch (nGate) {
                 case 0:
-                    getMatforGate();
+                      if( minedMinerals.contains("Uranium") &&
+                        minedMinerals.contains("WaterIce") &&
+                        minedMinerals.contains("Iron") &&
+                        minedMinerals.contains("Iron") ){
                     minedMinerals.remove(minedMinerals.indexOf("Uranium"));
                     minedMinerals.remove(minedMinerals.indexOf("WaterIce"));
                     minedMinerals.remove(minedMinerals.indexOf("Iron"));
                     minedMinerals.remove(minedMinerals.indexOf("Iron"));
-                  
                     
                     nGate =2;
                     return true ;
+                    } else return false;
+                    
                 case 1:
                     return true;
                 default:
